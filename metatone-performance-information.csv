@@ -85,6 +85,8 @@ time,filename,number_performers,performance_context,performance_type,instruments
 2014-08-24 15:45:01.750883,2014-08-24T15-44-55-MetatoneOSCLog,3,performance,composition,iPad,colour music concert Cage Amores,
 2014-08-24 15:47:43.664464,2014-08-24T15-47-42-MetatoneOSCLog,4,performance,composition,percussion,colour music concert correspondences,
 2014-08-24 15:56:07.952397,2014-08-24T15-56-07-MetatoneOSCLog,4,demonstration,improvisation,iPad,colour music concert - audience demo session.,
+2014-12-12 12:06:19.528851,2014-12-12T12-05-53-GestureTargetLog-CPM,1,data_collection,composition,iPad,gesture data collection with harness - charles,
+2015-02-07 17:20:17.103662,2015-02-07T17-19-45-MetatoneOSCLog-JG,1,data_collection,composition,iPad,gesture data collection with harness - jonathan,
 2015-03-20 13:40:47.684507,2015-03-20T13-39-35-MetatoneOSCLog-6PlayerRehearsal,6,rehearsal,composition,iPad,ANU New Music Ensemble Rehearsing in Listening Space,
 2015-03-21 23:48:32.856694,2015-03-21T23-45-42-MetatoneOSCLog-6PlayerPerformance,6,performance,composition,iPad,ANU New Music Ensemble Performance at You Are Here 2015,
 2015-04-24 15:40:00.578788,2015-04-24T15-39-57-MetatoneOSCLog,4,study,orientation,iPad,"study walkthrough with charles, christina, ben and malcolm.",

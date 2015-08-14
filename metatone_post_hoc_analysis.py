@@ -106,7 +106,6 @@ class MetatoneTouchLog:
 
 def main():
     """Load up all the performances and do some stats"""
-    print("Loading up the performances.")
     log_files = []
     performances = []
     for local_file in os.listdir("data"):
