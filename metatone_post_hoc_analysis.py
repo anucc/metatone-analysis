@@ -73,8 +73,6 @@ def main():
     for log in log_files:
         performances.append(MetatoneTouchLog(log))
 
-    ## Also load up the experiment design dataframe to merge with the data!
-    performance_information = pd.read_csv("metatone-performance-information.csv", index_col='time', parse_dates=True)
 
     perf_names = {}
     for perf in performances:
@@ -84,6 +82,10 @@ def main():
             }})
     perf_frame = pd.DataFrame.from_dict(perf_names, orient="index")
     perf_frame.to_csv("performance-names.csv")
+
+    
+    ## Also load up the experiment design dataframe to merge with the data!
+    performance_information = pd.read_csv("metatone-performance-information.csv", index_col='time', parse_dates=True)
 
     # print("Finding the lengths.")
     # performer_length_dict = {}
