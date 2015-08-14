@@ -1,0 +1,3 @@
+[submodule "MetatoneClassifier"]
+	path = MetatoneClassifier
+	url = https://github.com/cpmpercussion/MetatoneClassifier
