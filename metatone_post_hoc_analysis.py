@@ -57,13 +57,6 @@ class MetatoneTouchLog:
         """
         return len(self.touches['device_id'].unique().tolist())
 
-        # self.events = pd.read_csv(performance_path + EVENTS_PATH, index_col='time', parse_dates=True)
-        # self.raw_new_ideas = self.events[self.events["event_type"] == "new_idea"]["event_type"].count()
-        # self.screen_change_new_ideas = self.count_new_idea_interface_changes()
-        # self.transitions = pd.read_csv(performance_path + TRANSITIONS_PATH, index_col='time', parse_dates=True)
-        # self.metatone = pd.read_csv(performance_path + METATONE_PATH, index_col='time', parse_dates=True)
-        # self.online = pd.read_csv(performance_path + ONLINE_PATH, index_col='time', parse_dates=True)
-
     def ensemble_flux(self):
         """
         Returns the flux of the whole ensemble transition matrix.
@@ -138,11 +131,13 @@ def main():
             "entropy": perf.ensemble_entropy()
             }})
     perf_frame = pd.DataFrame.from_dict(perf_names, orient="index")
-    perf_frame.to_csv("performance-names.csv")
+    perf_frame = pd.concat([performance_information,perf_frame], axis = 1)
+    #perf_frame['performance_context','performance_type','instruments','notes','video_location'] = performance_information['performance_context','performance_type','instruments','notes','video_location']
+    perf_frame.to_csv("metatone-performance-data.csv")
 
-    print("Creating Gesture Scores.")
-    for perf in performances:
-        perf.print_gesture_score() ## Prints out a gesture-score pdf for reference.
+    #print("Creating Gesture Scores.")
+    #for perf in performances:
+    #    perf.print_gesture_score() ## Prints out a gesture-score pdf for reference.
 
     # print("Finding the lengths.")
     # performer_length_dict = {}
