@@ -15,6 +15,7 @@ sys.path.append("MetatoneClassifier/performance-plotter/")
 import metatone_classifier
 import transitions
 import PlotMetatonePerformanceAndTransitions
+import generate_posthoc_gesture_score
 
 class MetatoneTouchLog:
     """
@@ -30,9 +31,13 @@ class MetatoneTouchLog:
         gestures_path = performance_path + "-posthoc-gestures.csv"
         if (os.path.isfile(gestures_path)):
             self.gestures = pd.read_csv(gestures_path, index_col='time', parse_dates=True)
-        #else:
-            #print("No gesture file.")
-            # generate the gestures!
+        else:
+            print("Gesture Frame not found, now generating: " + gestures_path)
+            self.gestures = generate_posthoc_gesture_score.generate_gesture_frame(self.touches)
+            self.gestures.to_csv(gestures_path)
+        self.ensemble_transition_matrix = transitions.calculate_full_group_transition_matrix(self.gestures)
+        self.ensemble_transition_matrix = transitions.transition_matrix_to_stochastic_matrix(self.ensemble_transition_matrix)
+
 
     def first_touch_timestamp(self):
         """
@@ -58,12 +63,57 @@ class MetatoneTouchLog:
         # self.transitions = pd.read_csv(performance_path + TRANSITIONS_PATH, index_col='time', parse_dates=True)
         # self.metatone = pd.read_csv(performance_path + METATONE_PATH, index_col='time', parse_dates=True)
         # self.online = pd.read_csv(performance_path + ONLINE_PATH, index_col='time', parse_dates=True)
-        # self.ensemble_transition_matrix = transitions.calculate_full_group_transition_matrix(self.gestures)
-        # self.ensemble_transition_matrix = transitions.transition_matrix_to_stochastic_matrix(self.ensemble_transition_matrix)
 
+    def ensemble_flux(self):
+        """
+        Returns the flux of the whole ensemble transition matrix.
+        """
+        return transitions.flux_measure(self.ensemble_transition_matrix)
+
+    def ensemble_entropy(self):
+        """
+        Returns the entropy of the whole ensemble transition matrix.
+        """
+        return transitions.entropy_measure(self.ensemble_transition_matrix)
+
+    def performance_length(self):
+        """
+        Returns the total length of the performance (first touch to last touch)
+        """
+        first_touch = self.touches[:1].index[0].to_datetime()
+        last_touch = self.touches[-1:].index[0].to_datetime()
+        return (last_touch - first_touch).total_seconds()
+
+    def performer_lengths(self):
+        """
+        Returns the individual performers' performance lengths
+        """
+        performers = self.performers()
+        first_touch = self.touches[:1].index[0].to_datetime()
+        performer_first_touches = {}
+        performer_last_touches = {}
+        performance_lengths = {}
+        for performer_id in performers:
+            performer_touches = self.touches.ix[self.touches['device_id'] == performer_id]
+            performer_first_touches[performer_id] = performer_touches[:1].index[0].to_datetime()
+            performer_last_touches[performer_id] = performer_touches[-1:].index[0].to_datetime()
+            performer_length = (performer_touches[-1:].index[0].to_datetime() - first_touch).total_seconds()
+            performance_lengths[performer_id] = performer_length
+            # print("Performer: " + performer_id + " Length was: " + str(performer_length))
+        return {self.first_touch_timestamp():performance_lengths}
+
+    def print_gesture_score(self):
+        """
+        Prints a gesture-score using the script procedure
+        """
+        performance_time = time.strptime(self.performance_title[:19], '%Y-%m-%dT%H-%M-%S')
+        plot_title = time.strftime('%Y-%m-%dT%H-%M-%S', performance_time) + "-gesture-plot"
+        PlotMetatonePerformanceAndTransitions.plot_gesture_only_score(plot_title, self.gestures)
+        print("Saved gesture plot: " + plot_title)
 
 def main():
     """Load up all the performances and do some stats"""
+    print("Loading up the performances.")
     log_files = []
     performances = []
     for local_file in os.listdir("data"):
@@ -73,19 +123,26 @@ def main():
     for log in log_files:
         performances.append(MetatoneTouchLog(log))
 
+    ## Also load up the experiment design dataframe to merge with the data!
+    print("Loading performance information frame.")
+    performance_information = pd.read_csv("metatone-performance-information.csv", index_col='time', parse_dates=True)
 
+    print("Generating the performance data frame.")
     perf_names = {}
     for perf in performances:
         perf_names.update({perf.first_touch_timestamp():{
             "filename":perf.performance_title,
-            "number_performers": perf.number_performers()
+            "number_performers": perf.number_performers(),
+            "length_seconds": perf.performance_length(),
+            "flux": perf.ensemble_flux(),
+            "entropy": perf.ensemble_entropy()
             }})
     perf_frame = pd.DataFrame.from_dict(perf_names, orient="index")
     perf_frame.to_csv("performance-names.csv")
 
-    
-    ## Also load up the experiment design dataframe to merge with the data!
-    performance_information = pd.read_csv("metatone-performance-information.csv", index_col='time', parse_dates=True)
+    print("Creating Gesture Scores.")
+    for perf in performances:
+        perf.print_gesture_score() ## Prints out a gesture-score pdf for reference.
 
     # print("Finding the lengths.")
     # performer_length_dict = {}
@@ -97,40 +154,6 @@ def main():
     # long_performance_lengths = pd.melt(performance_length_frame, id_vars=['time'], value_vars=performers)
     # long_performance_lengths = long_performance_lengths.replace({'variable':DEVICE_SEATS})
     # long_performance_lengths.to_csv("performance_lengths.csv")
-
-    # print("Creating Gesture Scores.")
-    # for perf in performances:
-    #     perf.print_gesture_score() ## Prints out a gesture-score pdf for reference.
-
-    # print("Creating performance info dataframe.")
-    # perf_data = {}
-    # for perf in performances:
-    #     perf_data.update({perf.first_touch_timestamp():{
-    #         "raw_new_ideas":perf.raw_new_ideas,
-    #         "new_idea_changes":perf.count_new_idea_interface_changes(),
-    #         "button_presses":perf.count_button_interface_changes(),
-    #         "flux":perf.ensemble_flux(),
-    #         "entropy":perf.ensemble_entropy()
-    #     }})
-    # performance_data = pd.DataFrame.from_dict(perf_data, orient = "index")
-    # performance_data.to_csv("performance_data.csv")
-
-    # print("Creating perfomer button press dataframe")
-    # performer_presses = {}
-    # for perf in performances:
-    #     performer_presses.update(perf.button_interface_changes_by_performer())
-    # button_changes_frame = pd.DataFrame.from_dict(performer_presses,orient = "index")
-    # button_experiment_frame = pd.concat([experiment_design,button_changes_frame], axis = 1)
-    # performers = performances[0].performers().tolist()
-    # button_experiment_frame['time'] = button_experiment_frame.index
-
-    # long_button_frame = pd.melt(button_experiment_frame, id_vars=['time', 'perf_number', 'group', 'performance', 'button', 'server', 'overall'],
-    #     value_vars=performers,
-    #     var_name='seat',
-    #     value_name='button_presses')
-    # long_button_frame = long_button_frame.replace({'seat':DEVICE_SEATS})
-    # long_button_frame['performer'] = np.vectorize(lambda x, y: PARTICIPANTS[x][y])(long_button_frame['group'], long_button_frame['seat'])
-    # long_button_frame.to_csv("button_presses_per_performer.csv")
 
 if __name__ == '__main__':
     main()
