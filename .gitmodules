@@ -1,3 +1,6 @@
 [submodule "MetatoneClassifier"]
 	path = MetatoneClassifier
 	url = https://github.com/cpmpercussion/MetatoneClassifier
+[submodule "minirank"]
+	path = minirank
+	url = https://github.com/fabianp/minirank
