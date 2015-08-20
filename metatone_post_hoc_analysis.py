@@ -149,5 +149,15 @@ def main():
     # long_performance_lengths = long_performance_lengths.replace({'variable':DEVICE_SEATS})
     # long_performance_lengths.to_csv("performance_lengths.csv")
 
+    # loading the survey data
+    # 2014 - Q1 was performance quality
+    performance_surveys_2014 = pd.read_csv("data-surveys/201407-Study.csv",index_col='time', parse_dates=True)
+    # 2015 runthrough - Q26
+    performance_surveys_2015_runthrough = pd.read_csv("data-surveys/201504-Study-RunthroughData.csv",index_col='time', parse_dates=True)
+    # 2015 study - Q23
+    performance_surveys_2015_study = pd.read_csv("data-surveys/201504-Study-PerformanceSurveys.csv",index_col='time', parse_dates=True)
+
+
+
 if __name__ == '__main__':
     main()
