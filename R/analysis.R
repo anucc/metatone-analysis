@@ -1,6 +1,6 @@
-library(dplyr)
 library(ggplot2)
-library(polr)
+
+library(MASS)
 
 ## time,filename,number_performers,performance_context,performance_type,instruments,notes,video_location,flux,number_performers,length_seconds,entropy,filename
 df <- read.csv("../metatone-performance-data.csv")
@@ -48,3 +48,17 @@ ggplot(reh.perf.studies.df, aes(performance_context, entropy)) + geom_boxplot()
 
 ggplot(reh.perf.studies.df, aes(instruments, flux)) + geom_boxplot()
 ggplot(reh.perf.studies.df, aes(instruments, entropy)) + geom_boxplot()
+
+library("AER")
+flux.entropy.ratings <- read.csv("../flux_entropy_ratings.csv")
+flux.entropy.ratings
+
+summary(aov(rating ~ flux, data = flux.entropy.ratings))
+summary(aov(rating ~ entropy, data = flux.entropy.ratings))
+mod <- polr(response ~ entropy, data = subset(stats.of.df, question=="Q3"))
+
+## get a p-value. this is filthy, but MM said it was ok.  so blame him.
+message(paste("($t = ", format(summary(mod)$coefficients[1,3], digits = 3), ", df = ", format(mod$edf, digits = 3), ", p = ", format(pt(summary(mod)$coefficients[1,3], mod$edf, lower.tail = FALSE), digits = 2), "$)", sep = ""))
+
+ggplot(flux.entropy.ratings, aes(as.factor(rating),flux)) + geom_point() + geom_boxplot()
+ggplot(flux.entropy.ratings, aes(flux,rating)) + geom_smooth(method=lm)

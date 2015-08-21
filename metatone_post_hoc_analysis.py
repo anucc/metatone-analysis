@@ -12,6 +12,7 @@ import datetime
 import sys
 sys.path.append("MetatoneClassifier/classifier/")
 sys.path.append("MetatoneClassifier/performance-plotter/")
+sys.path.append("minirank")
 import metatone_classifier
 import transitions
 import PlotMetatonePerformanceAndTransitions
@@ -157,7 +158,85 @@ def main():
     # 2015 study - Q23
     performance_surveys_2015_study = pd.read_csv("data-surveys/201504-Study-PerformanceSurveys.csv",index_col='time', parse_dates=True)
 
+    # a.apply(lambda x: LIKERT_MAPPING[x])
+    LIKERT_MAPPING = {1:1,2:1,3:2,4:2,5:3,6:4,7:4,8:5,9:5}
+    ratings = performance_surveys_2014["Q1"]
+    ratings = c.append(performance_surveys_2015_runthrough["Q26"].apply(lambda x: LIKERT_MAPPING[x]))
+    ratings = ratings.append(performance_surveys_2015_study["Q23"].apply(lambda x: LIKERT_MAPPING[x]))
+    flux_ratings_frame = perf_frame['flux']
+    flux_ratings_frame = pd.concat([flux_ratings_frame,ratings],axis =1)
 
+    flux_entropy_ratings = pd.DataFrame({"rating":ratings})
+    flux_entropy_ratings["flux"] = perf_frame["flux"]
+    flux_entropy_ratings["entropy"] = perf_frame["entropy"]
+    flux_entropy_ratings.to_csv("flux_entropy_ratings.csv")
+
+def test_regression(df):
+    """
+    using the logistic ordinal regression package from:
+    http://fa.bianp.net/blog/2013/logistic-ordinal-regression/
+    """
+    from minirank import *
+    from sklearn import datasets, metrics, cross_validation
+    X, y = np.array(df[["flux","entropy"]]), np.array(df["rating"])
+    #X, y = np.array(df["flux"]), np.array(df["rating"])
+
+    #X -= X.mean()
+    #y -= y.min()
+
+    idx = np.argsort(y)
+    X = X[idx]
+    y = y[idx]
+    cv = cross_validation.ShuffleSplit(y.size, n_iter=50, test_size=.1, random_state=0)
+    score_logistic = []
+    score_ordinal_logistic = []
+    score_ridge = []
+    for i, (train, test) in enumerate(cv):
+        if not np.all(np.unique(y[train]) == np.unique(y)):
+            # we need the train set to have all different classes
+            continue
+        assert np.all(np.unique(y[train]) == np.unique(y))
+        train = np.sort(train)
+        test = np.sort(test)
+        w, theta = ordinal_logistic_fit(X[train], y[train])
+        pred = ordinal_logistic_predict(w, theta, X[test])
+        s = metrics.mean_absolute_error(y[test], pred)
+        print('ERROR (ORDINAL)  fold %s: %s' % (i+1, s))
+        score_ordinal_logistic.append(s)
+
+        from sklearn import linear_model
+        clf = linear_model.LogisticRegression(C=1.)
+        clf.fit(X[train], y[train])
+        pred = clf.predict(X[test])
+        s = metrics.mean_absolute_error(y[test], pred)
+        print('ERROR (LOGISTIC) fold %s: %s' % (i+1, s))
+        score_logistic.append(s)
+
+        from sklearn import linear_model
+        clf = linear_model.Ridge(alpha=1.)
+        clf.fit(X[train], y[train])
+        pred = np.round(clf.predict(X[test]))
+        s = metrics.mean_absolute_error(y[test], pred)
+        print('ERROR (RIDGE) fold %s: %s' % (i+1, s))
+        score_ridge.append(s)
+    print()
+    print('MEAN ABSOLUTE ERROR (ORDINAL LOGISTIC):    %s' % np.mean(score_ordinal_logistic))
+    print('MEAN ABSOLUTE ERROR (LOGISTIC REGRESSION): %s' % np.mean(score_logistic))
+    print('MEAN ABSOLUTE ERROR (RIDGE REGRESSION):    %s' % np.mean(score_ridge))
+
+
+
+def plot_confusion_matrix(cm, title='Confusion matrix', cmap=plt.cm.Blues):
+    import matplotlib.pyplot as plt
+    plt.imshow(cm, interpolation='nearest', cmap=cmap)
+    plt.title(title)
+    plt.colorbar()
+    tick_marks = np.arange(len(iris.target_names))
+    plt.xticks(tick_marks, iris.target_names, rotation=45)
+    plt.yticks(tick_marks, iris.target_names)
+    plt.tight_layout()
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
 
 if __name__ == '__main__':
     main()
