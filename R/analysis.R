@@ -94,6 +94,8 @@ ggplot(flux.entropy.ratings, aes(flux,rating)) + geom_smooth(method=lm)
 library("plyr")
 library("reshape2")
 
+source("tm.R")
+
 filenames <- llply(list.files("../data"),
                   function(x) c(x, names(read.csv(paste("../data/", x, sep = "")))))
 
@@ -111,6 +113,22 @@ df <- ldply(list.files("../data"),
                 process_session(x, read.csv(filename))
             })
 ## get all the column classes right
-df$gesture <- factor(df$gesture)
+df$gesture <- ordered(gestures[df$gesture+1], levels = gestures)
 ## add time-windowed chunk section
 df$section <- ordered(c("beginning", "middle", "end"), levels = c("beginning", "middle", "end"))[as.integer(df$time*3)+1]
+
+## Transition Matrices
+tm <- ddply(df, .(filename, musician, section), calculate.transitions)
+## add flux, entropy
+tm <- ddply(tm, .(filename, musician, section),
+            function(x){
+                data.frame(x,
+                           flux = transition.flux(x),
+                           entropy = transition.entropy(x))
+            })
+
+## plotting
+library("ggplot2")
+
+ggplot(tm, aes(section, flux)) + geom_violin(aes(fill=section))
+ggplot(tm, aes(section, entropy)) + geom_violin(aes(fill=section))
