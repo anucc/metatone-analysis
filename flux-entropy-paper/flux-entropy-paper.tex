@@ -90,19 +90,165 @@
 \maketitle
 
 \begin{abstract}
-
+  HCI systems for supporting collaborative creativity are often
+  evaluated with user ratings and interviews. However, such data can
+  be impractical to collect in-the-wild, such as during musical
+  performances. In this paper we consider measures of gestural
+  transitions during collaborative interactions with musical touch
+  screen interfaces. The performers' interactions are characterised as
+  sequences of discrete gestures and summarised in a transition matrix
+  for each performance. Using a corpus of more than 140 performances,
+  rehearsals, and demonstrations, we find that two matrix measures,
+  flux and entropy, vary significantly with different kinds of
+  in-the-wild interactions. Further, using performers' ratings
+  collected during a lab-study we find that these measures have a
+  significant relationship with the perceived effect of the interface
+  on performance. Thus transition analysis, flux and entropy, can be
+  used as a proxy for performer ratings during in-the-wild interaction.
 \end{abstract}
 
-\keywords{Authors' choice; of terms; separated; by semi\-colons;
-  commas, within terms only; this section is required.}
+\keywords{  Creativity Support Tools;
+  Agent; 
+  Design;
+  Methodology}
 
-\category{H.5.m.}{Information Interfaces and Presentation
-  (e.g. HCI)}{Miscellaneous} \category{See
-  \url{http://acm.org/about/class/1998/} for the full list of ACM
-  classifiers. This section is required.}{}{}
+\category{H.5.5.}{Information Interfaces and Presentation
+  (e.g. HCI)}{Sound and Music Computing}{Systems} 
+
+% \category{See
+%   \url{http://acm.org/about/class/1998/} for the full list of ACM
+%   classifiers. This section is required.}{}{}
 
 \section{Introduction}
 
+
+
+Finally, we report a quantitative analysis of the transition matrices
+from our experimental protocols, and describe the quantities
+\emph{flux} and \emph{entropy} which can be used to characterise the
+gestural activity of the musicians during a performance. We found a
+significant effect of the app on these measures, allowing us to
+observe quantitatively the performers' dissatisfaction with a
+particular interface. We also investigate the significant relationship
+between both of these measures and the survey responses, which
+suggests that performers rate interaction with our agent and apps more
+highly when engaged in adventurous, exploratory performance.
+
+\section{Related Work}
+
+\section{Transition Matrices and Matrix Measures}
+
+It has been recognised that collaborative interactions such as
+improvised musical performances can be modelled as a sequence of
+states. In the following section we present a method for analysing the
+transitions between adjacent states in such a sequence and derive two
+high-level quantities that we use to compare musical performances
+under different circumstances. Suppose that an collaborative
+interaction can be characterised by a set of interaction states $S$
+with $m$ members.
+Each participant's activity can then be represented as a sequence:
+\begin{equation}
+ X_n \hskip 2em n = 1, \ldots, N
+\end{equation}
+Where each $X_i$ is a member of $G$. The transitions between different
+interaction states can be summarised in a transition matrix as if the
+sequence $X_n$ were a first-order Markov chain. Let $N_{ij}$ be the
+number of times that state $j$ follows state $i$. Each participant's
+transition matrix, $P$, will then be an $m \times m$ matrix with
+entries calculated thus
+\begin{equation}
+  p_{ij} = \frac{N_{ij}}{\sum_j N_{ij}}
+\end{equation}
+Each entry of $P$ will be such that the transition probability from
+state $i$ to state $j$ is given by the entry in the $i^{th}$ row and
+the $j^{th}$ column. The transition activity of the whole ensemble can
+be calculated by averaging the transition matrix for each performer.
+
+To compare the transition matrices of different interactions we use
+two high-level quantities, ``flux'' and ``entropy''. The flux of a
+transition matrix $P$ is given by
+\begin{equation}
+  \mathrm{flux}(P) = \frac{\|P\|_1-\|\mathrm{diag}(P)\|}{\|P\|_1}
+\end{equation}
+Where $\|P\|_1 = \sum_{i,j}|p_{ij}|$ is the element-wise 1-norm of $P$
+and $\mathrm{diag}(P)$ is the vector of the main diagonal entries of
+$P$.
+
+Flux measures the ratio of transitions that change
+state to self-transitions from a certain state back to itself.
+Intuitively, it is a measure of how frequently a group changes state. Flux
+returns a value in the interval $[0,1]$ and will return 0 when
+participants never change state, and 1 when participants never stay on
+the same state for two measurements in a row.
+
+A related (but different) high-level derived quantity for the
+transition matrix is its entropy, defined in the
+information-theoretic~\cite{Shannon:1948rt} sense:
+\begin{equation}
+  H(P) = -\sum_{i,j}p_{ij}\log_2(p_{ij})
+\end{equation}
+This entropy measure is small when the matrix is sparse, and largest
+when each matrix element is equal. It offers a different perspective
+on collaborative interactions than the flux measure by capturing the
+breadth of the gestural space explored by the participants throughout
+the course of an interaction. Consider the degenerate case of a
+participant who alternates between two states for a whole performance:
+the flux in this case will be maximal ($\mathrm{flux}(P) = 1$) since
+there are no self-transitions, (only $A \rightarrow B$ or
+$ B \rightarrow A$) even though the participant has only used a small
+subset of the state space. The entropy of this interaction,
+on the other hand, will be low. Entropy, therefore, is a measure of
+how broad the participant's exploration of the state space is in a given
+interaction.
+
+\section{Modelling Performer Ratings with Flux and Entropy}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{figures/stat-response-fit.pdf}
+  \caption{Transition matrix statistics (flux above and entropy below) vs Likert responses for
+    questions 3, 6 and 7, all of which exhibited significant
+    relationships under a proportional odds logistic regression model.
+    A least-squares linear model is shown with a dotted line.
+    \label{fig:stat-response-fit}}
+\end{figure}
+
+One final question to explore is how these flux and entropy measures
+in the interaction data relate to the performers' perceptions of their
+performance?
+
+To answer this question, we construct models with the flux and entropy
+measures as independent variables and the Likert responses (1 to 5) as
+the dependent variable. These measures exhibited clear relationships
+for three of the survey questions (Questions 3, 6 and 7), which are
+plotted in Figure~\ref{fig:stat-response-fit} where the least-squares
+line of best fit has a positive gradient for both flux and entropy.
+
+Determining the strengths of these positive relationships is
+difficult, both due to the problem of treating ordinal Likert
+responses as numeric~\cite{Gardner:2007fj} and also
+due to the unknown distribution of the entropy and flux statistics. As
+a result, we use a conservative proportional odds logistic regression
+(POLR)~(using the \texttt{polr} function in \texttt{R}, from the MASS
+package \cite{Venables:2002qv}) to treat the Likert responses as an
+ordered factor response.
+
+The POLR results indicate a significant ($p<0.05$) relationship
+between the user-reported Likert response and the flux statistic for
+Question 3 ($t = 2.77, df = 4, p = 0.025$), Question 6
+($t = 2.41, df = 4, p = 0.037$), and Question 7
+($t = 2.49, df = 4, p = 0.034$). The same questions displayed a
+significant relationship for the entropy statistic: Question 3
+($t = 2.93, df = 4, p = 0.022$), Question 6
+($t = 2.69, df = 4, p = 0.028$), and Question 7
+($t = 2.89, df = 4, p = 0.022$). These relationships are shown in
+Figure~\ref{fig:stat-response-fit}.
+
+It is notable that these questions (3, 6, and 7) all pertain to the
+\emph{perceived effect of the agent} on the performers. As the agent
+uses the flux measure to trigger new-idea messages, it appears that
+performers appreciated its intervention more in particularly creative
+performances where flux and entropy were high.
 
 
 
