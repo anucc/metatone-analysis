@@ -166,6 +166,9 @@ def main():
     flux_ratings_frame = perf_frame['flux']
     flux_ratings_frame = pd.concat([flux_ratings_frame,ratings],axis =1)
 
+    ratings = performance_surveys_2014["Q6"]
+    flux_entropy_ratings = flux_entropy_ratings.dropna()
+
     flux_entropy_ratings = pd.DataFrame({"rating":ratings})
     flux_entropy_ratings["flux"] = perf_frame["flux"]
     flux_entropy_ratings["entropy"] = perf_frame["entropy"]
