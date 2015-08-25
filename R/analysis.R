@@ -1,7 +1,7 @@
 library(ggplot2)
-
 library(MASS)
-
+chifig.3colours <- c("#e41a1c", "#377eb8", "#4daf4a")
+chifig.2colours <- c("#984ea3", "#ff7f00")
 ## time,filename,number_performers,performance_context,performance_type,instruments,notes,video_location,flux,number_performers,length_seconds,entropy,filename
 df <- read.csv("../metatone-performance-data.csv")
 df$time <- strptime(as.character(df$time), "%Y-%m-%d %H:%M:%S.%OS")
@@ -16,22 +16,48 @@ summary(reh.perf.studies.df)
 
 ggplot(reh.perf.studies.df, aes(performance_type)) + geom_bar(aes(fill = performance_context))
 ggplot(reh.perf.studies.df, aes(performance_type, flux)) + geom_boxplot(aes(fill = performance_context))
-ggplot(reh.perf.studies.df, aes(performance_type, entropy)) + geom_boxplot(aes(fill = performance_context))
+ggplot(reh.perf.studies.df, aes(performance_type, entropy)) + geom_point(aes(colour = performance_context))
+
+    geom_boxplot(aes(fill = performance_context))
 
 
 ggplot(df, aes(flux, entropy)) + geom_point(aes(colour = instruments)) + facet_wrap(~instruments)
 ggplot(df, aes(flux, entropy)) + geom_point(aes(size = number_performers, colour = performance_type))
+
 ggplot(df, aes(flux, number_performers)) + geom_point(aes(colour = performance_type))
-ggplot(df, aes(flux, exp(entropy))) + geom_point(aes(size = number_performers, colour = performance_context))
+
+ggplot(df, aes(flux, exp(entropy))) + geom_point(aes(size = number_performers, colour = performance_context), alpha = 0.6)
+
+
 
 + facet_wrap(~performance_context)
+
+
 ggplot(df, aes(time, flux)) + geom_point(aes(size = number_performers, colour = performance_type))
 
 ## stats
+head(df)
 
 ## Question: Do Performance Type and Context have a significant effect on Flux and Entropy?
 summary(aov(flux~performance_context*performance_type*instruments, reh.perf.studies.df))
-summary(aov(entropy~performance_context*performance_type*instruments, reh.perf.studies.df))
+summary(aov(flux~performance_context*performance_type*instruments, df))
+
+
+summary(aov(exp(entropy) ~ performance_context * performance_type * instruments, df))
+summary(aov((2 ^ entropy)~performance_context*performance_type*instruments, df))
+
+ggplot(reh.perf.studies.df, aes(performance_context, entropy, colour = performance_type, shape = instruments, fill = instruments)) + geom_boxplot() + geom_point(alpha = 0.5, position = position_jitter(w = 0.1, h = 0))  + scale_fill_manual(values = chifig.3colours) +scale_color_manual(values = chifig.2colours) + scale_y_log()
+
+
++ stat_summary(fun.data = "mean_cl_boot", position=position_jitter(w = 0.2, h=0))
+                                                                                                                                                                                                                                 
+
+                                                                                                                                                                                                                                        
+                                                                                                                                                                                                                               
+
+
+summary(aov(entropy ~ performance_context * performance_type * instruments, reh.perf.studies.df))
+summary(aov(exp(entropy)~performance_context*performance_type*instruments, reh.perf.studies.df))
 
 ggplot(reh.perf.studies.df,aes(performance_type,flux)) + geom_boxplot(aes(fill=instr))
 
@@ -49,13 +75,13 @@ ggplot(reh.perf.studies.df, aes(performance_context, entropy)) + geom_boxplot()
 ggplot(reh.perf.studies.df, aes(instruments, flux)) + geom_boxplot()
 ggplot(reh.perf.studies.df, aes(instruments, entropy)) + geom_boxplot()
 
-library("AER")
 flux.entropy.ratings <- read.csv("../flux_entropy_ratings.csv")
 flux.entropy.ratings
 
 summary(aov(rating ~ flux, data = flux.entropy.ratings))
 summary(aov(rating ~ entropy, data = flux.entropy.ratings))
-mod <- polr(response ~ entropy, data = subset(stats.of.df, question=="Q3"))
+
+mod <- polr(factor(rating) ~ flux, data = flux.entropy.ratings)
 
 ## get a p-value. this is filthy, but MM said it was ok.  so blame him.
 message(paste("($t = ", format(summary(mod)$coefficients[1,3], digits = 3), ", df = ", format(mod$edf, digits = 3), ", p = ", format(pt(summary(mod)$coefficients[1,3], mod$edf, lower.tail = FALSE), digits = 2), "$)", sep = ""))
