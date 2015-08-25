@@ -62,3 +62,29 @@ message(paste("($t = ", format(summary(mod)$coefficients[1,3], digits = 3), ", d
 
 ggplot(flux.entropy.ratings, aes(as.factor(rating),flux)) + geom_point() + geom_boxplot()
 ggplot(flux.entropy.ratings, aes(flux,rating)) + geom_smooth(method=lm)
+
+## time-window chunking (beginning-middle-end)
+
+library("plyr")
+library("reshape2")
+
+filenames <- llply(list.files("../data"),
+                  function(x) c(x, names(read.csv(paste("../data/", x, sep = "")))))
+
+process_session <- function(filename, session_df){
+    ## assume first column is filename, second is time
+    t <- as.numeric(strptime(as.character(session_df$time), "%Y-%m-%d %H:%M:%S"))
+    ## normalise the time variable into [0,1]
+    session_df$time <- (t-min(t))/(max(t)-min(t))
+    melt(cbind(filename, session_df), id.vars = 1:2, variable.name = "musician", value.name = "gesture")
+}
+
+df <- ldply(list.files("../data"),
+            function(x) {
+                filename <- paste("../data/", x, sep = "")
+                process_session(x, read.csv(filename))
+            })
+## get all the column classes right
+df$gesture <- factor(df$gesture)
+## add time-windowed chunk section
+df$section <- ordered(c("beginning", "middle", "end"), levels = c("beginning", "middle", "end"))[as.integer(df$time*3)+1]
