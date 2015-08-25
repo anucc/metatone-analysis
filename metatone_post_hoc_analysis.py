@@ -17,6 +17,9 @@ import metatone_classifier
 import transitions
 import PlotMetatonePerformanceAndTransitions
 import generate_posthoc_gesture_score
+from minirank import *
+from sklearn import datasets, metrics, cross_validation
+import matplotlib.pyplot as plt
 
 class MetatoneTouchLog:
     """
@@ -136,8 +139,8 @@ def main():
     perf_frame.to_csv("metatone-performance-data.csv")
 
     #print("Creating Gesture Scores.")
-    #for perf in performances:
-    #    perf.print_gesture_score() ## Prints out a gesture-score pdf for reference.
+    for perf in performances:
+        perf.print_gesture_score() ## Prints out a gesture-score pdf for reference.
 
     # print("Finding the lengths.")
     # performer_length_dict = {}
@@ -160,27 +163,25 @@ def main():
 
     # a.apply(lambda x: LIKERT_MAPPING[x])
     LIKERT_MAPPING = {1:1,2:1,3:2,4:2,5:3,6:4,7:4,8:5,9:5}
-    ratings = performance_surveys_2014["Q1"]
-    ratings = c.append(performance_surveys_2015_runthrough["Q26"].apply(lambda x: LIKERT_MAPPING[x]))
-    ratings = ratings.append(performance_surveys_2015_study["Q23"].apply(lambda x: LIKERT_MAPPING[x]))
-    flux_ratings_frame = perf_frame['flux']
-    flux_ratings_frame = pd.concat([flux_ratings_frame,ratings],axis =1)
+    #ratings = performance_surveys_2014["Q1"]
+    #ratings = ratings.append(performance_surveys_2015_runthrough["Q26"].apply(lambda x: LIKERT_MAPPING[x]))
+    #ratings = ratings.append(performance_surveys_2015_study["Q23"].apply(lambda x: LIKERT_MAPPING[x]))
+    #flux_ratings_frame = perf_frame['flux']
+    #flux_ratings_frame = pd.concat([flux_ratings_frame,ratings],axis =1)
 
-    ratings = performance_surveys_2014["Q6"]
-    flux_entropy_ratings = flux_entropy_ratings.dropna()
+    #ratings = performance_surveys_2014["Q6"]
+    #flux_entropy_ratings = flux_entropy_ratings.dropna()
 
-    flux_entropy_ratings = pd.DataFrame({"rating":ratings})
-    flux_entropy_ratings["flux"] = perf_frame["flux"]
-    flux_entropy_ratings["entropy"] = perf_frame["entropy"]
-    flux_entropy_ratings.to_csv("flux_entropy_ratings.csv")
+    #flux_entropy_ratings = pd.DataFrame({"rating":ratings})
+    #flux_entropy_ratings["flux"] = perf_frame["flux"]
+    #flux_entropy_ratings["entropy"] = perf_frame["entropy"]
+    #flux_entropy_ratings.to_csv("flux_entropy_ratings.csv")
 
 def test_regression(df):
     """
     using the logistic ordinal regression package from:
     http://fa.bianp.net/blog/2013/logistic-ordinal-regression/
     """
-    from minirank import *
-    from sklearn import datasets, metrics, cross_validation
     X, y = np.array(df[["flux","entropy"]]), np.array(df["rating"])
     #X, y = np.array(df["flux"]), np.array(df["rating"])
 
@@ -230,7 +231,6 @@ def test_regression(df):
 
 
 def plot_confusion_matrix(cm, title='Confusion matrix', cmap=plt.cm.Blues):
-    import matplotlib.pyplot as plt
     plt.imshow(cm, interpolation='nearest', cmap=cmap)
     plt.title(title)
     plt.colorbar()
