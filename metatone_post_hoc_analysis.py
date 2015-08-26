@@ -139,8 +139,8 @@ def main():
     perf_frame.to_csv("metatone-performance-data.csv")
 
     #print("Creating Gesture Scores.")
-    for perf in performances:
-        perf.print_gesture_score() ## Prints out a gesture-score pdf for reference.
+    #for perf in performances:
+    #    perf.print_gesture_score() ## Prints out a gesture-score pdf for reference.
 
     # print("Finding the lengths.")
     # performer_length_dict = {}
