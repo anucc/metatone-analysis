@@ -22,7 +22,8 @@ ggplot(reh.perf.studies.df, aes(performance_type, entropy)) + geom_point(aes(col
 
 
 ggplot(df, aes(flux, entropy)) + geom_point(aes(colour = instruments)) + facet_wrap(~instruments)
-ggplot(df, aes(flux, entropy)) + geom_point(aes(size = number_performers, colour = performance_type))
+
+ggplot(df, aes(flux, 2 ^ entropy)) + geom_point(aes(size = number_performers, colour = performance_type))
 
 ggplot(df, aes(flux, number_performers)) + geom_point(aes(colour = performance_type))
 
@@ -44,17 +45,10 @@ summary(aov(flux~performance_context*performance_type*instruments, df))
 
 
 summary(aov(exp(entropy) ~ performance_context * performance_type * instruments, df))
-summary(aov((2 ^ entropy)~performance_context*performance_type*instruments, df))
 
-ggplot(reh.perf.studies.df, aes(performance_context, entropy, colour = performance_type, shape = instruments, fill = instruments)) + geom_boxplot() + geom_point(alpha = 0.5, position = position_jitter(w = 0.1, h = 0))  + scale_fill_manual(values = chifig.3colours) +scale_color_manual(values = chifig.2colours) + scale_y_log()
+summary(aov( entropy ~ performance_context*performance_type*instruments, df))
 
-
-+ stat_summary(fun.data = "mean_cl_boot", position=position_jitter(w = 0.2, h=0))
-                                                                                                                                                                                                                                 
-
-                                                                                                                                                                                                                                        
-                                                                                                                                                                                                                               
-
+ggplot(reh.perf.studies.df, aes(performance_context, flux, colour = performance_type, shape = instruments, fill = instruments)) + geom_violin()+ geom_boxplot() + geom_point(alpha = 0.5, position = position_jitter(w = 0.1, h = 0))  + scale_fill_manual(values = chifig.3colours) +scale_color_manual(values = chifig.2colours) + stat_summary(fun.data = "mean_cl_boot", position=position_jitter(w = 0.2, h=0))
 
 summary(aov(entropy ~ performance_context * performance_type * instruments, reh.perf.studies.df))
 summary(aov(exp(entropy)~performance_context*performance_type*instruments, reh.perf.studies.df))
