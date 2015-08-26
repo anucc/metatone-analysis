@@ -41,7 +41,7 @@ class MetatoneTouchLog:
             self.gestures.to_csv(gestures_path)
         self.ensemble_transition_matrix = transitions.calculate_full_group_transition_matrix(self.gestures)
         self.ensemble_transition_matrix = transitions.transition_matrix_to_stochastic_matrix(self.ensemble_transition_matrix)
-
+        self.longest_break = self.find_longest_breaks()
 
     def first_touch_timestamp(self):
         """
@@ -107,6 +107,33 @@ class MetatoneTouchLog:
         plot_title = time.strftime('%Y-%m-%dT%H-%M-%S', performance_time) + "-gesture-plot"
         PlotMetatonePerformanceAndTransitions.plot_gesture_only_score(plot_title, self.gestures)
         print("Saved gesture plot: " + plot_title)
+        
+    def find_long_breaks(self):
+        """
+        Finds breaks longer than 2 minutes in a touch log. Prints a warning!
+        """
+        self.touches["timediff"] = self.touches.index
+        self.touches["timediff"] = self.touches["timediff"] - self.touches["timediff"].shift()
+        long_break = self.touches.ix[self.touches["timediff"] > pd.to_timedelta("00:03:00")]
+        if not long_break.empty:
+            print("WARNING: Long Break in Performance: " + self.performance_title)
+            print("Printing autosplit touch files.")
+            print(str(long_break["timediff"]))
+            first_touch = self.touches[:1].index[0]
+            frame_list = []
+            for last_touch in long_break.index:
+                part_frame = self.touches.ix[self.touches.index.indexer_between_time(first_touch,last_touch)]
+                first_touch = last_touch
+                frame_list.append(part_frame[:-1]) ## this makes it left closed, right open
+            # then add the rest:
+            last_touch = self.touches.index[-1]
+            part_frame = self.touches.ix[self.touches.index.indexer_between_time(first_touch,last_touch)] #inclusive
+            frame_list.append(part_frame) ## the last one is closed on both sides!
+            # now write each one to csv. (forget about the time_diff column)
+            for frame in frame_list:
+                frame_name = frame.index[0].strftime('%Y-%m-%dT%H-%M-%S') + "-MetatoneOSCLog-autosplit-touches.csv"
+                frame[['device_id','x_pos','y_pos','velocity']].to_csv(frame_name)
+        return 0
 
 def main():
     """Load up all the performances and do some stats"""
@@ -138,9 +165,9 @@ def main():
     #perf_frame['performance_context','performance_type','instruments','notes','video_location'] = performance_information['performance_context','performance_type','instruments','notes','video_location']
     perf_frame.to_csv("metatone-performance-data.csv")
 
-    #print("Creating Gesture Scores.")
-    #for perf in performances:
-    #    perf.print_gesture_score() ## Prints out a gesture-score pdf for reference.
+    print("Creating Gesture Scores.")
+    for perf in performances:
+        perf.print_gesture_score() ## Prints out a gesture-score pdf for reference.
 
     # print("Finding the lengths.")
     # performer_length_dict = {}
