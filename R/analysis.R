@@ -7,6 +7,9 @@ df <- read.csv("../metatone-performance-data.csv")
 df$time <- strptime(as.character(df$time), "%Y-%m-%d %H:%M:%S.%OS")
 summary(df)
 
+touch.sessions <- subset(df, performance_type %in% c("composition","improvisation"))
+summary(touch.sessions)
+
 ## rehearsals/performances/studies only
 reh.perf.studies.df <- subset(df, performance_context %in% c("rehearsal", "performance", "study"))
 reh.perf.studies.df <- subset(reh.perf.studies.df, performance_type %in% c("composition","improvisation"))
@@ -41,7 +44,14 @@ head(df)
 
 ## Question: Do Performance Type and Context have a significant effect on Flux and Entropy?
 summary(aov(flux~performance_context*performance_type*instruments, reh.perf.studies.df))
-summary(aov(flux~performance_context*performance_type*instruments, df))
+summary(aov(entropy~performance_context*performance_type*instruments, reh.perf.studies.df))
+                                        # yes! this is a result.
+# performance_type and performance_type:instruments both have significant effects
+
+
+summary(aov(flux~performance_context*performance_type*instruments, touch.sessions))
+summary(aov(entropy~performance_context*performance_type*instruments, touch.sessions))
+# entropy has another main effect for performance_context!
 
 
 summary(aov(exp(entropy) ~ performance_context * performance_type * instruments, df))
