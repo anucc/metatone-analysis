@@ -149,6 +149,7 @@ def main():
     ## Also load up the experiment design dataframe to merge with the data!
     print("Loading performance information frame.")
     performance_information = pd.read_csv("metatone-performance-information.csv", index_col='time', parse_dates=True)
+    performance_information = performance_information[['performance_context', 'performance_type', 'instruments', 'notes']]
 
     print("Generating the performance data frame.")
     perf_names = {}
@@ -162,12 +163,11 @@ def main():
             }})
     perf_frame = pd.DataFrame.from_dict(perf_names, orient="index")
     perf_frame = pd.concat([performance_information,perf_frame], axis = 1)
-    #perf_frame['performance_context','performance_type','instruments','notes','video_location'] = performance_information['performance_context','performance_type','instruments','notes','video_location']
     perf_frame.to_csv("metatone-performance-data.csv")
 
-    print("Creating Gesture Scores.")
-    for perf in performances:
-        perf.print_gesture_score() ## Prints out a gesture-score pdf for reference.
+    #print("Creating Gesture Scores.")
+    #for perf in performances:
+    #    perf.print_gesture_score() ## Prints out a gesture-score pdf for reference.
 
     # print("Finding the lengths.")
     # performer_length_dict = {}
