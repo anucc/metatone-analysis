@@ -156,8 +156,13 @@ tm <- merge(tm, metadata, by = "filename", all.x = TRUE)
 ## plotting
 library("ggplot2")
 
-ggplot(tm, aes(section, flux)) + geom_violin(aes(fill=section))
-ggplot(tm, aes(section, entropy)) + geom_violin(aes(fill=section))
+ggplot(tm, aes(section, flux)) + geom_jitter(aes(color=performance_context, size=number_performers, shape=performance_type), alpha = 0.5)
+
+ggplot(tm, aes(performance_context, flux)) + geom_boxplot(aes(fill=section)) + geom_point(alpha=.05, size = 5)
+
+ggsave("../flux-by-section.pdf")
+
+ggplot(tm, aes(section, entropy)) + geom_violin(aes(fill=performance_context))
 
 ggplot(tm, aes(section, flux)) + geom_boxplot(aes(fill=section))
 ggplot(tm, aes(section, entropy)) + geom_boxplot(aes(fill=section))
