@@ -80,7 +80,7 @@ class MetatoneTouchLog:
         return np.linalg.norm(self.ensemble_transition_matrix, ord="fro")
 
     def ensemble_trace(self):
-        return np.linalg.trace(self.ensemble_transition_matrix)
+        return np.trace(self.ensemble_transition_matrix)
 
     def performance_length(self):
         """
