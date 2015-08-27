@@ -108,11 +108,18 @@ ggplot(flux.entropy.ratings, aes(flux,rating)) + geom_smooth(method=lm) + geom_p
 
 library("plyr")
 library("reshape2")
-
+library("stringr")
 source("tm.R")
 
-filenames <- llply(list.files("../data"),
-                  function(x) c(x, names(read.csv(paste("../data/", x, sep = "")))))
+## TODO use metatone-performance-data.csv to get metadata, use
+## filename as a foreign key into the gestures data csvs (append
+## -gesture to filename)
+
+metadata <- read.csv("../metatone-performance-information.csv")[,1:10]
+metadata$time <- strptime(as.character(metadata$time), "%Y-%m-%d %H:%M:%S.%OS")
+metadata$number_performers <- as.numeric(metadata$number_performers)
+metadata$length_seconds <- as.numeric(metadata$length_seconds)
+metadata$notes <- as.character(metadata$notes)
 
 process_session <- function(filename, session_df){
     ## assume first column is filename, second is time
@@ -131,19 +138,26 @@ df <- ldply(list.files("../data"),
 df$gesture <- ordered(gestures[df$gesture+1], levels = gestures)
 ## add time-windowed chunk section
 df$section <- ordered(c("beginning", "middle", "end"), levels = c("beginning", "middle", "end"))[as.integer(df$time*3)+1]
+## return filename to "base" filename
+df$filename <- str_replace(df$filename, "-touches-posthoc-gestures.csv", "")
 
 ## Transition Matrices
 tm <- ddply(df, .(filename, musician, section), calculate.transitions)
 ## add flux, entropy
 tm <- ddply(tm, .(filename, musician, section),
             function(x){
-                data.frame(x,
-                           flux = transition.flux(x),
+                data.frame(flux = transition.flux(x),
                            entropy = transition.entropy(x))
             })
+## average flux/entropy over whole group
+tm <- ddply(tm, .(filename, section), summarise, flux = mean(flux), entropy = mean(entropy))
+tm <- merge(tm, metadata, by = "filename", all.x = TRUE)
 
 ## plotting
 library("ggplot2")
 
 ggplot(tm, aes(section, flux)) + geom_violin(aes(fill=section))
 ggplot(tm, aes(section, entropy)) + geom_violin(aes(fill=section))
+
+ggplot(tm, aes(section, flux)) + geom_boxplot(aes(fill=section))
+ggplot(tm, aes(section, entropy)) + geom_boxplot(aes(fill=section))
