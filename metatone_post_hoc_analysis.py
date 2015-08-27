@@ -41,6 +41,7 @@ class MetatoneTouchLog:
             self.gestures.to_csv(gestures_path)
         self.ensemble_transition_matrix = transitions.calculate_full_group_transition_matrix(self.gestures)
         self.ensemble_transition_matrix = transitions.transition_matrix_to_stochastic_matrix(self.ensemble_transition_matrix)
+        #self.ensemble_transition_matrix = transitions.transition_matrix_to_normal_transition_matrix(self.ensemble_transition_matrix)
         self.longest_break = self.find_long_breaks()
 
     def first_touch_timestamp(self):
@@ -81,6 +82,9 @@ class MetatoneTouchLog:
 
     def ensemble_trace(self):
         return np.trace(self.ensemble_transition_matrix)
+
+    def ensemble_one_norm(self):
+        return sum(sum(self.ensemble_transition_matrix))
 
     def performance_length(self):
         """

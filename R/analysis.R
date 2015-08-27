@@ -3,7 +3,9 @@ library(MASS)
 chifig.3colours <- c("#e41a1c", "#377eb8", "#4daf4a")
 chifig.2colours <- c("#984ea3", "#ff7f00")
 ## time,filename,number_performers,performance_context,performance_type,instruments,notes,video_location,flux,number_performers,length_seconds,entropy,filename
-raw.performance.data <- read.csv("../metatone-performance-data.csv")
+#raw.performance.data <- read.csv("../metatone-performance-data-stochasticmatrices.csv")
+raw.performance.data <- read.csv("../metatone-performance-data-normalmatrices.csv")
+#raw.performance.data <- read.csv("../metatone-performance-data.csv")
 raw.performance.data$time <- strptime(as.character(raw.performance.data$time), "%Y-%m-%d %H:%M:%S.%OS")
 valid.sessions <- subset(raw.performance.data, performance_type %in% c("composition","improvisation"))
 flux.entropy.ratings <- read.csv("../flux_entropy_ratings.csv")
@@ -24,7 +26,11 @@ ggplot(valid.sessions, aes(performance_context, flux)) + geom_boxplot(aes(fill =
 ggplot(valid.sessions, aes(performance_context, entropy)) +  geom_boxplot(aes(fill = performance_type))
 
 ggplot(valid.sessions, aes(performance_context, trace)) + geom_boxplot(aes(fill = performance_type))
-+ scale_y_log10()
+ggplot(valid.sessions, aes(performance_context, norm)) + geom_boxplot(aes(fill = performance_type))
+ggplot(valid.sessions, aes(performance_context, determinant)) + geom_boxplot(aes(fill = performance_type))
+ggplot(valid.sessions, aes(performance_context, number_performers)) + geom_boxplot(aes(fill = performance_type))
+ggplot(valid.sessions, aes(performance_context, length_seconds)) + geom_boxplot(aes(fill = performance_type))
+
 # distribution of flux and entropy
 ggplot(valid.sessions, aes(flux, entropy)) + geom_point(aes(colour = performance_type, shape = instruments)) + facet_wrap(~performance_context)
 #ggplot(df, aes(flux, 2 ^ entropy)) + geom_point(aes(size = number_performers, colour = performance_type))
@@ -34,18 +40,20 @@ ggplot(valid.sessions, aes(flux, entropy)) + geom_point(aes(colour = performance
 
 # Flux through time.
 ggplot(raw.performance.data, aes(time, flux)) + geom_point(aes(size = number_performers, colour = performance_context,shape = performance_type), alpha = 0.6)
-
+# Entropy through time
 ggplot(raw.performance.data, aes(time, entropy)) + geom_point(aes(size = number_performers, colour = performance_context,shape = performance_type), alpha = 0.6)
 
 
 ## stats
 ## Question: Do Performance Type and Context have a significant effect on Flux and Entropy?
+summary(aov(flux~performance_context*performance_type*instruments, perf.contexts))
+summary(aov(entropy~performance_context*performance_type*instruments, perf.contexts))
 summary(aov(norm~performance_context*performance_type*instruments, perf.contexts))
 summary(aov(determinant~performance_context*performance_type*instruments, perf.contexts))
 summary(aov(trace~performance_context*performance_type*instruments, perf.contexts))
+summary(aov(length_seconds~performance_context*performance_type*instruments, perf.contexts))
+summary(aov(number_performers~performance_context*performance_type*instruments, perf.contexts))
 
-summary(aov(flux~performance_context*performance_type*instruments, perf.contexts))
-summary(aov(entropy~performance_context*performance_type*instruments, perf.contexts))
                                         # yes! this is a result.
 # performance_type and performance_type:instruments both have significant effects
 summary(aov(flux~performance_context*performance_type*instruments, valid.sessions))
