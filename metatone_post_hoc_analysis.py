@@ -41,7 +41,7 @@ class MetatoneTouchLog:
             self.gestures.to_csv(gestures_path)
         self.ensemble_transition_matrix = transitions.calculate_full_group_transition_matrix(self.gestures)
         self.ensemble_transition_matrix = transitions.transition_matrix_to_stochastic_matrix(self.ensemble_transition_matrix)
-        self.longest_break = self.find_longest_breaks()
+        self.longest_break = self.find_long_breaks()
 
     def first_touch_timestamp(self):
         """
@@ -72,6 +72,15 @@ class MetatoneTouchLog:
         Returns the entropy of the whole ensemble transition matrix.
         """
         return transitions.entropy_measure(self.ensemble_transition_matrix)
+
+    def ensemble_determinant(self):
+        return np.linalg.det(self.ensemble_transition_matrix)
+
+    def ensemble_norm(self):
+        return np.linalg.norm(self.ensemble_transition_matrix, ord="fro")
+
+    def ensemble_trace(self):
+        return np.linalg.trace(self.ensemble_transition_matrix)
 
     def performance_length(self):
         """
@@ -159,7 +168,10 @@ def main():
             "number_performers": perf.number_performers(),
             "length_seconds": perf.performance_length(),
             "flux": perf.ensemble_flux(),
-            "entropy": perf.ensemble_entropy()
+            "entropy": perf.ensemble_entropy(),
+            "determinant": perf.ensemble_determinant(),
+            "norm": perf.ensemble_norm(),
+            "trace": perf.ensemble_trace()
             }})
     perf_frame = pd.DataFrame.from_dict(perf_names, orient="index")
     perf_frame = pd.concat([performance_information,perf_frame], axis = 1)
