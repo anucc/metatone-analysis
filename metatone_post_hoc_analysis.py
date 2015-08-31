@@ -206,18 +206,18 @@ def main():
 
     # a.apply(lambda x: LIKERT_MAPPING[x])
     LIKERT_MAPPING = {1:1,2:1,3:2,4:2,5:3,6:4,7:4,8:5,9:5}
-    #ratings = performance_surveys_2014["Q1"]
+    #ratings = performance_surveys_2014["Q6"]
     #ratings = ratings.append(performance_surveys_2015_runthrough["Q26"].apply(lambda x: LIKERT_MAPPING[x]))
     #ratings = ratings.append(performance_surveys_2015_study["Q23"].apply(lambda x: LIKERT_MAPPING[x]))
     #flux_ratings_frame = perf_frame['flux']
     #flux_ratings_frame = pd.concat([flux_ratings_frame,ratings],axis =1)
 
-    #ratings = performance_surveys_2014["Q6"]
-    #flux_entropy_ratings = flux_entropy_ratings.dropna()
+    ratings = performance_surveys_2014["Q6"]
 
-    #flux_entropy_ratings = pd.DataFrame({"rating":ratings})
-    #flux_entropy_ratings["flux"] = perf_frame["flux"]
-    #flux_entropy_ratings["entropy"] = perf_frame["entropy"]
+    flux_entropy_ratings = pd.DataFrame({"rating":ratings})
+    flux_entropy_ratings = flux_entropy_ratings.dropna()
+    flux_entropy_ratings["flux"] = perf_frame["flux"]
+    flux_entropy_ratings["entropy"] = perf_frame["entropy"]
     #flux_entropy_ratings.to_csv("flux_entropy_ratings.csv")
 
 def test_regression(df):
