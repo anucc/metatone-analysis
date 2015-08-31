@@ -1,7 +1,9 @@
 library(ggplot2)
 library(MASS)
+library(grid)
 chifig.3colours <- c("#e41a1c", "#377eb8", "#4daf4a")
 chifig.2colours <- c("#984ea3", "#ff7f00")
+chifig.5colours <- c("#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00")
 ## time,filename,number_performers,performance_context,performance_type,instruments,notes,video_location,flux,number_performers,length_seconds,entropy,filename
 #raw.performance.data <- read.csv("../metatone-performance-data-stochasticmatrices.csv")
 raw.performance.data <- read.csv("../metatone-performance-data-normalmatrices.csv")
@@ -10,37 +12,54 @@ raw.performance.data$time <- strptime(as.character(raw.performance.data$time), "
 valid.sessions <- subset(raw.performance.data, performance_type %in% c("composition","improvisation"))
 flux.entropy.ratings <- read.csv("../flux_entropy_ratings.csv")
 #summary(raw.performance.data)
-#summary(valid.sessions)
+summary(valid.sessions)
 ## rehearsals/performances/studies only
 perf.contexts <- subset(raw.performance.data, performance_context %in% c("rehearsal", "performance", "study"))
 perf.contexts <- subset(perf.contexts, performance_type %in% c("composition","improvisation"))
-## 
 summary(perf.contexts$performance_type) # Composition: 23 - Improvisation: 72
 summary(perf.contexts)
+                                        # Calculate total recorded time.
+total.seconds <- max(valid.sessions$length_seconds)
+message(paste(total.seconds %/% 3600, "H", (total.seconds %% 3600) %/% 60, "M", signif(total.seconds %% 60, 4), "S", sep = "" ))
+                                        # performer data
+message(paste(sum(valid.sessions$number_performers),min(valid.sessions$number_performers),median(valid.sessions$number_performers),max(valid.sessions$number_performers),sep = " & "))
+                                        #
+message(paste(signif(sum(valid.sessions$flux),4),signif(min(valid.sessions$flux),4),signif(median(valid.sessions$flux),4),signif(max(valid.sessions$flux),4),sep = " & "))
+
+# cut out data_collection
+#valid.sessions <- (subset(valid.sessions, performance_context != "data_collection"))
 ## plots
 # Count of Session Data
-ggplot(valid.sessions, aes(performance_context)) + geom_bar(aes(fill = performance_type))
+ggplot(valid.sessions, aes(performance_context)) + geom_bar(aes(fill = performance_type)) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "top", legend.box = "horizontal") + scale_fill_manual(values=chifig.2colours)
+quartz.save("../flux-entropy-paper/figures/sessions-count.pdf", type = "pdf")
 #ggplot(perf.contexts, aes(performance_context)) + geom_bar(aes(fill = performance_type))
-#
-ggplot(valid.sessions, aes(performance_context, flux)) + geom_boxplot(aes(fill = performance_type))
-ggplot(valid.sessions, aes(performance_context, entropy)) +  geom_boxplot(aes(fill = performance_type))
+# Flux boxplot
+ggplot(valid.sessions, aes(performance_context, flux)) + geom_boxplot(aes(fill = performance_type)) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "top", legend.box = "horizontal") + scale_fill_manual(values=chifig.2colours) + scale_x_discrete("performance context")
+quartz.save("../flux-entropy-paper/figures/flux-boxplot.pdf", type = "pdf")
+# Entropy boxplot
+ggplot(valid.sessions, aes(performance_context, entropy)) +  geom_boxplot(aes(fill = performance_type))  + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "top", legend.box = "horizontal") + scale_fill_manual(values=chifig.2colours) + scale_x_discrete("performance context")
+quartz.save("../flux-entropy-paper/figures/entropy-boxplot.pdf", type = "pdf")
 
 ggplot(valid.sessions, aes(performance_context, trace)) + geom_boxplot(aes(fill = performance_type))
 ggplot(valid.sessions, aes(performance_context, norm)) + geom_boxplot(aes(fill = performance_type))
-ggplot(valid.sessions, aes(performance_context, determinant)) + geom_boxplot(aes(fill = performance_type))
+ggplot(perf.contexts, aes(performance_context, determinant)) + geom_boxplot(aes(fill = performance_type))
 ggplot(valid.sessions, aes(performance_context, number_performers)) + geom_boxplot(aes(fill = performance_type))
 ggplot(valid.sessions, aes(performance_context, length_seconds)) + geom_boxplot(aes(fill = performance_type))
 
 # distribution of flux and entropy
-ggplot(valid.sessions, aes(flux, entropy)) + geom_point(aes(colour = performance_type, shape = instruments)) + facet_wrap(~performance_context)
+ggplot((subset(valid.sessions, performance_context != "data_collection")), aes(flux, entropy)) + geom_point(aes(colour = performance_type, shape = instruments), alpha = 0.8)  + facet_wrap(~performance_context) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "right", legend.box = "vertical") + scale_colour_manual(values=chifig.2colours)
+quartz.save("../flux-entropy-paper/figures/flux-entropy-distribution.pdf", type = "pdf")
 #ggplot(df, aes(flux, 2 ^ entropy)) + geom_point(aes(size = number_performers, colour = performance_type))
 #ggplot(df, aes(flux, number_performers)) + geom_point(aes(colour = performance_type))
 #ggplot(valid.session, aes(flux, exp(entropy))) + geom_point(aes(size = number_performers, colour = performance_context), alpha = 0.6)
 # + facet_wrap(~performance_context)
 
 # Flux through time.
-ggplot(raw.performance.data, aes(time, flux)) + geom_point(aes(size = number_performers, colour = performance_context,shape = performance_type), alpha = 0.6)
-# Entropy through time
+ggplot(valid.sessions, aes(time, flux)) + geom_point(aes(colour = performance_context,shape = performance_type), alpha = 0.8) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "right", legend.box = "vertical") + scale_colour_manual(values=chifig.5colours)
+quartz.save("../flux-entropy-paper/figures/flux-through-time.pdf", type = "pdf")
+
+
+                                        # Entropy through time
 ggplot(raw.performance.data, aes(time, entropy)) + geom_point(aes(size = number_performers, colour = performance_context,shape = performance_type), alpha = 0.6)
 
 
@@ -51,6 +70,7 @@ summary(aov(entropy~performance_context*performance_type*instruments, perf.conte
 summary(aov(norm~performance_context*performance_type*instruments, perf.contexts))
 summary(aov(determinant~performance_context*performance_type*instruments, perf.contexts))
 summary(aov(trace~performance_context*performance_type*instruments, perf.contexts))
+
 summary(aov(length_seconds~performance_context*performance_type*instruments, perf.contexts))
 summary(aov(number_performers~performance_context*performance_type*instruments, perf.contexts))
 
