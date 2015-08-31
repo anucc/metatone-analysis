@@ -26,6 +26,8 @@ message(paste(sum(valid.sessions$number_performers),min(valid.sessions$number_pe
                                         #
 message(paste(signif(sum(valid.sessions$flux),4),signif(min(valid.sessions$flux),4),signif(median(valid.sessions$flux),4),signif(max(valid.sessions$flux),4),sep = " & "))
 
+
+## Initial Plots
 # cut out data_collection
 #valid.sessions <- (subset(valid.sessions, performance_context != "data_collection"))
 ## plots
@@ -45,7 +47,6 @@ ggplot(valid.sessions, aes(performance_context, norm)) + geom_boxplot(aes(fill =
 ggplot(perf.contexts, aes(performance_context, determinant)) + geom_boxplot(aes(fill = performance_type))
 ggplot(valid.sessions, aes(performance_context, number_performers)) + geom_boxplot(aes(fill = performance_type))
 ggplot(valid.sessions, aes(performance_context, length_seconds)) + geom_boxplot(aes(fill = performance_type))
-
 # distribution of flux and entropy
 ggplot((subset(valid.sessions, performance_context != "data_collection")), aes(flux, entropy)) + geom_point(aes(colour = performance_type, shape = instruments), alpha = 0.8)  + facet_wrap(~performance_context) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "right", legend.box = "vertical") + scale_colour_manual(values=chifig.2colours)
 quartz.save("../flux-entropy-paper/figures/flux-entropy-distribution.pdf", type = "pdf")
@@ -57,13 +58,9 @@ quartz.save("../flux-entropy-paper/figures/flux-entropy-distribution.pdf", type 
 # Flux through time.
 ggplot(valid.sessions, aes(time, flux)) + geom_point(aes(colour = performance_context,shape = performance_type), alpha = 0.8) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "right", legend.box = "vertical") + scale_colour_manual(values=chifig.5colours)
 quartz.save("../flux-entropy-paper/figures/flux-through-time.pdf", type = "pdf")
-
+# Entropy through time.
 ggplot(valid.sessions, aes(time, entropy)) + geom_point(aes(colour = performance_context,shape = performance_type), alpha = 0.8) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "right", legend.box = "vertical") + scale_colour_manual(values=chifig.5colours)
 quartz.save("../flux-entropy-paper/figures/entropy-through-time.pdf", type = "pdf")
-
-
-                                        # Entropy through time
-ggplot(raw.performance.data, aes(time, entropy)) + geom_point(aes(size = number_performers, colour = performance_context,shape = performance_type), alpha = 0.6)
 
 
 ## stats
@@ -84,35 +81,10 @@ summary(aov(entropy~performance_context*performance_type*instruments, valid.sess
 # entropy has another main effect for performance_context!
 summary(aov(entropy~performance_context, valid.sessions))
 
-
-summary(aov(trace~performance_context*performance_type*instruments, perf.contexts))
-
-
-
-summary(aov(exp(entropy) ~ performance_context * performance_type * instruments, perf.contexts))
-summary(aov( entropy ~ performance_context*performance_type*instruments, perf.contexts))
-
+# worst plot ever.
 ggplot(perf.contexts, aes(performance_context, flux, colour = performance_type, shape = instruments, fill = instruments)) + geom_violin()+ geom_boxplot() + geom_point(alpha = 0.5, position = position_jitter(w = 0.1, h = 0))  + scale_fill_manual(values = chifig.3colours) +scale_color_manual(values = chifig.2colours) + stat_summary(fun.data = "mean_cl_boot", position=position_jitter(w = 0.2, h=0))
 
-summary(aov(entropy ~ performance_context * performance_type * instruments, reh.perf.studies.df))
-summary(aov(exp(entropy)~performance_context*performance_type*instruments, reh.perf.studies.df))
-
-ggplot(reh.perf.studies.df,aes(performance_type,flux)) + geom_boxplot(aes(fill=instr))
-
-ggplot(reh.perf.studies.df,aes(performance_type,flux)) + geom_boxplot()
-
-+ geom_boxplot(aes(fill=performance_context))
-
-
-ggplot(reh.perf.studies.df,aes(performance_type,entropy)) + geom_boxplot() + geom_point()
-ggplot(reh.perf.studies.df,aes(performance_type,flux)) + geom_boxplot() + geom_point()
-
-ggplot(reh.perf.studies.df, aes(performance_context, flux)) + geom_boxplot()
-ggplot(reh.perf.studies.df, aes(performance_context, entropy)) + geom_boxplot()
-
-ggplot(reh.perf.studies.df, aes(instruments, flux)) + geom_boxplot()
-ggplot(reh.perf.studies.df, aes(instruments, entropy)) + geom_boxplot()
-
+# Potential POLR stuff.
 #flux.entropy.ratings <- read.csv("../flux_entropy_ratings.csv")
 #flux.entropy.ratings
 
