@@ -58,6 +58,9 @@ quartz.save("../flux-entropy-paper/figures/flux-entropy-distribution.pdf", type 
 ggplot(valid.sessions, aes(time, flux)) + geom_point(aes(colour = performance_context,shape = performance_type), alpha = 0.8) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "right", legend.box = "vertical") + scale_colour_manual(values=chifig.5colours)
 quartz.save("../flux-entropy-paper/figures/flux-through-time.pdf", type = "pdf")
 
+ggplot(valid.sessions, aes(time, entropy)) + geom_point(aes(colour = performance_context,shape = performance_type), alpha = 0.8) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "right", legend.box = "vertical") + scale_colour_manual(values=chifig.5colours)
+quartz.save("../flux-entropy-paper/figures/entropy-through-time.pdf", type = "pdf")
+
 
                                         # Entropy through time
 ggplot(raw.performance.data, aes(time, entropy)) + geom_point(aes(size = number_performers, colour = performance_context,shape = performance_type), alpha = 0.6)
