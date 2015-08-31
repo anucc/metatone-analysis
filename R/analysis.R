@@ -105,6 +105,7 @@ library("plyr")
 library("reshape2")
 library("stringr")
 library("ggplot2")
+library("grid")
 source("tm.R")
 
 metadata <- read.csv("../metatone-performance-information.csv")[,1:10]
@@ -156,11 +157,17 @@ ggplot(tm, aes(performance_type, flux)) + geom_boxplot(aes(fill=section)) + geom
 
 summary(aov(flux~performance_type*section, tm))
 
-ggplot(tm, aes(as.numeric(section), flux)) + geom_boxplot(aes(fill=section)) + geom_point(alpha=.05, size = 5) + stat_smooth(method="lm") + facet_wrap(~performance_context)
-
-ggplot(tm, aes(1, flux)) + geom_boxplot(aes(fill=section)) + geom_point(alpha=.05, size = 5)
+ggplot(tm, aes(section, flux)) + geom_boxplot(aes(fill=section)) + facet_wrap(~performance_context) + scale_fill_manual(values=chifig.3colours) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "top", legend.box = "horizontal")
 
 ggsave("../flux-by-section.pdf")
+
+ggplot(tm, aes(section, entropy)) + geom_boxplot(aes(fill=section)) + facet_wrap(~performance_context) + scale_fill_manual(values=chifig.3colours) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "top", legend.box = "horizontal")
+
+ggsave("../entropy-by-section.pdf")
+
+
+
+ggplot(tm, aes(1, flux)) + geom_boxplot(aes(fill=section)) + geom_point(alpha=.05, size = 5)
 
 ggplot(tm, aes(section, entropy)) + geom_violin(aes(fill=performance_context))
 
