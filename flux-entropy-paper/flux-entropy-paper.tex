@@ -121,6 +121,18 @@
 
 \section{Introduction}
 
+\begin{figure*}
+  \centering
+  \includegraphics[width=\linewidth]{figures/three-performance-contexts}
+  \caption{Collaborative musical interaction with our touch-screen
+    interfaces in three different contexts: (left to right) rehearsal
+    in a studio,
+    performance in front of an audience, and demonstration at a
+    research poster session. All of these session were improvised,
+    and in the performance session, the musicians used percussion
+    instruments as well as iPads.
+    \label{fig:three-performance-contexts}}
+\end{figure*}
 
 
 Finally, we report a quantitative analysis of the transition matrices
@@ -209,117 +221,253 @@ interaction.
 
 \section{A Corpus of Musical Touch-Screen Interactions}
 
-In the following sections, we will use transition matrices, flux, and
-entropy to analyse a corpus of data collected as part of our research
-into collaborative interactions with musical touch-screen tablet
-interfaces. In a period of more than two years (April 2013 - June 2015), we have
-collected data from $150$ sessions where various participants used
-musical touch-screen interfaces on Apple iPad devices. Each session
-took place in a number of contexts including rehearsals, performances, lab study
-sessions, classes, and casual demonstrations. Participants performed
-free improvisations as well as written compositions and performed on
-iPads alone or using setups of iPads and acoustic percussion
-instruments. The median length of these sessions was 7m28s (minimum was
-1m0s and maximum was 26m) and the
-median number of participants was four (minimum 1, maximum 7).
+\begin{table}
+%\centering
+\begin{tabular}{l|llll}
+\hline
+            & Total & Min  & Median   & Max     \\ 
+\hline
+N           & 150       &         &        &  \\
+Record size & 306MB     &         &        &   \\
+Length      & 20H34M22S & 1M0S    & 7M29S  & 26M0S\\
+Participants& 524       & 1       & 4      & 9    \\
+Flux        &           & 0.02239 & 0.1445 & 0.3246\\
+\hline
+\end{tabular}
+\caption{
+  Representative data about the corpus of musical touch-screen
+  interaction sessions used in this study. These sessions were
+  rehearsals, performances, studies, and demonstration sessions and the
+  participants improvised or performed written compositions. Each record
+  consisted of touch-data recorded in CSV format and was later analysed
+  with a gestural classification system. Some participants were
+  present in multiple sessions, however this data was not tracked in
+  the corpus.\label{corpus-table}}
+\end{table}
+
 
 \begin{figure}
   \centering
   \includegraphics[width=\linewidth]{figures/sessions-count}
-  \caption{
+  \caption{Distribution of the sessions in our interaction corpus by
+    performance context. Improvisations or compositions were repeated
+    several times in rehearsals and study sessions but only performed
+    once in concerts.
     \label{fig:count-data}}
 \end{figure}
+
+
+In the following sections, we will use transition matrices and the
+flux measure to analyse a corpus of data collected as part of our research
+into collaborative interactions with musical touch-screen tablet
+interfaces. 
+
+Over a period of more than two years (April 2013 - June 2015), we have
+collected data from $150$ sessions where various participants used
+musical touch-screen interfaces on Apple iPad devices. These
+interfaces all shared a common mode of interaction where the majority
+of the screen could be used for free form touch interactions; tapping
+produced short sounds, while swiping or swirling produced long sounds
+with volume proportional to the velocity of the moving touch point.
+All touch interactions from each participant in a session was recorded
+by sending data to a central server application. This data was stored
+in CSV files recording the date and time, X, and Y locations,
+velocity, and a unique device identifier for each touch event detected
+by the iOS operating system.
+
+Each session took place in a number of contexts including rehearsals,
+performances, lab study sessions, classes, and casual demonstrations,
+some of which are shown in Figure
+\ref{fig:three-performance-contexts}. Participants performed free
+improvisations as well as written compositions and performed on iPads
+alone or using setups of iPads and acoustic percussion instruments.
+The median length of these sessions was 7m29s and the median number of
+participants was four, other descriptive statistics about the sessions
+is shown in Table \ref{corpus-table}. Each session was coded with
+metadata regarding the session context (whether it was a performance,
+rehearsal, study, demonstration, or data collection session), the
+session type (either improvisation or composition), and the
+instruments used (iPads alone, or iPads with acoustic percussion). The
+distribution of recorded sessions by context and type is shown in
+Figure \ref{fig:count-data}.
+
+To analyse the gestural interactions present in each of these
+sessions, the sessions were automatically coded according to a
+vocabulary of nine simple, continuous, touch-screen gestures. Examples
+of these gestures was generated by an expert user in formal process
+where each gesture was performed for 1-minute and feature vectors of
+discriptive statistics on these examples was used to train a Random
+Forest~\cite{Breiman:2001kx} classifier\footnote{The classifier used
+  was from Python's Scikit-learn package~\cite{scikit-learn}.}. The
+classifier was applied to 5-second windows of the touch-data each
+second provide a chain of gesture-states for each participant in each
+session. These chains can be used to create $9 /times 9$
+gesture-transition matrices for individual performers, and the whole
+ensemble in each session.
+
+
+
+% While musical interactions such as those in
+% our corpus are often analysed using qualitative methods, it is
+% problematic to 
+
+While the interaction sessions recorded in our corpus were performed
+by many different participants with varying experience levels, in
+different contexts and on different instrumental setups, the common
+interface and method of recording the data allows all the sessions to
+be transformed into gesture sequences. This common format allows us to
+ask if performance styles vary in between these different situations.
+The sequences can be plotted and inspected qualitatively, but
+transition matrices present a quantitative approach to analysing such
+interactions.
+
+In the rest of this paper we will use our matrix measure techniques to
+interrogate this dataset and to answer two questions. First, do the
+transition matrix measures allow us to distinguish between different
+performance contexts, types and instrumental setups? Secondly, do
+these performance measure allow us further insight into the corpus
+than the metadata can provide?
+
+\subsection{Differentiating interaction sessions}
+\label{differentiating-interaction-sessions}
+
+The distribution of flux and entropy with respect to session contexts,
+types and instrumentation are shown in Figures \ref{fig:flux-boxplot},
+\ref{fig:entropy-boxplot}, and \ref{fig:flux-entropy-distribution}. A
+three-way ANOVA procedure was performed on the data set to find
+whether the metatdata could significantly predict the entropy and flux
+values. In the following analysis, only the 95 performative sessions
+were considered (i.e. not the demonstration or data collection
+contexts).
+
+All main effects on flux were found to be significant: performance
+context ($F(2,86) = 6.28, p < 0.01$), performance type ($F(1,86) =
+7.21, p < 0.01$), and instrumentation ($F(1,86) = 20.06, p < 0.001$).
+Significant interaction effects were also found for performance
+context and type ($F(1,86) = 6.18, p < 0.05$), and performance context and
+instrumentation ($F(1,86) = 10.48, p < 0.01$).
+
+For entropy, significant main effects were found due to performance
+context ($F(2,86) = 12.10, p < 0.001$), and instrumentation ($F(1,86)
+= 25.86$). The interaction of performance type and instrumentation was
+also found to be significant ($F(1,86) = 9.93, p<0.01$).
+
+These tests show that the different interaction styles that might be
+present in performance contexts, types and
+instrumentations are reflected in the values of flux and entropy of
+their transition matrices.
+
+% need to add overall contrasts column to do pairwise t-tests.
 
 \begin{figure}
   \centering
   \includegraphics[width=\linewidth]{figures/flux-boxplot}
-  \caption{
+  \caption{Distributions of flux values by performance context. Study
+    and rehearsal sessions had the highest flux for improvisations
+    which fell during performances. Compositions had lower flux in
+    rehearsals than performances.
     \label{fig:flux-boxplot}}
 \end{figure}
 
 \begin{figure}
   \centering
   \includegraphics[width=\linewidth]{figures/entropy-boxplot}
-  \caption{
-    \label{fig:entropy-boxplot}}
+  \caption{Distribution of entropy by
+  performance context. Demonstration sessions had much lower entropy
+  indicating data unevenly spread in the transition matrices. This
+  could be because untrained
+  participants did not explore the full gestural potential of the
+  instruments. 
+  \label{fig:entropy-boxplot} }
 \end{figure}
 
 \begin{figure}
   \centering
   \includegraphics[width=\linewidth]{figures/flux-entropy-distribution}
-  \caption{
+  \caption{Distribution of flux and entropy by performance type and
+    context. Flux and entropy tended to be linearly related in
+    improvisations, particularly in demonstrations and studies, while
+    compositions had a more scattered relationship.
     \label{fig:flux-entropy-distribution}}
 \end{figure}
 
-A three-way ANOVA procedure was performed on the data set to find
-whether performance context, type, and instrumentation could predict
-the entropy and flux values.
 
-Using performative sessions only (i.e. not the demonstration
-sessions). We found a significant main effect on flux due to
-performance type ($F(1,86) = 5.87, p < 0.05$), and interaction
-effect due to performance type and instrumentation ($F(1,86) = 12.37, p
-< 0.001$). Similar effects on entropy were found due to performance
-type ($F(1,86) = 13.62, p < 0.001$) and an interaction effect due to
-performance type and instrumentation ($F(1,86) = 4.98, p < 0.05$). The
-effect on entropy due to performance context (rehearsal,
-performance, or study) was not found to be significant at $\alpha =
-0.05$, ($F(2,86) = 2.11, p = 0.128$). When including demonstration
-sessions in the analysis, however, performance context was found to
-have a significant main effect on entropy ($F(4,138) = 5.07, p <
-0.001$).
+\subsection{Breaking performances into sections}
+
+It is clear that flux and entropy can detect the variation in
+performance styles in between performances of different types, but can
+they be used to understand some of the internal structure of
+performances? A simple model for understanding temporal art-forms is
+the ``beginning, middle, end'' structure. To investigate how the
+structure fits session in our corpus, we can divide the
+gestural-sequences of each session into thirds and calculate the
+transition matrices given by each section.
 
 
 
 
-\section{Modelling Performer Ratings with Flux and Entropy}
+
+\subsection{Performance styles over time}
 
 \begin{figure}
   \centering
-  \includegraphics[width=\linewidth]{figures/stat-response-fit.pdf}
-  \caption{Transition matrix statistics (flux above and entropy below) vs Likert responses for
-    questions 3, 6 and 7, all of which exhibited significant
-    relationships under a proportional odds logistic regression model.
-    A least-squares linear model is shown with a dotted line.
-    \label{fig:stat-response-fit}}
+  \includegraphics[width=\linewidth]{figures/flux-through-time}
+  \caption{Distribution flux values of sessions through time.
+    Different performance styles are visible as clusters of similar
+    flux regardless of performance context.
+    \label{fig:flux-through-time}}
 \end{figure}
 
-One final question to explore is how these flux and entropy measures
-in the interaction data relate to the performers' perceptions of their
-performance?
+\section{Conclusions}
 
-To answer this question, we construct models with the flux and entropy
-measures as independent variables and the Likert responses (1 to 5) as
-the dependent variable. These measures exhibited clear relationships
-for three of the survey questions (Questions 3, 6 and 7), which are
-plotted in Figure~\ref{fig:stat-response-fit} where the least-squares
-line of best fit has a positive gradient for both flux and entropy.
+% \section{Modelling Performer Ratings with Flux and Entropy}
 
-Determining the strengths of these positive relationships is
-difficult, both due to the problem of treating ordinal Likert
-responses as numeric~\cite{Gardner:2007fj} and also
-due to the unknown distribution of the entropy and flux statistics. As
-a result, we use a conservative proportional odds logistic regression
-(POLR)~(using the \texttt{polr} function in \texttt{R}, from the MASS
-package \cite{Venables:2002qv}) to treat the Likert responses as an
-ordered factor response.
+% \begin{figure}
+%   \centering
+%   \includegraphics[width=\linewidth]{figures/stat-response-fit.pdf}
+%   \caption{Transition matrix statistics (flux above and entropy below) vs Likert responses for
+%     questions 3, 6 and 7, all of which exhibited significant
+%     relationships under a proportional odds logistic regression model.
+%     A least-squares linear model is shown with a dotted line.
+%     \label{fig:stat-response-fit}}
+% \end{figure}
 
-The POLR results indicate a significant ($p<0.05$) relationship
-between the user-reported Likert response and the flux statistic for
-Question 3 ($t = 2.77, df = 4, p = 0.025$), Question 6
-($t = 2.41, df = 4, p = 0.037$), and Question 7
-($t = 2.49, df = 4, p = 0.034$). The same questions displayed a
-significant relationship for the entropy statistic: Question 3
-($t = 2.93, df = 4, p = 0.022$), Question 6
-($t = 2.69, df = 4, p = 0.028$), and Question 7
-($t = 2.89, df = 4, p = 0.022$). These relationships are shown in
-Figure~\ref{fig:stat-response-fit}.
+% One final question to explore is how these flux and entropy measures
+% in the interaction data relate to the performers' perceptions of their
+% performance?
 
-It is notable that these questions (3, 6, and 7) all pertain to the
-\emph{perceived effect of the agent} on the performers. As the agent
-uses the flux measure to trigger new-idea messages, it appears that
-performers appreciated its intervention more in particularly creative
-performances where flux and entropy were high.
+% To answer this question, we construct models with the flux and entropy
+% measures as independent variables and the Likert responses (1 to 5) as
+% the dependent variable. These measures exhibited clear relationships
+% for three of the survey questions (Questions 3, 6 and 7), which are
+% plotted in Figure~\ref{fig:stat-response-fit} where the least-squares
+% line of best fit has a positive gradient for both flux and entropy.
+
+% Determining the strengths of these positive relationships is
+% difficult, both due to the problem of treating ordinal Likert
+% responses as numeric~\cite{Gardner:2007fj} and also
+% due to the unknown distribution of the entropy and flux statistics. As
+% a result, we use a conservative proportional odds logistic regression
+% (POLR)~(using the \texttt{polr} function in \texttt{R}, from the MASS
+% package \cite{Venables:2002qv}) to treat the Likert responses as an
+% ordered factor response.
+
+% The POLR results indicate a significant ($p<0.05$) relationship
+% between the user-reported Likert response and the flux statistic for
+% Question 3 ($t = 2.77, df = 4, p = 0.025$), Question 6
+% ($t = 2.41, df = 4, p = 0.037$), and Question 7
+% ($t = 2.49, df = 4, p = 0.034$). The same questions displayed a
+% significant relationship for the entropy statistic: Question 3
+% ($t = 2.93, df = 4, p = 0.022$), Question 6
+% ($t = 2.69, df = 4, p = 0.028$), and Question 7
+% ($t = 2.89, df = 4, p = 0.022$). These relationships are shown in
+% Figure~\ref{fig:stat-response-fit}.
+
+% It is notable that these questions (3, 6, and 7) all pertain to the
+% \emph{perceived effect of the agent} on the performers. As the agent
+% uses the flux measure to trigger new-idea messages, it appears that
+% performers appreciated its intervention more in particularly creative
+% performances where flux and entropy were high.
 
 
 
