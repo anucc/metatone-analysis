@@ -129,11 +129,8 @@ ggplot(flux.entropy.ratings, aes(flux,rating)) + geom_smooth(method=lm) + geom_p
 library("plyr")
 library("reshape2")
 library("stringr")
+library("ggplot2")
 source("tm.R")
-
-## TODO use metatone-performance-data.csv to get metadata, use
-## filename as a foreign key into the gestures data csvs (append
-## -gesture to filename)
 
 metadata <- read.csv("../metatone-performance-information.csv")[,1:10]
 metadata$time <- strptime(as.character(metadata$time), "%Y-%m-%d %H:%M:%S.%OS")
@@ -172,13 +169,21 @@ tm <- ddply(tm, .(filename, musician, section),
 ## average flux/entropy over whole group
 tm <- ddply(tm, .(filename, section), summarise, flux = mean(flux), entropy = mean(entropy))
 tm <- merge(tm, metadata, by = "filename", all.x = TRUE)
+## remove data which doesn't make sense in a  beginning-middle-end sense
+tm <- subset(tm, performance_type!="fail")
+tm <- subset(tm, performance_context %in% c("performance", "rehearsal", "study"))
 
 ## plotting
-library("ggplot2")
 
 ggplot(tm, aes(section, flux)) + geom_jitter(aes(color=performance_context, size=number_performers, shape=performance_type), alpha = 0.5)
 
-ggplot(tm, aes(performance_context, flux)) + geom_boxplot(aes(fill=section)) + geom_point(alpha=.05, size = 5)
+ggplot(tm, aes(performance_type, flux)) + geom_boxplot(aes(fill=section)) + geom_point(alpha=.05, size = 5)
+
+summary(aov(flux~performance_type*section, tm))
+
+ggplot(tm, aes(as.numeric(section), flux)) + geom_boxplot(aes(fill=section)) + geom_point(alpha=.05, size = 5) + stat_smooth(method="lm") + facet_wrap(~performance_context)
+
+ggplot(tm, aes(1, flux)) + geom_boxplot(aes(fill=section)) + geom_point(alpha=.05, size = 5)
 
 ggsave("../flux-by-section.pdf")
 
@@ -186,3 +191,5 @@ ggplot(tm, aes(section, entropy)) + geom_violin(aes(fill=performance_context))
 
 ggplot(tm, aes(section, flux)) + geom_boxplot(aes(fill=section))
 ggplot(tm, aes(section, entropy)) + geom_boxplot(aes(fill=section))
+
+## things!

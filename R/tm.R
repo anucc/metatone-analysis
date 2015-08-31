@@ -42,8 +42,9 @@ calculate.transitions <- function(df, left.stochastic=FALSE){
 ## }
 
 transition.flux <- function(df){
-    if(sum(df$prob)!=1)
-        message("warning: prob sum isn't 1")
+    if(sum(df$prob)!=1){
+        message("warning: prob sum isn't 1 - sum = ", sum(df$prob))
+    }
     on.diag.sum <- sum(df[df$from==df$to, "prob"])
     data.frame(flux = 1-on.diag.sum)
 }
