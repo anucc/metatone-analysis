@@ -85,22 +85,21 @@ summary(aov(entropy~performance_context, valid.sessions))
 ggplot(perf.contexts, aes(performance_context, flux, colour = performance_type, shape = instruments, fill = instruments)) + geom_violin()+ geom_boxplot() + geom_point(alpha = 0.5, position = position_jitter(w = 0.1, h = 0))  + scale_fill_manual(values = chifig.3colours) +scale_color_manual(values = chifig.2colours) + stat_summary(fun.data = "mean_cl_boot", position=position_jitter(w = 0.2, h=0))
 
 # Potential POLR stuff.
-#flux.entropy.ratings <- read.csv("../flux_entropy_ratings.csv")
-#flux.entropy.ratings
-
+flux.entropy.ratings <- read.csv("../flux_entropy_ratings.csv")
+head(flux.entropy.ratings)
 summary(aov(rating ~ flux, data = flux.entropy.ratings))
 summary(aov(rating ~ entropy, data = flux.entropy.ratings))
-
 mod <- polr(factor(rating) ~ flux, data = flux.entropy.ratings)
-
 ## get a p-value. this is filthy, but MM said it was ok.  so blame him.
 message(paste("($t = ", format(summary(mod)$coefficients[1,3], digits = 3), ", df = ", format(mod$edf, digits = 3), ", p = ", format(pt(summary(mod)$coefficients[1,3], mod$edf, lower.tail = FALSE), digits = 2), "$)", sep = ""))
-
 ggplot(flux.entropy.ratings, aes(as.factor(rating),flux)) + geom_point() + geom_boxplot()
 ggplot(flux.entropy.ratings, aes(flux,rating)) + geom_smooth(method=lm) + geom_point()
 
-## time-window chunking (beginning-middle-end)
 
+
+#######
+## time-window chunking (beginning-middle-end)
+#######
 library("plyr")
 library("reshape2")
 library("stringr")
@@ -122,7 +121,7 @@ process_session <- function(filename, session_df){
     melt(cbind(filename, session_df), id.vars = 1:2, variable.name = "musician", value.name = "gesture")
 }
 
-df <- ldply(list.files("../data"),
+df <- ldply(list.files("../data", pattern = "-posthoc-gestures\\.csv$"),
             function(x) {
                 filename <- paste("../data/", x, sep = "")
                 process_session(x, read.csv(filename))
@@ -149,21 +148,50 @@ tm <- merge(tm, metadata, by = "filename", all.x = TRUE)
 tm <- subset(tm, performance_type!="fail")
 tm <- subset(tm, performance_context %in% c("performance", "rehearsal", "study"))
 
-## plotting
+improvisation.sections <- subset(tm, performance_type = "improvisation")
+                                 
+## Models
+# ANOVA and t-test
+summary(aov(flux~performance_type*section, improvisation.sections))
+pairwise.t.test(improvisation.sections$flux,improvisation.sections$section,p.adjust.method="bonferroni")
+summary(aov(entropy~performance_type*section, tm))
+pairwise.t.test(tm$entropy,tm$section,p.adjust.method="bonferroni")
 
+# Ordinal Logistic Regression
+mod <- polr(section ~ flux, data = improvisation.sections)
+summary(mod)
+## get a p-value. this is filthy, but MM said it was ok.  so blame him.
+message(paste("($t = ", format(summary(mod)$coefficients[1,3], digits = 3), ", df = ", format(mod$edf, digits = 3), ", p = ", format(pt(summary(mod)$coefficients[1,3], mod$edf, lower.tail = FALSE), digits = 2), "$)", sep = ""))
+
+
+
+## plotting
 ggplot(tm, aes(section, flux)) + geom_jitter(aes(color=performance_context, size=number_performers, shape=performance_type), alpha = 0.5)
 
-ggplot(tm, aes(performance_type, flux)) + geom_boxplot(aes(fill=section)) + geom_point(alpha=.05, size = 5)
-
-summary(aov(flux~performance_type*section, tm))
-
-ggplot(tm, aes(section, flux)) + geom_boxplot(aes(fill=section)) + facet_wrap(~performance_context) + scale_fill_manual(values=chifig.3colours) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "top", legend.box = "horizontal")
-
-ggsave("../flux-by-section.pdf")
-
-ggplot(tm, aes(section, entropy)) + geom_boxplot(aes(fill=section)) + facet_wrap(~performance_context) + scale_fill_manual(values=chifig.3colours) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "top", legend.box = "horizontal")
-
-ggsave("../entropy-by-section.pdf")
+# Jitter Plots Section x Flux and type
+ggplot(tm,aes(section,flux))  + facet_wrap(~performance_type) + geom_jitter(alpha=.5,size=3, position = position_jitter(w = 0.1, h = 0), aes(colour=section)) + scale_colour_manual(values=chifig.3colours) + stat_smooth(aes(group=1),method="lm",size=2) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "none", legend.box = "horizontal")
+ggsave("../flux-entropy-paper/figures/type-section-flux-lm.pdf")
+# Jitter Plots Section x Entropy and type
+ggplot(tm,aes(section,entropy))  + facet_wrap(~performance_type) + geom_jitter(alpha=.5,size=3, position = position_jitter(w = 0.1, h = 0), aes(colour=section)) + scale_colour_manual(values=chifig.3colours) + stat_smooth(aes(group=1),method="lm",size=2) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "none", legend.box = "horizontal")
+ggsave("../flux-entropy-paper/figures/type-section-entropy-lm.pdf")
+# Jitter Plots Section x Flux and context
+ggplot(tm,aes(section,flux))  + facet_wrap(~performance_context) + geom_jitter(alpha=.5,size=3, position = position_jitter(w = 0.1, h = 0), aes(colour=section)) + scale_colour_manual(values=chifig.3colours) + stat_smooth(aes(group=1),method="lm",size=2) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "none", legend.box = "horizontal")
+ggsave("../flux-entropy-paper/figures/context-section-flux-lm.pdf")
+# Jitter Plots Section x Entropy and context
+ggplot(tm,aes(section,entropy))  + facet_wrap(~performance_context) + geom_jitter(alpha=.5,size=3, position = position_jitter(w = 0.1, h = 0), aes(colour=section)) + scale_colour_manual(values=chifig.3colours) + stat_smooth(aes(group=1),method="lm",size=2) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "none", legend.box = "horizontal")
+ggsave("../flux-entropy-paper/figures/context-section-entropy-lm.pdf")
+# Boxplot of Flux by section and context
+ggplot(improvisation.sections, aes(section, flux)) + geom_boxplot(aes(fill=section)) + facet_wrap(~performance_context) + scale_fill_manual(values=chifig.3colours) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "none", legend.box = "horizontal")
+ggsave("../flux-entropy-paper/figures/context-section-flux.pdf")
+# Box plot of Entropy by section and context
+ggplot(improvisation.sections, aes(section, entropy)) + geom_boxplot(aes(fill=section)) + facet_wrap(~performance_context) + scale_fill_manual(values=chifig.3colours) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "none", legend.box = "horizontal")
+ggsave("../flux-entropy-paper/figures/context-section-entropy.pdf")
+# Boxplot of Flux by section and type
+ggplot(improvisation.sections, aes(section, flux)) + geom_boxplot(aes(fill=section)) + facet_wrap(~performance_type) + scale_fill_manual(values=chifig.3colours) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "none", legend.box = "horizontal")
+ggsave("../flux-entropy-paper/figures/type-section-flux.pdf")
+# Box plot of Entropy by section and type
+ggplot(improvisation.sections, aes(section, entropy)) + geom_boxplot(aes(fill=section)) + facet_wrap(~performance_type) + scale_fill_manual(values=chifig.3colours) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "none", legend.box = "horizontal")
+ggsave("../flux-entropy-paper/figures/type-section-entropy.pdf")
 
 
 
