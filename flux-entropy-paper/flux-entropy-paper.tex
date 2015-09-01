@@ -175,23 +175,25 @@ number of times that state $j$ follows state $i$. Each participant's
 transition matrix, $P$, will then be an $m \times m$ matrix with
 entries calculated thus
 \begin{equation}
-  p_{ij} = \frac{N_{ij}}{\sum_j N_{ij}}
+  p_{ij} = \frac{N_{ij}}{\sum_i \sum_j N_{ij}}
 \end{equation}
 Each entry of $P$ will be such that the transition probability from
 state $i$ to state $j$ is given by the entry in the $i^{th}$ row and
 the $j^{th}$ column. The transition activity of the whole ensemble can
 be calculated by averaging the transition matrix for each performer.
+The matrix is normalised so that the sum of all elements will be one
+(rather than the sum of each row being one, as for a right-stochastic matrix).
 
 To compare the transition matrices of different interactions we use
 two high-level quantities, ``flux'' and ``entropy''. The flux of a
-sequence is defined as the ratio of changed transitions (e.g. state $x$
-to state $y$), to self transitions (e.g. state $x$ to state $x$). The
-the flux of a transition matrix $P$ can be calculated as:
+sequence is defined as the ratio of changed transitions (e.g.
+$A \rightarrow B$), to self transitions (e.g. $A \rightarrow A $). The
+the flux of a transition matrix $P$ can easily be calculated:
 \begin{equation}
-  \mathrm{flux}(P) = 1 - tr(P)
+  \mathrm{flux}(P) = 1 - \mathrm{tr}(P)
 \end{equation}
-Where the trace of P, $tr(P)$ is given by the vector 1-norm of the
-diagonal entries of $P$. 
+Where the trace of P, $tr(P)$ is given by the sum of the diagonal
+entries of $P$.
 % Where $\|P\|_1 = \sum_{i,j}|p_{ij}|$ is the element-wise 1-norm of $P$
 % and $\mathrm{diag}(P)$ is the vector of the main diagonal entries of
 % $P$.
@@ -200,9 +202,9 @@ returns a value in the interval $[0,1]$ and will return 0 when
 participants never change state, and 1 when participants never stay on
 the same state for two measurements in a row.
 
-A related (but different) high-level derived quantity for the
-transition matrix is its entropy, defined in the
-information-theoretic~\cite{Shannon:1948rt} sense:
+Another useful measure that can be used on a transition matrix is its
+entropy, defined in the information-theoretic~\cite{Shannon:1948rt}
+sense:
 \begin{equation}
   H(P) = -\sum_{i,j}p_{ij}\log_2(p_{ij})
 \end{equation}
@@ -259,9 +261,9 @@ Flux        &           & 0.02239 & 0.1445 & 0.3246\\
 
 
 In the following sections, we will use transition matrices and the
-flux measure to analyse a corpus of data collected as part of our research
-into collaborative interactions with musical touch-screen tablet
-interfaces. 
+flux measure to analyse a corpus of data collected as part of our
+research into collaborative interactions with musical touch-screen
+tablet interfaces.
 
 Over a period of more than two years (April 2013 - June 2015), we have
 collected data from $150$ sessions where various participants used
@@ -376,7 +378,9 @@ present in performance contexts, types and
 instrumentations are reflected in the values of flux and entropy of
 their transition matrices.
 
-% todo need to add overall contrasts column to do pairwise t-tests.
+\begin{itemize}
+\item todo: need to add overall contrasts column to do pairwise t-tests.
+\end{itemize}
 
 \subsection{Breaking performances into sections}
 
