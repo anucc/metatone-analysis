@@ -1,6 +1,9 @@
 library(ggplot2)
 library(MASS)
 library(grid)
+library(gridExtra)
+library(reshape2)
+
 chifig.3colours <- c("#e41a1c", "#377eb8", "#4daf4a")
 chifig.2colours <- c("#984ea3", "#ff7f00")
 chifig.5colours <- c("#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00")
@@ -26,6 +29,12 @@ message(paste(sum(valid.sessions$number_performers),min(valid.sessions$number_pe
                                         #
 message(paste(signif(sum(valid.sessions$flux),4),signif(min(valid.sessions$flux),4),signif(median(valid.sessions$flux),4),signif(max(valid.sessions$flux),4),sep = " & "))
 
+# New long data frame for initial plots.
+valid.sessions.long <- read.csv("../metatone-performance-data-normalmatrices.csv")
+valid.sessions.long <- melt(valid.sessions.long,id.vars=c("time","performance_context","performance_type","instruments"),variable.name = "measure",measure.vars = c("flux","entropy"))
+valid.sessions.long$time <- strptime(as.character(valid.sessions.long$time), "%Y-%m-%d %H:%M:%S.%OS")
+valid.sessions.long <-  subset(valid.sessions.long, performance_type %in% c("composition","improvisation"))
+summary(valid.sessions.long)
 
 ## Initial Plots
 # cut out data_collection
@@ -36,11 +45,14 @@ ggplot(valid.sessions, aes(performance_context)) + geom_bar(aes(fill = performan
 quartz.save("../flux-entropy-paper/figures/sessions-count.pdf", type = "pdf")
 #ggplot(perf.contexts, aes(performance_context)) + geom_bar(aes(fill = performance_type))
 # Flux boxplot
-ggplot(valid.sessions, aes(performance_context, flux)) + geom_boxplot(aes(fill = performance_type)) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "top", legend.box = "horizontal") + scale_fill_manual(values=chifig.2colours) + scale_x_discrete("performance context")
-quartz.save("../flux-entropy-paper/figures/flux-boxplot.pdf", type = "pdf")
+#ggplot(valid.sessions, aes(performance_context, flux)) + geom_boxplot(aes(fill = performance_type)) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "top", legend.box = "horizontal") + scale_fill_manual(values=chifig.2colours) + scale_x_discrete("performance context")
+#quartz.save("../flux-entropy-paper/figures/flux-boxplot.pdf", type = "pdf")
 # Entropy boxplot
-ggplot(valid.sessions, aes(performance_context, entropy)) +  geom_boxplot(aes(fill = performance_type))  + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "top", legend.box = "horizontal") + scale_fill_manual(values=chifig.2colours) + scale_x_discrete("performance context")
-quartz.save("../flux-entropy-paper/figures/entropy-boxplot.pdf", type = "pdf")
+#ggplot(valid.sessions, aes(performance_context, entropy)) +  geom_boxplot(aes(fill = performance_type))  + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "top", legend.box = "horizontal") + scale_fill_manual(values=chifig.2colours) + scale_x_discrete("performance context")
+#quartz.save("../flux-entropy-paper/figures/entropy-boxplot.pdf", type = "pdf")
+# Both Flux and Entropy Boxplot
+ggplot(valid.sessions.long, aes(performance_context, value)) + geom_boxplot(aes(fill = performance_type)) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "top", legend.box = "horizontal") + scale_fill_manual(values=chifig.2colours) + scale_x_discrete("performance context") + scale_y_continuous("measure value") + facet_grid(measure~.,scales="free_y")
+quartz.save("../flux-entropy-paper/figures/context-flux-entropy-boxplot.pdf", type = "pdf")
 
 ggplot(valid.sessions, aes(performance_context, trace)) + geom_boxplot(aes(fill = performance_type))
 ggplot(valid.sessions, aes(performance_context, norm)) + geom_boxplot(aes(fill = performance_type))
@@ -56,12 +68,17 @@ quartz.save("../flux-entropy-paper/figures/flux-entropy-distribution.pdf", type 
 # + facet_wrap(~performance_context)
 
 # Flux through time.
-ggplot(valid.sessions, aes(time, flux)) + geom_point(aes(colour = performance_context,shape = performance_type), alpha = 0.8) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "right", legend.box = "vertical") + scale_colour_manual(values=chifig.5colours)
-quartz.save("../flux-entropy-paper/figures/flux-through-time.pdf", type = "pdf")
+#ggplot(valid.sessions, aes(time, flux)) + geom_point(aes(colour = performance_context,shape = performance_type), alpha = 0.8) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "right", legend.box = "vertical") + scale_colour_manual(values=chifig.5colours)
+#quartz.save("../flux-entropy-paper/figures/flux-through-time.pdf", type = "pdf")
 # Entropy through time.
-ggplot(valid.sessions, aes(time, entropy)) + geom_point(aes(colour = performance_context,shape = performance_type), alpha = 0.8) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "right", legend.box = "vertical") + scale_colour_manual(values=chifig.5colours)
-quartz.save("../flux-entropy-paper/figures/entropy-through-time.pdf", type = "pdf")
+#ggplot(valid.sessions, aes(time, entropy)) + geom_point(aes(colour = performance_context,shape = performance_type), alpha = 0.8) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "right", legend.box = "vertical") + scale_colour_manual(values=chifig.5colours)
+#quartz.save("../flux-entropy-paper/figures/entropy-through-time.pdf", type = "pdf")
+                                        # Flux and Entropy through time.
+ggplot(valid.sessions.long, aes(time, value)) + geom_point(aes(colour = performance_context,shape = performance_type), alpha = 0.8) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "right", legend.box = "vertical") + scale_colour_manual(values=chifig.5colours) + scale_y_continuous("measure value") + facet_grid(measure~.,scales="free_y")
+quartz.save("../flux-entropy-paper/figures/flux-entropy-through-time.pdf", type = "pdf")
 
+
+grid.arrange(ggplot(valid.sessions, aes(time, flux)) + geom_point(aes(colour = performance_context,shape = performance_type), alpha = 0.8) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "top", legend.box = "vertical") + scale_colour_manual(values=chifig.5colours),ggplot(valid.sessions, aes(time, entropy)) + geom_point(aes(colour = performance_context,shape = performance_type), alpha = 0.8) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "none", legend.box = "vertical") + scale_colour_manual(values=chifig.5colours),nrow = 2)
 
 ## stats
 ## Question: Do Performance Type and Context have a significant effect on Flux and Entropy?
@@ -82,7 +99,7 @@ summary(aov(entropy~performance_context*performance_type*instruments, valid.sess
 summary(aov(entropy~performance_context, valid.sessions))
 
 # worst plot ever.
-ggplot(perf.contexts, aes(performance_context, flux, colour = performance_type, shape = instruments, fill = instruments)) + geom_violin()+ geom_boxplot() + geom_point(alpha = 0.5, position = position_jitter(w = 0.1, h = 0))  + scale_fill_manual(values = chifig.3colours) +scale_color_manual(values = chifig.2colours) + stat_summary(fun.data = "mean_cl_boot", position=position_jitter(w = 0.2, h=0))
+#ggplot(perf.contexts, aes(performance_context, flux, colour = performance_type, shape = instruments, fill = instruments)) + geom_violin()+ geom_boxplot() + geom_point(alpha = 0.5, position = position_jitter(w = 0.1, h = 0))  + scale_fill_manual(values = chifig.3colours) +scale_color_manual(values = chifig.2colours) + stat_summary(fun.data = "mean_cl_boot", position=position_jitter(w = 0.2, h=0))
 
 # Potential POLR stuff.
 flux.entropy.ratings <- read.csv("../flux_entropy_ratings.csv")
@@ -96,12 +113,10 @@ ggplot(flux.entropy.ratings, aes(as.factor(rating),flux)) + geom_point() + geom_
 ggplot(flux.entropy.ratings, aes(flux,rating)) + geom_smooth(method=lm) + geom_point()
 
 
-
 #######
 ## time-window chunking (beginning-middle-end)
 #######
 library("plyr")
-library("reshape2")
 library("stringr")
 library("ggplot2")
 library("grid")
@@ -151,7 +166,6 @@ tm <- subset(tm, performance_context %in% c("performance", "rehearsal", "study")
 improvisation.sections <- subset(tm, performance_type == "improvisation")
 composition.sections <- subset(tm, performance_type == "composition")
 
-head(improvisation.sections)
 ## Models
 
 # Kruskal Wallis tests on performance type sections.
@@ -171,24 +185,14 @@ pairwise.t.test(performances$entropy,performances$section,p.adjust.method="bonfe
 summary(aov(entropy~section+Error(section/filename),data=performances))
 summary(performances)
 kruskal.test(performances$entropy~performances$section)
-
-#summary(aov(flux~section + Error(section/filename), data = tm))
-
+#summary(aov(flux~section + Error(section/filename), data = tm)) 
 #TukeyHSD(aov(flux~section + Error(section/filename), data=improvisation.sections))
 #pairwise.t.test(improvisation.sections$flux,improvisation.sections$section,p.adjust.method="bonferroni")
 #summary(aov(entropy~performance_type*section, tm))
 #pairwise.t.test(tm$entropy,tm$section,p.adjust.method="bonferroni")
 
-# Ordinal Logistic Regression
-mod <- polr(section ~ entropy, data = performances)
-summary(mod)
-## get a p-value. this is filthy, but MM said it was ok.  so blame him.
-message(paste("($t = ", format(summary(mod)$coefficients[1,3], digits = 3), ", df = ", format(mod$edf, digits = 3), ", p = ", format(pt(summary(mod)$coefficients[1,3], mod$edf, lower.tail = FALSE), digits = 2), "$)", sep = ""))
-
-
-
 ## plotting
-ggplot(tm, aes(section, flux)) + geom_jitter(aes(color=performance_context, size=number_performers, shape=performance_type), alpha = 0.5)
+# todo: make long data frames and produce faceted plots.
 
 # Jitter Plots Section x Flux and type
 ggplot(tm,aes(section,flux))  + facet_wrap(~performance_type) + geom_jitter(alpha=.5,size=3, position = position_jitter(w = 0.1, h = 0), aes(colour=section)) + scale_colour_manual(values=chifig.3colours) + stat_smooth(aes(group=1),method="lm",size=2) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "none", legend.box = "horizontal")
@@ -215,13 +219,3 @@ ggsave("../flux-entropy-paper/figures/type-section-flux.pdf")
 ggplot(tm, aes(section, entropy)) + geom_boxplot(aes(fill=section)) + facet_wrap(~performance_type) + scale_fill_manual(values=chifig.3colours) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "none", legend.box = "horizontal")
 ggsave("../flux-entropy-paper/figures/type-section-entropy.pdf")
 
-
-
-ggplot(tm, aes(1, flux)) + geom_boxplot(aes(fill=section)) + geom_point(alpha=.05, size = 5)
-
-ggplot(tm, aes(section, entropy)) + geom_violin(aes(fill=performance_context))
-
-ggplot(tm, aes(section, flux)) + geom_boxplot(aes(fill=section))
-ggplot(tm, aes(section, entropy)) + geom_boxplot(aes(fill=section))
-
-## things!

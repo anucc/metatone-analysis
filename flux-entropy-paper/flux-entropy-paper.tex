@@ -220,7 +220,7 @@ on the other hand, will be low. Entropy, therefore, is a measure of
 how broad the participant's exploration of the state space is in a given
 interaction.
 
-\section{A Corpus of Musical Touch-Screen Interactions}
+\section{A Corpus of Touch-Screen Interactions}
 
 \begin{table}
 %\centering
@@ -326,14 +326,38 @@ than the metadata can provide?
 \subsection{Differentiating interaction sessions}
 \label{differentiating-interaction-sessions}
 
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{figures/context-flux-entropy-boxplot}
+  \caption{Distributions of flux and entropy values by performance context. Study
+    and rehearsal sessions had the highest flux for improvisations
+    which fell during performances. Compositions had lower flux in
+    rehearsals than performances. Demonstration sessions had much lower entropy
+  indicating data unevenly spread in the transition matrices. This
+  could be because untrained
+  participants did not explore the full gestural potential of the
+  instruments. 
+  \label{fig:flux-entropy-boxplot}}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{figures/flux-entropy-distribution}
+  \caption{Distribution of flux and entropy by performance type and
+    context. Flux and entropy tended to be linearly related in
+    improvisations, particularly in demonstrations and studies, while
+    compositions had a more scattered relationship.
+    \label{fig:flux-entropy-distribution}}
+\end{figure}
+
 The distribution of flux and entropy with respect to session contexts,
-types and instrumentation are shown in Figures \ref{fig:flux-boxplot},
-\ref{fig:entropy-boxplot}, and \ref{fig:flux-entropy-distribution}. A
-three-way ANOVA procedure was performed on the data set to find
-whether the metatdata could significantly predict the entropy and flux
-values. In the following analysis, only the 95 performative sessions
-were considered (i.e. not the demonstration or data collection
-contexts).
+types and instrumentation are shown in Figures
+\ref{fig:flux-entropy-boxplot} and
+\ref{fig:flux-entropy-distribution}. A three-way ANOVA procedure was
+performed on the data set to find whether the metatdata could
+significantly predict the entropy and flux values. In the following
+analysis, only the 95 performative sessions were considered (i.e. not
+the demonstration or data collection contexts).
 
 All main effects on flux were found to be significant: performance
 context ($F(2,86) = 6.28, p < 0.01$), performance type ($F(1,86) =
@@ -354,39 +378,6 @@ their transition matrices.
 
 % todo need to add overall contrasts column to do pairwise t-tests.
 
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{figures/flux-boxplot}
-  \caption{Distributions of flux values by performance context. Study
-    and rehearsal sessions had the highest flux for improvisations
-    which fell during performances. Compositions had lower flux in
-    rehearsals than performances.
-    \label{fig:flux-boxplot}}
-\end{figure}
-
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{figures/entropy-boxplot}
-  \caption{Distribution of entropy by
-  performance context. Demonstration sessions had much lower entropy
-  indicating data unevenly spread in the transition matrices. This
-  could be because untrained
-  participants did not explore the full gestural potential of the
-  instruments. 
-  \label{fig:entropy-boxplot} }
-\end{figure}
-
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{figures/flux-entropy-distribution}
-  \caption{Distribution of flux and entropy by performance type and
-    context. Flux and entropy tended to be linearly related in
-    improvisations, particularly in demonstrations and studies, while
-    compositions had a more scattered relationship.
-    \label{fig:flux-entropy-distribution}}
-\end{figure}
-
-
 \subsection{Breaking performances into sections}
 
 It is clear that flux and entropy can detect the variation in
@@ -398,69 +389,52 @@ structure fits session in our corpus, we can divide the
 gestural-sequences of each session into thirds and calculate the
 transition matrices given by each section.
 
-Figures \ref{fig:type-section-flux} and \ref{fig:type-section-entropy}
-show that the flux and entropy of compositions are much more stable
-with respect to section than for improvisations. The stability of
-compositions is to be expected since performers are expected to use
-the same gestures in each rehearsal and performance of a composition,
-it may be that different kinds of compositions could result in
-different structural differences. Both measures have a downward trend
-through sections in improvisations with Kruskal-Wallis tests showing a
-significant effect of section on flux ($\chi^2(2)=5.8, p=0.05$). This
-could be explained by performers entering an exploration stage at the
-start of an improvisation, where they change gesture frequently to
-experiment with different ideas. At the end of an improvisation,
-performers may change gesture less frequently while ``winding up'' the
-performance.
+Figures \ref{fig:type-section-flux-entropy} shows that the flux and
+entropy of compositions are much more stable with respect to section
+than for improvisations. The stability of compositions is to be
+expected since performers are expected to use the same gestures in
+each rehearsal and performance of a composition, it may be that
+different kinds of compositions could result in different structural
+differences. Both measures have a downward trend through sections in
+improvisations with Kruskal-Wallis tests showing a significant effect
+of section on flux ($\chi^2(2)=5.8, p=0.05$). This could be explained
+by performers entering an exploration stage at the start of an
+improvisation, where they change gesture frequently to experiment with
+different ideas. At the end of an improvisation, performers may change
+gesture less frequently while ``winding up'' the performance.
 
 The gestural change in improvisation can be further explored by
-dividing the sessions by performance context. Figures
-\ref{fig:context-section-flux}, and \ref{fig:context-section-entropy} show
-this division for improvisations only. In rehearsals and studies the
-distribution of flux and entropy over sections has a similar shape,
-both measures drop in the ending section of studies and after the
-beginning section in rehearsals. In performances however, flux drops
-after the beginning while entropy drops substantially in the ending
-section. This indicates a more constrained performance style in this
-closing section, where performers transition between fewer gestures in
-the final section of performances.
+dividing the sessions by performance context. Figure
+\ref{fig:context-section-flux-entropy} shows this division for
+improvisations only. In rehearsals and studies the distribution of
+flux and entropy over sections has a similar shape, both measures drop
+in the ending section of studies and after the beginning section in
+rehearsals. In performances however, flux drops after the beginning
+while entropy drops substantially in the ending section. This
+indicates a more constrained performance style in this closing
+section, where performers transition between fewer gestures in the
+final section of performances.
 
 % todo add the plots here.
 
 \begin{figure}
   \centering
   \includegraphics[width=\linewidth]{figures/type-section-flux}
+\includegraphics[width=\linewidth]{figures/type-section-entropy}
   \caption{The flux of compositions and improvisations divided into
-    beginning, middle, and end. Compositions remain stable throughout,
-    but improvisations show a downward trend.
-    \label{fig:type-section-flux}}
-\end{figure}
-
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{figures/type-section-entropy}
-  \caption{The entropy of compositions and improvisations divided by
-    beginning, middle, and end. Composition entropy tends to move up
+    beginning, middle, and end. Composition flux remains stable throughout,
+    but improvisations show a downward trend and composition entropy tends to move up
     at the end, while flux moves down.
-    \label{fig:type-section-entropy}}
+    \label{fig:type-section-flux-entropy}}
 \end{figure}
-
-% todo add the results from the plots.
 
 \begin{figure}
   \centering
   \includegraphics[width=\linewidth]{figures/context-section-flux}
-  \caption{The distribution in performances divided by ``beginnings,
-    middles, and ends''.
-    \label{fig:context-section-flux}}
-\end{figure}
-
-\begin{figure}
-  \centering
   \includegraphics[width=\linewidth]{figures/context-section-entropy}
-  \caption{The distribution of entropy in performances divided into
-    sections and by performance context.
-    \label{fig:context-section-entropy}}
+  \caption{The distribution of flux and entropy in performances divided by ``beginnings,
+    middles, and ends''.
+    \label{fig:context-section-flux-entropy}}
 \end{figure}
 
 
@@ -469,37 +443,28 @@ the final section of performances.
 
 While the interaction session in our corpus have many different
 contexts, they are all part of a program of artistic and HCI research
-that has evolved over time. Figures \ref{fig:flux-through-time} and
-\ref{fig:entropy-through-time} show the values of flux and entropy for
-each session in the corpus. Over the course of this research program,
-different ensembles and different activities have been emphasised,
-some of these differences can be seen as clusters of performances with
-similar flux and entropy in the two plots. For instance, the earliest
-series of rehearsals and performances had flux between 0.05 and 0.15,
-while the period of activity after July 2014 had flux between 0.1 and
-0.25. This change corresponded with an intensive series of study
-sessions and rehearsals where the participants developed a more
-fluctuating style of performance. The entropy between these two
-periods, however, remains at a similiar level, showing the the space
-of available gestures that the performers explored was more constant.
+that has evolved over time. Figure \ref{fig:flux-entropy-through-time}
+shows the values of flux and entropy for each session in the corpus.
+Over the course of this research program, different ensembles and
+different activities have been emphasised, some of these differences
+can be seen as clusters of performances with similar flux and entropy
+in the two plots. For instance, the earliest series of rehearsals and
+performances had flux between 0.05 and 0.15, while the period of
+activity after July 2014 had flux between 0.1 and 0.25. This change
+corresponded with an intensive series of study sessions and rehearsals
+where the participants developed a more fluctuating style of
+performance. The entropy between these two periods, however, remains
+at a similiar level, showing the the space of available gestures that
+the performers explored was more constant.
 
 \begin{figure}
   \centering
-  \includegraphics[width=\linewidth]{figures/flux-through-time}
-  \caption{Distribution of flux values of sessions through time.
+  \includegraphics[width=\linewidth]{figures/flux-entropy-through-time}
+  \caption{Distribution of flux and entropy values of sessions through time.
     Different performance styles are visible as clusters of similar
     flux regardless of performance context.
-    \label{fig:flux-through-time}}
+    \label{fig:flux-entropy-through-time}}
 \end{figure}
-
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{figures/entropy-through-time}
-  \caption{Distribution of entropy values of sessions through time.
-    \label{fig:entropy-through-time}}
-\end{figure}
-
-% todo add anymore results from these plots
 
 \section{Conclusions}
 
