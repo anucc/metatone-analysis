@@ -66,7 +66,7 @@
 % \newcommand\tabhead[1]{\small\textbf{#1}}
 
 % End of preamble. Here it comes the document.
-\begin{document}
+  \begin{document}
 
 \title{Quantitative Evaluation of Touch-Screen Performance with
   Transition Matrix Measures}
@@ -163,8 +163,8 @@ transitions between adjacent states in such a sequence and derive two
 high-level quantities that we use to compare musical performances
 under different circumstances. Suppose that an collaborative
 interaction can be characterised by a set of interaction states $S$
-with $m$ members.
-Each participant's activity can then be represented as a sequence:
+with $m$ members. Each participant's activity can then be represented
+as a sequence:
 \begin{equation}
  X_n \hskip 2em n = 1, \ldots, N
 \end{equation}
@@ -184,17 +184,18 @@ be calculated by averaging the transition matrix for each performer.
 
 To compare the transition matrices of different interactions we use
 two high-level quantities, ``flux'' and ``entropy''. The flux of a
-transition matrix $P$ is given by
+sequence is defined as the ratio of changed transitions (e.g. state $x$
+to state $y$), to self transitions (e.g. state $x$ to state $x$). The
+the flux of a transition matrix $P$ can be calculated as:
 \begin{equation}
-  \mathrm{flux}(P) = \frac{\|P\|_1-\|\mathrm{diag}(P)\|}{\|P\|_1}
+  \mathrm{flux}(P) = 1 - tr(P)
 \end{equation}
-Where $\|P\|_1 = \sum_{i,j}|p_{ij}|$ is the element-wise 1-norm of $P$
-and $\mathrm{diag}(P)$ is the vector of the main diagonal entries of
-$P$.
-
-Flux measures the ratio of transitions that change
-state to self-transitions from a certain state back to itself.
-Intuitively, it is a measure of how frequently a group changes state. Flux
+Where the trace of P, $tr(P)$ is given by the vector 1-norm of the
+diagonal entries of $P$. 
+% Where $\|P\|_1 = \sum_{i,j}|p_{ij}|$ is the element-wise 1-norm of $P$
+% and $\mathrm{diag}(P)$ is the vector of the main diagonal entries of
+% $P$.
+Intuitively, flux is a measure of how frequently a group changes state. Flux
 returns a value in the interval $[0,1]$ and will return 0 when
 participants never change state, and 1 when participants never stay on
 the same state for two measurements in a row.
@@ -397,23 +398,71 @@ structure fits session in our corpus, we can divide the
 gestural-sequences of each session into thirds and calculate the
 transition matrices given by each section.
 
+Figures \ref{fig:type-section-flux} and \ref{fig:type-section-entropy}
+show that the flux and entropy of compositions are much more stable
+with respect to section than for improvisations. The stability of
+compositions is to be expected since performers are expected to use
+the same gestures in each rehearsal and performance of a composition,
+it may be that different kinds of compositions could result in
+different structural differences. Both measures have a downward trend
+through sections in improvisations with Kruskal-Wallis tests showing a
+significant effect of section on flux ($\chi^2(2)=5.8, p=0.05$). This
+could be explained by performers entering an exploration stage at the
+start of an improvisation, where they change gesture frequently to
+experiment with different ideas. At the end of an improvisation,
+performers may change gesture less frequently while ``winding up'' the
+performance.
+
+The gestural change in improvisation can be further explored by
+dividing the sessions by performance context. Figures
+\ref{fig:context-section-flux}, and \ref{fig:context-section-entropy} show
+this division for improvisations only. In rehearsals and studies the
+distribution of flux and entropy over sections has a similar shape,
+both measures drop in the ending section of studies and after the
+beginning section in rehearsals. In performances however, flux drops
+after the beginning while entropy drops substantially in the ending
+section. This indicates a more constrained performance style in this
+closing section, where performers transition between fewer gestures in
+the final section of performances.
+
 % todo add the plots here.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{figures/type-section-flux}
+  \caption{The flux of compositions and improvisations divided into
+    beginning, middle, and end. Compositions remain stable throughout,
+    but improvisations show a downward trend.
+    \label{fig:type-section-flux}}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{figures/type-section-entropy}
+  \caption{The entropy of compositions and improvisations divided by
+    beginning, middle, and end. Composition entropy tends to move up
+    at the end, while flux moves down.
+    \label{fig:type-section-entropy}}
+\end{figure}
 
 % todo add the results from the plots.
 
 \begin{figure}
   \centering
-  \includegraphics[width=\linewidth]{figures/section-flux}
-  \caption{
-    \label{fig:section-flux}}
+  \includegraphics[width=\linewidth]{figures/context-section-flux}
+  \caption{The distribution in performances divided by ``beginnings,
+    middles, and ends''.
+    \label{fig:context-section-flux}}
 \end{figure}
 
 \begin{figure}
   \centering
-  \includegraphics[width=\linewidth]{figures/section-entropy}
-  \caption{
-    \label{fig:section-entropy}}
+  \includegraphics[width=\linewidth]{figures/context-section-entropy}
+  \caption{The distribution of entropy in performances divided into
+    sections and by performance context.
+    \label{fig:context-section-entropy}}
 \end{figure}
+
 
 
 \subsection{Performance styles over time}
@@ -453,6 +502,20 @@ of available gestures that the performers explored was more constant.
 % todo add anymore results from these plots
 
 \section{Conclusions}
+
+In this paper we have extended the transition matrix methodology
+previously presented at CHI with two simple matrix measures, flux and
+entropy, both of which have been demonstrated to have significant
+discriminatory power with regards to a corpus of 150 collaborative
+touch-screen interactions. Not only do these measures differentiate
+between different types of sessions and the internal structure of
+these sessions, but they have explanatory power that has thrown new
+light on the musical interactions under examination. HCI researchers
+are increasingly concerned with interactions that happen in-the-wild,
+where the interactions of many users may be collected without the
+opportunity to survey or interview users. We suggest that analysing
+interaction-state transitions using matrices and simple measures can
+lead to new insights into HCI interactions outside the lab.
 
 % todo blah de blah
 
