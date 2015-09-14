@@ -41,8 +41,8 @@ summary(valid.sessions.long)
 #valid.sessions <- (subset(valid.sessions, performance_context != "data_collection"))
 ## plots
 # Count of Session Data
-ggplot(valid.sessions, aes(performance_context)) + geom_bar(aes(fill = performance_type)) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "right", legend.box = "vertical") + scale_fill_manual(values=chifig.2colours)
-quartz.save("../flux-entropy-paper/figures/sessions-count.pdf", type = "pdf")
+ggplot(valid.sessions, aes(performance_context)) + geom_bar(aes(fill = performance_type)) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "top", legend.box = "horizontal") + scale_fill_manual(values=chifig.2colours) + scale_x_discrete("performance context") + scale_y_continuous("no. of sessions")
+ggsave("../flux-entropy-paper/figures/sessions-count.pdf", width=5.4, height = 2.4)
 #ggplot(perf.contexts, aes(performance_context)) + geom_bar(aes(fill = performance_type))
 # Flux boxplot
 #ggplot(valid.sessions, aes(performance_context, flux)) + geom_boxplot(aes(fill = performance_type)) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "top", legend.box = "horizontal") + scale_fill_manual(values=chifig.2colours) + scale_x_discrete("performance context")
