@@ -28,6 +28,9 @@
 \usepackage{ccicons}
 \usepackage{todonotes}
 
+\usepackage{subcaption}
+
+
 % llt: Define a global style for URLs, rather that the default one
 \makeatletter
 \def\url@leostyle{%
@@ -363,20 +366,19 @@ than the metadata can provide?
   \label{fig:flux-entropy-boxplot}}
 \end{figure}
 
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{figures/flux-entropy-distribution}
-  \caption{Distribution of flux and entropy by performance type and
-    context. Flux and entropy tended to be linearly related in
-    improvisations, particularly in demonstrations and studies, while
-    compositions had a more scattered relationship.
-    \label{fig:flux-entropy-distribution}}
-\end{figure}
+% \begin{figure}
+%   \centering
+%   \includegraphics[width=\linewidth]{figures/flux-entropy-distribution}
+%   \caption{Distribution of flux and entropy by performance type and
+%     context. Flux and entropy tended to be linearly related in
+%     improvisations, particularly in demonstrations and studies, while
+%     compositions had a more scattered relationship.
+%     \label{fig:flux-entropy-distribution}}
+% \end{figure}
 
 The distribution of flux and entropy with respect to session contexts,
-types and instrumentation are shown in Figures
-\ref{fig:flux-entropy-boxplot} and
-\ref{fig:flux-entropy-distribution}. A three-way ANOVA procedure was
+types and instrumentation are shown in Figure
+\ref{fig:flux-entropy-boxplot}. A three-way ANOVA procedure was
 performed on the data set to find whether the metatdata could
 significantly predict the entropy and flux values.
 % TODO we haven't explained what ``the 95 performative sessions'' are,
@@ -404,6 +406,26 @@ matrices.
 \begin{itemize}
 \item TODO: need to add overall contrasts column to do pairwise t-tests.
 \end{itemize}
+
+\begin{figure*}[t!]
+    \centering
+    \begin{subfigure}[t]{0.4\linewidth}
+        \centering
+          \includegraphics[width=\linewidth]{figures/type-section-flux}
+          \includegraphics[width=\linewidth]{figures/type-section-entropy}
+          \caption{Performances divided by performance type. \label{fig:type-section-flux-entropy}}
+    \end{subfigure}%
+    ~ 
+    \begin{subfigure}[t]{0.4\linewidth}
+        \centering
+          \includegraphics[width=\linewidth]{figures/context-section-flux}
+          \includegraphics[width=\linewidth]{figures/context-section-entropy}
+          \caption{Sessions divided by performance context. \label{fig:context-section-flux-entropy}}
+    \end{subfigure}
+    \caption{The flux and entropy of different interaction sessions
+      divided into beginning, middle, and end.}
+\end{figure*}
+
 
 \subsection{Breaking performances into sections}
 
@@ -444,25 +466,25 @@ final section of performances.
 
 % todo add the plots here.
 
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{figures/type-section-flux}
-\includegraphics[width=\linewidth]{figures/type-section-entropy}
-  \caption{The flux of compositions and improvisations divided into
-    beginning, middle, and end. Composition flux remains stable throughout,
-    but improvisations show a downward trend and composition entropy tends to move up
-    at the end, while flux moves down.
-    \label{fig:type-section-flux-entropy}}
-\end{figure}
+% \begin{figure}
+%   \centering
+%   \includegraphics[width=\linewidth]{figures/type-section-flux}
+%   \includegraphics[width=\linewidth]{figures/type-section-entropy}
+%   \caption{The flux of compositions and improvisations divided into
+%     beginning, middle, and end. Composition flux remains stable throughout,
+%     but improvisations show a downward trend and composition entropy tends to move up
+%     at the end, while flux moves down.
+%     \label{fig:type-section-flux-entropy}}
+% \end{figure}
 
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{figures/context-section-flux}
-  \includegraphics[width=\linewidth]{figures/context-section-entropy}
-  \caption{The distribution of flux and entropy in performances divided by ``beginnings,
-    middles, and ends''.
-    \label{fig:context-section-flux-entropy}}
-\end{figure}
+% \begin{figure}
+%   \centering
+%   \includegraphics[width=\linewidth]{figures/context-section-flux}
+%   \includegraphics[width=\linewidth]{figures/context-section-entropy}
+%   \caption{The distribution of flux and entropy in performances divided by ``beginnings,
+%     middles, and ends''.
+%     \label{fig:context-section-flux-entropy}}
+% \end{figure}
 
 \subsection{Performance styles over time}
 
