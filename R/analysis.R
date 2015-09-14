@@ -52,7 +52,7 @@ ggsave("../flux-entropy-paper/figures/sessions-count.pdf", width=5.4, height = 2
 #quartz.save("../flux-entropy-paper/figures/entropy-boxplot.pdf", type = "pdf")
 # Both Flux and Entropy Boxplot
 ggplot(valid.sessions.long, aes(performance_context, value)) + geom_boxplot(aes(fill = performance_type)) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "top", legend.box = "horizontal") + scale_fill_manual(values=chifig.2colours) + scale_x_discrete("performance context") + scale_y_continuous("measure value") + facet_grid(measure~.,scales="free_y")
-quartz.save("../flux-entropy-paper/figures/context-flux-entropy-boxplot.pdf", type = "pdf")
+ggsave("../flux-entropy-paper/figures/context-flux-entropy-boxplot.pdf",width=5.9,height=3.6)
 
 ggplot(valid.sessions, aes(performance_context, trace)) + geom_boxplot(aes(fill = performance_type))
 ggplot(valid.sessions, aes(performance_context, norm)) + geom_boxplot(aes(fill = performance_type))
@@ -74,11 +74,9 @@ quartz.save("../flux-entropy-paper/figures/flux-entropy-distribution.pdf", type 
 #ggplot(valid.sessions, aes(time, entropy)) + geom_point(aes(colour = performance_context,shape = performance_type), alpha = 0.8) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "right", legend.box = "vertical") + scale_colour_manual(values=chifig.5colours)
 #quartz.save("../flux-entropy-paper/figures/entropy-through-time.pdf", type = "pdf")
                                         # Flux and Entropy through time.
-ggplot(valid.sessions.long, aes(time, value)) + geom_point(aes(colour = performance_context,shape = performance_type), alpha = 0.8) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "right", legend.box = "vertical") + scale_colour_manual(values=chifig.5colours) + scale_y_continuous("measure value") + facet_grid(measure~.,scales="free_y")
-quartz.save("../flux-entropy-paper/figures/flux-entropy-through-time.pdf", type = "pdf")
+ggplot(valid.sessions.long, aes(time, value)) + geom_point(aes(colour = performance_context,shape = performance_type), alpha = 0.8) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "right", legend.box = "vertical") + scale_colour_manual(values=chifig.5colours) + labs(x="", y="measure value") +  facet_grid(measure~.,scales="free_y")
+ggsave("../flux-entropy-paper/figures/flux-entropy-through-time.pdf", width=6,height=3.2)
 
-
-grid.arrange(ggplot(valid.sessions, aes(time, flux)) + geom_point(aes(colour = performance_context,shape = performance_type), alpha = 0.8) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "top", legend.box = "vertical") + scale_colour_manual(values=chifig.5colours),ggplot(valid.sessions, aes(time, entropy)) + geom_point(aes(colour = performance_context,shape = performance_type), alpha = 0.8) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "none", legend.box = "vertical") + scale_colour_manual(values=chifig.5colours),nrow = 2)
 
 ## stats
 ## Question: Do Performance Type and Context have a significant effect on Flux and Entropy?
