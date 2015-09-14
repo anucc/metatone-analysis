@@ -206,6 +206,8 @@ ggsave("../flux-entropy-paper/figures/context-section-flux-lm.pdf")
 # Jitter Plots Section x Entropy and context
 ggplot(improvisation.sections,aes(section,entropy))  + facet_wrap(~performance_context) + geom_jitter(alpha=.5,size=3, position = position_jitter(w = 0.1, h = 0), aes(colour=section)) + scale_colour_manual(values=chifig.3colours) + stat_smooth(aes(group=1),method="lm",size=2) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "none", legend.box = "horizontal")
 ggsave("../flux-entropy-paper/figures/context-section-entropy-lm.pdf")
+
+
 # Boxplot of Flux by section and context
 ggplot(improvisation.sections, aes(section, flux)) + geom_boxplot(aes(fill=section)) + facet_wrap(~performance_context) + scale_fill_manual(values=chifig.3colours) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "none", legend.box = "horizontal")
 ggsave("../flux-entropy-paper/figures/context-section-flux.pdf")
@@ -219,3 +221,11 @@ ggsave("../flux-entropy-paper/figures/type-section-flux.pdf")
 ggplot(tm, aes(section, entropy)) + geom_boxplot(aes(fill=section)) + facet_wrap(~performance_type) + scale_fill_manual(values=chifig.3colours) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "none", legend.box = "horizontal")
 ggsave("../flux-entropy-paper/figures/type-section-entropy.pdf")
 
+## Boxplots for flux and entropy by section.
+## faceted by section and measure (flux and entropy)
+improvisation.sections.long <- melt(improvisation.sections,id.vars=c("section","performance_context","performance_type","instruments"),variable.name = "measure",measure.vars = c("flux","entropy"))
+ggplot(improvisation.sections.long, aes(section, value)) + geom_boxplot(aes(fill=section)) + facet_grid(measure~performance_context, scales="free_y") + scale_fill_manual(values=chifig.3colours) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "none", legend.box = "horizontal") + scale_x_discrete("") + scale_y_continuous("measure value")
+ggsave("../flux-entropy-paper/figures/context-section-flux-entropy.pdf", width=6, height = 3.6)
+tm.long <- melt(tm,id.vars=c("section","performance_context","performance_type","instruments"),variable.name = "measure",measure.vars = c("flux","entropy"))
+ggplot(tm.long, aes(section, value)) + geom_boxplot(aes(fill=section)) + facet_grid(measure~performance_type, scales="free_y") + scale_fill_manual(values=chifig.3colours) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "none", legend.box = "horizontal") + scale_x_discrete("") + scale_y_continuous("measure value")
+ggsave("../flux-entropy-paper/figures/type-section-flux-entropy.pdf", width=6, height = 3.6)

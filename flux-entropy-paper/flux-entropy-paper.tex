@@ -189,7 +189,6 @@ the $j^{th}$ column. The transition activity of the whole ensemble can
 be calculated by averaging the TM for each performer.
 The matrix can be normalised so that the sum of all elements is equal
 to one.
-% (rather than the sum of each row being one, as for a right-stochastic matrix)
 
 If there is an (automated) classification process for determining each
 participant's state sequence during an activity, then it is a simple
@@ -207,11 +206,7 @@ flux of a TM $P$ is given by
   \mathrm{flux}(P) = 1 - \mathrm{tr}(P)
 \end{equation}
 where the trace $\mathrm{tr}(P)$ is the sum of the diagonal entries of
-$P$.
-% Where $\|P\|_1 = \sum_{i,j}|p_{ij}|$ is the element-wise 1-norm of $P$
-% and $\mathrm{diag}(P)$ is the vector of the main diagonal entries of
-% $P$.
-Intuitively, flux is a measure of how frequently the participant/group
+$P$. Intuitively, flux is a measure of how frequently the participant/group
 changes state. Flux returns a value in the interval $[0,1]$ and will
 return 0 when participants never change state, and 1 when participants
 never stay in the same state for two measurements in a row.
@@ -236,8 +231,9 @@ other hand, will be low. Entropy, therefore, is a measure of how broad
 the participant's exploration of the state space is in a given
 interaction.
 
-\section{Making sense of two year's worth of touch-screen
-  interactions}
+% \section{Making sense of two year's worth of touch-screen
+%   interactions}
+\section{A corpus of touch-screen interaction}
 
 \begin{table}
 %\centering
@@ -281,7 +277,7 @@ Flux        &           & 0.02239 & 0.1445 & 0.3246\\
 % open to push-back on that.
 
 Over a period of more than two years (April 2013 - June 2015), we have
-collected data from $150$ group musicmaking sessions where
+collected data from $150$ group music-making sessions where
 participants used musical touch-screen interfaces on Apple iPad
 devices. These interfaces all shared a common mode of interaction
 where the majority of the screen could be used for free form touch
@@ -289,13 +285,11 @@ interactions; tapping produced short sounds, while swiping or swirling
 produced long sounds with volume proportional to the velocity of the
 moving touch point. Through all of these performances every touch
 interaction---every touch down, dragged and up---was timestamped and
-logged to disk for later analysis
+logged to disk for later analysis.
 
-% TODO say something about how it was both your research project and
-% your creative practice. That's why it encompassed all these
-% different contexts.
-
-Each session took place in a number of contexts including rehearsals,
+These sessions were part of a long-term research project into music
+touch-screen interaction, as well as an ongoing creative practice. As
+a result, the sessions had a variety of contexts including rehearsals,
 performances, lab study sessions, classes, and casual demonstrations,
 some of which are shown in Figure
 \ref{fig:three-performance-contexts}. Participants performed free
@@ -328,7 +322,7 @@ Forest~\cite{Breiman:2001kx} classifier\footnote{The classifier used
   was from Python's Scikit-learn package~\cite{scikit-learn}.}. The
 classifier was applied to 5-second windows of the touch-data each
 second provide a chain of gesture-states for each participant in each
-session. These chains can be used to create $9 /times 9$
+session. These chains can be used to create $9 \times 9$
 gesture-transition matrices for individual performers, and the whole
 ensemble in each session.
 
@@ -384,7 +378,7 @@ significantly predict the entropy and flux values.
 % TODO we haven't explained what ``the 95 performative sessions'' are,
 % have we?
 In the following analysis, only the 95 performative sessions were
-considered (i.e.~not the demonstration or data collection contexts).
+considered, excluding the demonstration and data-collection contexts.
 
 All main effects on flux were found to be significant: performance
 context ($F(2,86) = 6.28, p < 0.01$), performance type ($F(1,86) =
@@ -409,17 +403,15 @@ matrices.
 
 \begin{figure*}[t!]
     \centering
-    \begin{subfigure}[t]{0.4\linewidth}
+    \begin{subfigure}[t]{0.5\linewidth}
         \centering
-          \includegraphics[width=\linewidth]{figures/type-section-flux}
-          \includegraphics[width=\linewidth]{figures/type-section-entropy}
+          \includegraphics[width=\linewidth]{figures/type-section-flux-entropy}
           \caption{Performances divided by performance type. \label{fig:type-section-flux-entropy}}
     \end{subfigure}%
     ~ 
-    \begin{subfigure}[t]{0.4\linewidth}
+    \begin{subfigure}[t]{0.5\linewidth}
         \centering
-          \includegraphics[width=\linewidth]{figures/context-section-flux}
-          \includegraphics[width=\linewidth]{figures/context-section-entropy}
+          \includegraphics[width=\linewidth]{figures/context-section-flux-entropy}
           \caption{Sessions divided by performance context. \label{fig:context-section-flux-entropy}}
     \end{subfigure}
     \caption{The flux and entropy of different interaction sessions
