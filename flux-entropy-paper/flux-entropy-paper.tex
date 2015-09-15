@@ -71,8 +71,10 @@
 % End of preamble. Here it comes the document.
   \begin{document}
 
-\title{Quantitative Evaluation of Touch-Screen Performance with
+\title{Quantitative Evaluation of Touch-Screen Group Musical Performance with
   Transition Matrix Measures}
+\title{Mining interaction log data in long-term practice-led research}
+
 
 \numberofauthors{3}
 \author{%
@@ -93,11 +95,11 @@
 \maketitle
 
 \begin{abstract}
-  HCI systems for supporting collaborative creativity are often
-  evaluated with user ratings and interviews. However, such data can
-  be impractical to collect in-the-wild, for example during musical
+  Interfaces for supporting collaborative creativity are often
+  evaluated with user ratings and interviews. Such data can be
+  impractical to collect in-the-wild, for example during musical
   performances. In this paper we show how a transition matrix based
-  post-hoc analysis of logged interaction from a long program of
+  post-hoc analysis of logged interaction data from a long program of
   experiments in group musical creativity can shed light on the nature
   of the group interaction in-the-wild. Using a corpus of more than
   140 performances, rehearsals, and demonstrations over more than two
@@ -120,20 +122,20 @@
 
 \section{General comments}
 
-\begin{itemize}
-\item we should be clear (and careful) where we're talking about
-  groups TMs, and where we're talking about individual performers
-\item what's the terminology we're using for a ``performance''? Is it
-  ``performance'', or is that too music-specific? ``Session''?
-  Alternatives are ``activity'', or ``interaction'', but they're so
-  general\ldots This decision has implications for our other
-  terminology: participant vs performer vs musician, etc.
-\item Title: maybe ``Traces through time: making sense of longitudinal
-  open-ended interaction data'' or some such? I think that's our big
-  contribution: it takes the in-the-wild, practitioner-driven research
-  program stuff and tries to make some quantitative sense out of it
-  post-hoc.
-\end{itemize}
+% \begin{itemize}
+% \item we should be clear (and careful) where we're talking about
+%   groups TMs, and where we're talking about individual performers
+% \item what's the terminology we're using for a ``performance''? Is it
+%   ``performance'', or is that too music-specific? ``Session''?
+%   Alternatives are ``activity'', or ``interaction'', but they're so
+%   general\ldots This decision has implications for our other
+%   terminology: participant vs performer vs musician, etc.
+% \item Title: maybe ``Traces through time: making sense of longitudinal
+%   open-ended interaction data'' or some such? I think that's our big
+%   contribution: it takes the in-the-wild, practitioner-driven research
+%   program stuff and tries to make some quantitative sense out of it
+%   post-hoc.
+% \end{itemize}
 
 \section{Introduction}
 
@@ -152,88 +154,48 @@
 
 \section{Introduction}
 
-Ideas: the in-the-wild nature, and the different contexts - both the
-fact that they are different, and the fact that their differences make
-collecting certain data/responses easier or harder
+Computing devices and interfaces continue to open up rich, open-ended
+interaction contexts such as group music-making. Understanding and
+evaluating interfaces in these contexts presents many challenges;
+making use of the easily-logged interaction data without descending
+into ``quantitative reductionism'', as well as balancing the desire to
+gather ``felt experience'' data through surveys/interviews without
+unnecessary interruptions to the participants.
 
-\section{Transition Matrices and Matrix Measures}
+In this paper we show how we have used post-hoc analyses of log data
+to support a long-term practice-led research program into iPad
+interfaces for group music-making. Over a period of more than two
+years (April 2013--June 2015), we have collected data from $150$ group
+music-making sessions where participants used musical touch-screen
+interfaces on Apple iPad devices. These interfaces (see\cite{TODO} for
+details) shared a common mode of interaction where the majority of
+the screen could be used for free form touch interactions; tapping
+produced short sounds, while swiping or swirling produced long sounds
+with volume proportional to the velocity of the moving touch point.
+Through all of these performances every touch interaction---every
+touch down, dragged and up---was timestamped and logged to disk for
+later analysis.
 
-Open-ended collaborative interactions such as improvised musical
-performances can be modelled as a sequence of
-% could also use Thimbleby:2004fj
-states\cite{Thimbleby:2001kq,Swift:2014tya}. In this section we use
-transition matrix (TM) statistics to analyse the transitions between
-adjacent states in such a sequence. We then present two high-level
-derived quantities---\emph{flux} and \emph{entropy}---which can be
-used to compare musical performances under different circumstances.
+These sessions were part of a long-term research project into music
+touch-screen interaction, as well as an ongoing creative practice. The
+log data collected over these sessions is homogeneous in form, but
+represents a wide variety of performance contexts: rehearsals and
+performances, written compositions and free improvisations, controlled
+lab studies and casual demonstrations, with and without additional
+acoustic instruments (some of these are shown in
+Figure~\ref{fig:three-performance-contexts}).
 
-Suppose that each participant's activity in a collaborative
-interaction can at any given time be classified as belonging to one of
-$m$ distinct \emph{states}. Over the course of the activity, each
-participant $X$ generates a length $N$ sequence of these interaction
-states
-\begin{equation}
- X_n \hskip 2em n = 1, \ldots, N
-\end{equation}
-The transitions between these interaction states can be summarised in
-a transition matrix (TM) as if the sequence $X_n$ were a first-order Markov
-chain. Let $N_{ij}$ be the number of times that state $j$ follows
-state $i$. Each participant's TM $P$, will then be an
-$m \times m$ matrix with entries
-\begin{equation}
-  p_{ij} = \frac{N_{ij}}{\sum_i \sum_j N_{ij}}
-\end{equation}
-Each entry of $P$ will be such that the transition probability from
-state $i$ to state $j$ is given by the entry in the $i^{th}$ row and
-the $j^{th}$ column. The transition activity of the whole ensemble can
-be calculated by averaging the TM for each performer.
-The matrix can be normalised so that the sum of all elements is equal
-to one.
-
-If there is an (automated) classification process for determining each
-participant's state sequence during an activity, then it is a simple
-process to generate a TM for each participant and for the group as a
-whole. The challenge is to understand what the TM reveals about the
-group interaction, and to allow for comparisons between sessions and
-groups.
-
-To compare the TMs of different interactions we use two high-level
-quantities, ``flux'' and ``entropy''. The flux of a sequence is
-defined as the ratio of change transitions (e.g. $A \rightarrow B$
-where $A \neq B$), to self transitions (e.g. $A \rightarrow A $). The
-flux of a TM $P$ is given by
-\begin{equation}
-  \mathrm{flux}(P) = 1 - \mathrm{tr}(P)
-\end{equation}
-where the trace $\mathrm{tr}(P)$ is the sum of the diagonal entries of
-$P$. Intuitively, flux is a measure of how frequently the participant/group
-changes state. Flux returns a value in the interval $[0,1]$ and will
-return 0 when participants never change state, and 1 when participants
-never stay in the same state for two measurements in a row.
-
-Another useful measure that can be used on a transition matrix is its
-entropy, defined in the information-theoretic~\cite{Shannon:1948rt}
-sense:
-\begin{equation}
-  H(P) = -\sum_{i,j}p_{ij}\log_2(p_{ij})
-\end{equation}
-This entropy measure is small when the matrix is sparse, and largest
-when each matrix element is equal. It offers a different perspective
-on collaborative interactions than the flux measure by capturing the
-breadth of the gestural space explored by the participants throughout
-the course of an interaction. Consider the degenerate case of a
-participant who alternates between two states for a whole performance:
-the flux in this case will be maximal ($\mathrm{flux}(P) = 1$) since
-there are no self-transitions, (only $A \rightarrow B$ or
-$ B \rightarrow A$) even though the participant has only used a small
-subset of the state space. The entropy of this interaction, on the
-other hand, will be low. Entropy, therefore, is a measure of how broad
-the participant's exploration of the state space is in a given
-interaction.
-
-% \section{Making sense of two year's worth of touch-screen
-%   interactions}
-\section{A corpus of touch-screen interaction}
+The median length of these sessions was 7m29s and the median number of
+participants was four; other descriptive statistics about the sessions
+are shown in Table \ref{corpus-table}. The session data includes
+metadata regarding the session \emph{context} (whether it was a
+performance, rehearsal, study, demonstration, or data collection
+session), session \emph{type} (either improvisation or composition),
+and the instruments used (iPads alone, or iPads with acoustic
+percussion). The distribution of recorded sessions by context and type
+is shown in Figure \ref{fig:count-data}, and we shall use these
+groupings for our analysis in
+Section~\ref{differentiating-interaction-sessions}.
 
 \begin{table}
 %\centering
@@ -259,6 +221,110 @@ Flux        &           & 0.02239 & 0.1445 & 0.3246\\
   the corpus.\label{corpus-table}}
 \end{table}
 
+In some of these sessions, surveys and open-ended interviews were
+conducted with the participating musicians in an effort to understand
+the interaction dynamics and felt experience of the participants.
+However, many of these sessions were in-the-wild musical performances,
+and in these cases no such subjective evaluation data was
+collected---only the log data. This raises the question: can we use
+the log data to fill in some of the missing ``subjective experience''
+data, and to understand broader trends in the interaction behaviour of
+the musicians over this period?
+
+\section{Transition Matrices and Matrix Measures}
+
+Open-ended collaborative interactions such as improvised musical
+performances can be modelled as a sequence of
+% could also use Thimbleby:2004fj
+states\cite{Thimbleby:2001kq,Swift:2014tya}. In this section we use
+transition matrix (TM) statistics to analyse the transitions between
+adjacent states in such a sequence. We then present two high-level
+derived quantities---\emph{flux} and \emph{entropy}---which can be
+used to compare musical performances under different circumstances.
+
+Suppose that each participant's activity in a collaborative
+interaction can at any given time be classified as belonging to one of
+$m$ distinct \emph{states}. Over the course of the activity, each
+participant $X$ generates a length $N$ sequence of these interaction
+states
+\begin{equation}
+ X_n \hskip 2em n = 1, \ldots, N
+\end{equation}
+which can be thought of as Markov process. If there is an
+(automated) classification process for extracting each participant's
+state sequence from (or during) their interaction data, then we can
+estimate the $m \times m$ transition matrix $P$ which characterises
+this process by simply counting the number of times state $j$ follows
+state $i$
+\begin{equation}
+  p_{ij} = \frac{N_{ij}}{\sum_i \sum_j N_{ij}}
+\end{equation}
+The transition activity of the whole ensemble can be calculated by
+averaging the TM for each performer. The matrix can be normalised so
+that the sum of all elements is equal to one.
+
+From previous work\cite{TODO} we have a robust technique for
+segmenting the raw touch data generated by the instrument into a
+sequence of high-level ``gestures'' using a Random
+Forest\cite{Breiman:2001kx} classifier\footnote{The classifier used
+  was from Python's Scikit-learn package\cite{scikit-learn}.}. The
+classifier was applied to 5-second windows of the touch-data to
+provide a chain of gesture-states for each participant in each
+session. These chains can be used to create $9 \times 9$ (the
+classifier recognises 9~distinct gestures) transition matrices for
+individual performers and the whole ensemble in each session.
+
+\section{Quantitative transition matrix statistics}
+\label{sec:underst-impr-group}
+
+While the interaction sessions recorded in our corpus were performed
+by many different participants with varying experience levels, in
+different contexts and on different instrumental setups, the common
+interface and method of recording the data allows all the sessions to
+be transformed into gesture sequences. These transition matrices have
+been used as a visualisation technique to reveal qualitative
+differences in structure in improvisational
+music-making\cite{Swift:2014tya}. In this paper, however, we wish to
+extract quantitative statistics from these TMs for comparing and
+tracking different sessions over time.
+
+To do this we calculate two high-level quantities from each session:
+``flux'' and ``entropy''. The flux of a sequence is defined as the
+ratio of state transitions (e.g. $A \rightarrow B$ where $A \neq B$),
+to self transitions (e.g. $A \rightarrow A $). The flux of a TM $P$ is
+given by $\mathrm{flux}(P) = 1 - \mathrm{tr}(P)$ where the trace
+$\mathrm{tr}(P)$ is the sum of the diagonal entries of $P$.
+Intuitively, flux is a measure of how frequently the participant/group
+changes state. Flux returns a value in the interval $[0,1]$ and will
+return 0 when participants never change state, and 1 when participants
+never stay in the same state for two measurements in a row.
+
+Another useful measure that can be used on a transition matrix is its
+entropy, defined in the information-theoretic\cite{Shannon:1948rt}
+sense:
+\begin{equation}
+  H(P) = -\sum_{i,j}p_{ij}\log_2(p_{ij})
+\end{equation}
+This entropy measure is small when the matrix is sparse, and largest
+when each matrix element is equal. It offers a different perspective
+on collaborative interactions than the flux measure by capturing the
+breadth of the gestural space explored by the participants throughout
+the course of an interaction. Consider the degenerate case of a
+participant who alternates between two states for a whole performance:
+the flux in this case will be maximal ($\mathrm{flux}(P) = 1$) since
+there are no self-transitions, (only $A \rightarrow B$ or
+$ B \rightarrow A$) even though the participant has only used a small
+subset of the state space. The entropy of this interaction, on the
+other hand, will be low. Entropy, therefore, is a measure of how broad
+the participant's exploration of the state space is in a given
+interaction.
+
+In the rest of this paper we will use these matrix measures to answer
+two questions. First, do the transition matrix measures allow us to
+distinguish between different performance contexts, types and
+instrumental setups? Secondly, do these performance measure allow us
+further insight into the corpus than the metadata can provide? TODO I
+think this second question is too broad?
 
 \begin{figure}
   \centering
@@ -270,78 +336,6 @@ Flux        &           & 0.02239 & 0.1445 & 0.3246\\
     \label{fig:count-data}}
 \end{figure}
 
-% TODO maybe a ref to the CHI paper here?
-
-% TODO I think this ``scene-setting'' stuff could actually go in the
-% first section of the paper, with the TM stuff following.  But I'm
-% open to push-back on that.
-
-Over a period of more than two years (April 2013 - June 2015), we have
-collected data from $150$ group music-making sessions where
-participants used musical touch-screen interfaces on Apple iPad
-devices. These interfaces all shared a common mode of interaction
-where the majority of the screen could be used for free form touch
-interactions; tapping produced short sounds, while swiping or swirling
-produced long sounds with volume proportional to the velocity of the
-moving touch point. Through all of these performances every touch
-interaction---every touch down, dragged and up---was timestamped and
-logged to disk for later analysis.
-
-These sessions were part of a long-term research project into music
-touch-screen interaction, as well as an ongoing creative practice. As
-a result, the sessions had a variety of contexts including rehearsals,
-performances, lab study sessions, classes, and casual demonstrations,
-some of which are shown in Figure
-\ref{fig:three-performance-contexts}. Participants performed free
-improvisations as well as written compositions and performed on iPads
-alone or using setups of iPads and acoustic percussion instruments.
-The median length of these sessions was 7m29s and the median number of
-participants was four, other descriptive statistics about the sessions
-is shown in Table \ref{corpus-table}. Each session was coded with
-metadata regarding the session context (whether it was a performance,
-rehearsal, study, demonstration, or data collection session), the
-session type (either improvisation or composition), and the
-instruments used (iPads alone, or iPads with acoustic percussion). The
-distribution of recorded sessions by context and type is shown in
-Figure \ref{fig:count-data}.
-
-% TODO again, I think this bit would be beefed-up if we included the
-% fact that it's already been published.  And it also means we don't
-% have to go into as much detail about how we did it - the main thing
-% is that we've got a sensible (and peer-reviewed!) way of taking the
-% touch interaction data and generating gesture sequences (and
-% therefore TMs)
-
-To analyse the gestural interactions present in each of these
-sessions, the sessions were automatically coded according to a
-vocabulary of nine simple, continuous, touch-screen gestures. Examples
-of these gestures was generated by an expert user in formal process
-where each gesture was performed for 1-minute and feature vectors of
-discriptive statistics on these examples was used to train a Random
-Forest~\cite{Breiman:2001kx} classifier\footnote{The classifier used
-  was from Python's Scikit-learn package~\cite{scikit-learn}.}. The
-classifier was applied to 5-second windows of the touch-data each
-second provide a chain of gesture-states for each participant in each
-session. These chains can be used to create $9 \times 9$
-gesture-transition matrices for individual performers, and the whole
-ensemble in each session.
-
-While the interaction sessions recorded in our corpus were performed
-by many different participants with varying experience levels, in
-different contexts and on different instrumental setups, the common
-interface and method of recording the data allows all the sessions to
-be transformed into gesture sequences. This common format allows us to
-ask if performance styles vary in between these different situations.
-The sequences can be plotted and inspected qualitatively, but
-transition matrices present a quantitative approach to analysing such
-interactions.
-
-In the rest of this paper we will use our matrix measure techniques to
-interrogate this dataset and to answer two questions. First, do the
-transition matrix measures allow us to distinguish between different
-performance contexts, types and instrumental setups? Secondly, do
-these performance measure allow us further insight into the corpus
-than the metadata can provide?
 
 \subsection{Differentiating interaction sessions}
 \label{differentiating-interaction-sessions}
@@ -377,8 +371,9 @@ performed on the data set to find whether the metatdata could
 significantly predict the entropy and flux values.
 % TODO we haven't explained what ``the 95 performative sessions'' are,
 % have we?
-In the following analysis, only the 95 performative sessions were
-considered, excluding the demonstration and data-collection contexts.
+In the following analysis, only the 95~``performance context''
+sessions were considered, excluding the demonstration and
+data-collection contexts. TODO can we justify this?
 
 All main effects on flux were found to be significant: performance
 context ($F(2,86) = 6.28, p < 0.01$), performance type ($F(1,86) =
@@ -417,14 +412,13 @@ matrices.
 
 \subsection{Breaking performances into sections}
 
-It is clear that flux and entropy can detect the variation in
-performance styles in between performances of different types, but can
-they be used to understand some of the internal structure of
-performances? A simple model for understanding temporal art-forms is
-the ``beginning, middle, end'' structure. To investigate how this
-structure fits our corpus, we can divide the gestural-sequences of
-each session into thirds and calculate the transition matrices given
-by each section.
+It is clear from these results that flux and entropy can be used to
+differentiate between performance styles and types, but can they be
+used to understand some of the internal structure of performances? A
+simple model for understanding temporal art-forms is the ``beginning,
+middle, end'' structure. To investigate how this structure fits our
+corpus, we can divide the gestural-sequences of each session into
+thirds and calculate the transition matrices given by each section.
 
 Figure~\ref{fig:type-section-flux-entropy} shows that the flux and
 entropy of compositions are much more stable with respect to section
@@ -544,7 +538,7 @@ lead to new insights into HCI interactions outside the lab.
 
 % Determining the strengths of these positive relationships is
 % difficult, both due to the problem of treating ordinal Likert
-% responses as numeric~\cite{Gardner:2007fj} and also
+% responses as numeric\cite{Gardner:2007fj} and also
 % due to the unknown distribution of the entropy and flux statistics. As
 % a result, we use a conservative proportional odds logistic regression
 % (POLR)~(using the \texttt{polr} function in \texttt{R}, from the MASS
