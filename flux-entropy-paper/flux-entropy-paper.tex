@@ -564,61 +564,6 @@ lead to new insights into HCI interactions outside the lab.
 
 %TODO Mention Manovich transmutation stuff
 
-
-% \section{Modelling Performer Ratings with Flux and Entropy}
-
-% \begin{figure}
-%   \centering
-%   \includegraphics[width=\linewidth]{figures/stat-response-fit.pdf}
-%   \caption{Transition matrix statistics (flux above and entropy below) vs Likert responses for
-%     questions 3, 6 and 7, all of which exhibited significant
-%     relationships under a proportional odds logistic regression model.
-%     A least-squares linear model is shown with a dotted line.
-%     \label{fig:stat-response-fit}}
-% \end{figure}
-
-% One final question to explore is how these flux and entropy measures
-% in the interaction data relate to the performers' perceptions of their
-% performance?
-
-% To answer this question, we construct models with the flux and entropy
-% measures as independent variables and the Likert responses (1 to 5) as
-% the dependent variable. These measures exhibited clear relationships
-% for three of the survey questions (Questions 3, 6 and 7), which are
-% plotted in Figure~\ref{fig:stat-response-fit} where the least-squares
-% line of best fit has a positive gradient for both flux and entropy.
-
-% Determining the strengths of these positive relationships is
-% difficult, both due to the problem of treating ordinal Likert
-% responses as numeric\cite{Gardner:2007fj} and also
-% due to the unknown distribution of the entropy and flux statistics. As
-% a result, we use a conservative proportional odds logistic regression
-% (POLR)~(using the \texttt{polr} function in \texttt{R}, from the MASS
-% package \cite{Venables:2002qv}) to treat the Likert responses as an
-% ordered factor response.
-
-% The POLR results indicate a significant ($p<0.05$) relationship
-% between the user-reported Likert response and the flux statistic for
-% Question 3 ($t = 2.77, df = 4, p = 0.025$), Question 6
-% ($t = 2.41, df = 4, p = 0.037$), and Question 7
-% ($t = 2.49, df = 4, p = 0.034$). The same questions displayed a
-% significant relationship for the entropy statistic: Question 3
-% ($t = 2.93, df = 4, p = 0.022$), Question 6
-% ($t = 2.69, df = 4, p = 0.028$), and Question 7
-% ($t = 2.89, df = 4, p = 0.022$). These relationships are shown in
-% Figure~\ref{fig:stat-response-fit}.
-
-% It is notable that these questions (3, 6, and 7) all pertain to the
-% \emph{perceived effect of the agent} on the performers. As the agent
-% uses the flux measure to trigger new-idea messages, it appears that
-% performers appreciated its intervention more in particularly creative
-% performances where flux and entropy were high.
-
-
-
-
-
-
 \bibliographystyle{SIGCHI-Reference-Format}
 \bibliography{references}
 
