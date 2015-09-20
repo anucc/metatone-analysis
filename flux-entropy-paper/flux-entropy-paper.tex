@@ -108,22 +108,26 @@
 % new-media artists and musicians and %and can facilitate post-hoc data
 % processing and data mining.
   
-%   %In this note we describe a data archive for an iPad
-% musical-ensemble performance practice which has included concerts,
-% demonstrations and formal HCI studies of groups of musicians over more
-% than two years. Our corpus contains data for 150 performances,
-% rehearsals, and demonstrations, involving some 100 different musicians
-% and several different iPad apps. At the lowest level, data for each
-% musician in a particular performance was archived as Apple iOS
-% callback methods for touching and swiping. Subsequent data analysis
-% has been undertaken by first classifying these data into higher level
-% gesture types and then describing the transitions between these
-% gestures for each artist as a function of time. We find that a
-% transition-matrix measure, which we call ``flux'', can be used to
-% distinguish different performance types and contexts, as well as
-% different phases (beginning, middle and end) of all of the
-% performances in our corpus.
-  
+  In this note we describe the analysis of a data archive for an iPad
+  musical-ensemble performance practice where transition matrix
+  measures are able to distinguish between sessions of different
+  contexts, and the internal structure of these sessions. The archive
+  includes 95 touch data logs of ensemble touch-screen interactions in
+  concerts, rehearslas and formal HCI studies of groups of musicians
+  over more than two years.
+
+
+  % At the lowest level, data for each musician in a particular
+  % performance was archived as Apple iOS callback methods for
+  % touching and swiping.
+
+  The data analysis has been undertaken by first classifying
+  these data into higher level gesture types and then describing the
+  transitions between these gestures for each artist as a function of
+  time. We find that a transition-matrix measure, which we call
+  ``flux'', can be used to distinguish different performance types and
+  contexts, as well as different phases (beginning, middle and end) of
+  all of the performances in our corpus.
 
 \end{abstract}
 
@@ -133,7 +137,7 @@
   Methodology}
 
 \category{H.5.5.}{Information Interfaces and Presentation
-  (e.g. HCI)}{Sound and Music Computing}{Systems} 
+  (e.g. HCI)}{Sound and Music Computing}{ Systems} 
 
 % \category{See
 %   \url{http://acm.org/about/class/1998/} for the full list of ACM
@@ -174,17 +178,19 @@
 
 Modern computing devices and interfaces continue to open up rich,
 open-ended creative opportunities in the new media arts. Understanding
-and evaluating interfaces in these contexts presents many challenges~\cite{Resnick:2005yu,Shneiderman:2007qv}. In the context of live performance,
-interface evaluation, using, for example, post-performance
-questionnaires, can omit consideration of the dynamic needs of artists
-in the moment of the performance and in the wild of the performance
-context. In contrast to traditional art forms, logged interaction data
-from a new media arts performance can provide an enduring record of
-that performance for post-hoc quantitative investigation as well as
-for curation and preservation~\cite{England:2014ys}. Over
-time, the accumulation of new-media interaction log data might allow
-data-mining techniques to be deployed to potentially describe
-universal features of such interaction.
+and evaluating interfaces in these contexts presents many
+challenges~\cite{Resnick:2005yu,Shneiderman:2007qv}. In the context of
+live performance, interface evaluation, using, for example,
+post-performance questionnaires, can omit consideration of the dynamic
+needs of artists in the moment of the performance and in the wild of
+the performance context. In contrast to traditional art forms, logged
+interaction data from a new media arts performance can provide an
+enduring record of that performance for post-hoc quantitative
+investigation as well as for curation and
+preservation~\cite{England:2014ys}. Over time, the accumulation of
+new-media interaction log data might allow data-mining techniques to
+be deployed to potentially describe universal features of such
+interaction.
 
 % Additionally, a wider dissemination of such log data will better
 % support the replication of findings in HCI
@@ -205,7 +211,8 @@ swipes: fast taps, slow taps, random taps, short swipes and swirls.
 This process of discovery of interesting musical gestures from a
 simple interface is analogous to what percussionists do with acoustic
 instruments -- drums and bowls and bells are often tapped, stroked and
-hit in novel ways to communicate meaning and emotion through music~\cite{Schick:2006fk}.
+hit in novel ways to communicate meaning and emotion through
+music~\cite{Schick:2006fk}.
 
 In this note we describe a log data archive that has been accumulated
 to support a long-term practice-led research program into simple iPad
@@ -291,10 +298,31 @@ Flux        &           & 0.02239 & 0.1445 & 0.3246\\
 
 
 
-A useful way of modelling user interfaces is to consider their configurations as state vectors and to deploy the methods of matrix algebra to describe transitions between these states during an interaction sequence\cite{Thimbleby:2001kq, Thimbleby:2004fj}. Data obtained from usability analysis of quite complex systems (such as a resource planning application for anti-terrorism planning [ref: Kannampallil, Thomas, and Steven Haynes. "Using Event Based Markov Model Simulation to Analyze Interactive Human Behavior." AMCIS 2007 Proceedings (2007): 142. ]) have been undertaken by coding sequences of fine-detail human actions as states and then to model data from usability walkthroughs as sequences of state transitions. The transition probably matrix for transitions between states can then be derived from such user data and conclusions drawn about the nature of interaction. In the creative arts, editing commands at a computer interface for the ``live coding of computer music'' have also been coded coded as states and analysed using transition matrices, in both the textual and musical dimensions, in order to arrive at conclusions regarding artistic style\cite{Swift:2014tya}.
+A useful way of modelling user interfaces is to consider their
+configurations as state vectors and to deploy the methods of matrix
+algebra to describe transitions between these states during an
+interaction sequence\cite{Thimbleby:2001kq, Thimbleby:2004fj}. Data
+obtained from usability analysis of quite complex systems (such as 
+resource planning software for security applications~\cite{Kannampallil:2007fp}) 
 
-In our corpus of iPad musical performances, rehearsals and studies, the macro gestures identified in [ref: charlesHCI] provide a basis to identify and code macro gestures. Each performer in each muscial piece can then be thought of as following a ``score'' of state transitions and an overall transition matrix for the entire ensemble can be derived by averaging the individual transition matrices.
+have been undertaken by coding sequences of fine-detail human actions
+as states and then to model data from usability walkthroughs as
+sequences of state transitions. The transition probably matrix for
+transitions between states can then be derived from such user data and
+conclusions drawn about the nature of interaction. In the creative
+arts, editing commands at a computer interface for the ``live coding
+of computer music'' have also been coded coded as states and analysed
+using transition matrices, in both the textual and musical dimensions,
+in order to arrive at conclusions regarding artistic
+style\cite{Swift:2014tya}.
 
+In our corpus of iPad musical performances, rehearsals and studies,
+the macro gestures identified by Martin et al~\cite{Martin:2014cr}
+provide a basis to identify and code macro gestures. Each performer in
+each muscial piece can then be thought of as following a ``score'' of
+state transitions and an overall transition matrix for the entire
+ensemble can be derived by averaging the individual transition
+matrices.
 
 Suppose that each participant's activity in a collaborative
 interaction can at any given time be classified as belonging to one of
@@ -317,11 +345,11 @@ The transition activity of the whole ensemble can be calculated by
 averaging the TM for each performer. The matrix can be normalised so
 that the sum of all elements is equal to one.
 
-Previous work showed that the raw touch data obtained from interaction with simple iPad interfaces similar to ours could
-be segmented  using a Random
-Forest\cite{Breiman:2001kx} classifier\footnote{The classifier used
-  was from Python's Scikit-learn package\cite{scikit-learn}.}. The
-classifier was applied to 5-second windows of the touch-data to
+Previous work showed that the raw touch data obtained from interaction
+with simple iPad interfaces similar to ours could be segmented using a
+Random Forest\cite{Breiman:2001kx} classifier\footnote{The classifier
+  used was from Python's Scikit-learn package\cite{scikit-learn}.}.
+The classifier was applied to 5-second windows of the touch-data to
 provide a chain of gesture-states for each participant in each
 session. These chains can be used to create $9 \times 9$ (the
 classifier recognises 9~distinct gestures) transition matrices for
@@ -376,8 +404,8 @@ In the rest of this paper we will use these matrix measures to answer
 two questions. First, do the transition matrix measures allow us to
 distinguish between different performance contexts, types and
 instrumental setups? Secondly, do these performance measure allow us
-further insight into the corpus than the metadata can provide? TODO I
-think this second question is too broad?
+further insight into the corpus than the metadata can provide?
+% TODO I think this second question is too broad?
 
 \begin{figure}
   \centering
@@ -393,29 +421,17 @@ think this second question is too broad?
 \subsection{Differentiating interaction sessions}
 \label{differentiating-interaction-sessions}
 
-\begin{figure}
-  \centering
+\begin{figure} \centering
   \includegraphics[width=\linewidth]{figures/context-flux-entropy-boxplot}
-  \caption{Distributions of flux and entropy values by performance context. Study
-    and rehearsal sessions had the highest flux for improvisations
-    which fell during performances. Compositions had lower flux in
-    rehearsals than performances. Demonstration sessions had much lower entropy
-  indicating data unevenly spread in the transition matrices. This
-  could be because untrained
-  participants did not explore the full gestural potential of the
-  instruments. 
-  \label{fig:flux-entropy-boxplot}}
+  \caption{Distributions of flux and entropy values by performance
+context. Study and rehearsal sessions had the highest flux for
+improvisations which fell during performances. Compositions had lower
+flux in rehearsals than performances. Demonstration sessions had much
+lower entropy indicating data unevenly spread in the transition
+matrices. This could be because untrained participants did not explore
+the full gestural potential of the instruments.
+\label{fig:flux-entropy-boxplot}}
 \end{figure}
-
-% \begin{figure}
-%   \centering
-%   \includegraphics[width=\linewidth]{figures/flux-entropy-distribution}
-%   \caption{Distribution of flux and entropy by performance type and
-%     context. Flux and entropy tended to be linearly related in
-%     improvisations, particularly in demonstrations and studies, while
-%     compositions had a more scattered relationship.
-%     \label{fig:flux-entropy-distribution}}
-% \end{figure}
 
 The distribution of flux and entropy with respect to session contexts,
 types and instrumentation are shown in Figure
@@ -429,16 +445,18 @@ sessions were considered, excluding the demonstration and
 data-collection contexts. TODO can we justify this?
 
 All main effects on flux were found to be significant: performance
-context ($F(2,86) = 6.28, p < 0.01$), performance type ($F(1,86) =
-7.21, p < 0.01$), and instrumentation ($F(1,86) = 20.06, p < 0.001$).
-Significant interaction effects were also found for performance
-context and type ($F(1,86) = 6.18, p < 0.05$), and performance context and
+context ($F(2,86) = 6.28, p < 0.01$), performance type
+($F(1,86) = 7.21, p < 0.01$), and instrumentation
+($F(1,86) = 20.06, p < 0.001$). Significant interaction effects were
+also found for performance context and type
+($F(1,86) = 6.18, p < 0.05$), and performance context and
 instrumentation ($F(1,86) = 10.48, p < 0.01$).
 
 For entropy, significant main effects were found due to performance
-context ($F(2,86) = 12.10, p < 0.001$), and instrumentation ($F(1,86)
-= 25.86$). The interaction of performance type and instrumentation was
-also found to be significant ($F(1,86) = 9.93, p<0.01$).
+context ($F(2,86) = 12.10, p < 0.001$), and instrumentation
+($F(1,86) = 25.86$). The interaction of performance type and
+instrumentation was also found to be significant
+($F(1,86) = 9.93, p<0.01$).
 
 These tests show that the different interaction styles that might be
 present in performance contexts, types and instrumentations are
@@ -569,7 +587,7 @@ lead to new insights into HCI interactions outside the lab.
 The macro-gestures that these processes reveal could also be used as
 the basis for new works of new media art~\cite{Manovich:2002ly}.
 
-\pagebreak
+%\pagebreak
 \bibliographystyle{SIGCHI-Reference-Format}
 \bibliography{references}
 
