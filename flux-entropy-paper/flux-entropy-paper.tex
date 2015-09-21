@@ -193,7 +193,7 @@ featured a variety of sound palettes, different kinds of visual
 feedback, and different kinds of networked interactions (between the
 iPads in an ensemble and with a central server).
 
-In all of our interaction sessions, every touch interaction---every
+In all of our 95 interaction sessions, every touch interaction---every
 touch down, dragging movement and release---was time-stamped and
 logged to disk for later analysis. These sessions included
 formally-structured HCI experiments, where participants were
@@ -322,18 +322,17 @@ While the interaction sessions recorded in our corpus were performed
 by many different participants with varying experience levels, in
 different contexts and on different instrumental setups, the common
 interface and method of recording the data allows all the sessions to
-be transformed into gesture sequences, and transition matrices.
-Transition matrices have been used as a visualisation technique to
-reveal qualitative differences in structure in improvisational
-music-making\cite{Swift:2014tya}. In this paper, however, we wish to
-extract quantitative measures from these TMs for comparing and
-tracking different sessions over time.
+be transformed into gesture sequences, and transition matrices. While
+these matrices can be used to visualise the structure of individual
+performances~\cite{Swift:2014tya}, we wish to extract quantitative
+measures from these TMs to compare the large number of sessions in our
+corpus.
 
 To do this we calculate two high-level quantities from each session:
 ``flux'' and ``entropy''. The flux of a sequence is defined as the
 ratio of state transitions (e.g. $A \rightarrow B$ where $A \neq B$),
 to self transitions (e.g. $A \rightarrow A $). The flux of a TM $P$ is
-given by: $\mathrm{flux}(P) = 1 - \mathrm{tr}(P)$. Where the trace
+given by: $\mathrm{flux}(P) = 1 - \mathrm{tr}(P)$ where the trace
 $\mathrm{tr}(P)$ is the sum of the diagonal entries of $P$.
 Intuitively, flux is a measure of how frequently the participant/group
 changes state. Flux returns a value in the interval $[0,1]$ and will
@@ -342,25 +341,21 @@ never stay in the same state for two measurements in a row.
 
 Another useful measure that can be used on a transition matrix is its
 entropy, defined in the information-theoretic\cite{Shannon:1948rt}
-sense: $H(P) = -\sum_{i,j}p_{ij}\log_2(p_{ij})$.
-% \begin{equation}
-%   H(P) = -\sum_{i,j}p_{ij}\log_2(p_{ij})
-% \end{equation}
-This entropy measure is small when the matrix is sparse, and largest
-when each matrix element is equal. It offers a different perspective
-on collaborative interactions than the flux measure by capturing the
-breadth of the gestural space explored by the participants throughout
-the course of an interaction. Consider the degenerate case of a
-participant who alternates between two states for a whole performance:
-the flux in this case will be maximal ($\mathrm{flux}(P) = 1$) since
-there are no self-transitions, (only $A \rightarrow B$ or
-$ B \rightarrow A$) even though the participant has only used a small
-subset of the state space. The entropy of this interaction, on the
-other hand, will be low. Entropy, therefore, is a measure of how broad
-the participant's exploration of the state space is in a given
-interaction.
+sense: $H(P) = -\sum_{i,j}p_{ij}\log_2(p_{ij})$. This measure
+is small when the matrix is sparse, and largest when each matrix
+element is equal. It offers a different perspective on collaborative
+interactions than the flux measure by capturing the breadth of the
+gestural space explored by the participants throughout the course of
+an interaction. Consider the degenerate case of a participant who
+alternates between two states for a whole performance: the flux in
+this case will be maximal ($\mathrm{flux}(P) = 1$) since there are no
+self-transitions, (only $A \rightarrow B$ or $ B \rightarrow A$) even
+though the participant has only used a small subset of the state
+space. The entropy of this interaction, on the other hand, will be
+low. Entropy, therefore, is a measure of how broad the participant's
+exploration of the state space is in a given interaction.
 
-In the rest of this paper we will use these matrix measures to answer
+In the rest of this note we will use these matrix measures to answer
 two questions. First, do the transition matrix measures allow us to
 distinguish between different performance contexts, types and
 instrumental setups? Secondly, do these measures allow us further
@@ -392,7 +387,7 @@ flux in rehearsals than performances.
 The distribution of flux and entropy with respect to session contexts,
 types and instrumentation are shown in Figure
 \ref{fig:flux-entropy-boxplot}. A three-way ANOVA procedure was
-performed on the data set to find whether the metatdata could
+performed on the data set to find whether the metadata could
 significantly predict the entropy and flux values.
 
 All main effects on flux were found to be significant: performance
@@ -437,17 +432,18 @@ matrices.
 It is clear from these results that flux and entropy can be used to
 differentiate between performance styles and types, but can they be
 used to understand some of the internal structure of performances? A
-simple model for understanding temporal art-forms is the ``beginning,
-middle, end'' structure. To investigate how this structure fits our
-corpus, we can divide the gestural-sequences of each session into
-thirds and calculate the transition matrices given by each section.
+classical model for understanding temporal art-forms is the
+``beginning, middle, end'' structure~\cite{Aristotle:350rt}. To
+investigate how this structure fits our corpus, we can divide the
+gestural-sequences of each session into thirds and calculate the
+transition matrices given by each section.
 
 Figure~\ref{fig:type-section-flux-entropy} shows that the flux and
 entropy of compositions are much more stable with respect to section
 than for improvisations. The stability of compositions is to be
-expected since performers are expected to use the same gestures in
-each rehearsal and performance of a composition, it may be that
-different kinds of compositions could result in different structural
+expected since performers use the same gestures in each rehearsal and
+performance of these written scores, however it may be that different
+kinds of compositions could result in different structural
 differences. Both measures have a downward trend through sections in
 improvisations with Kruskal-Wallis tests showing a significant effect
 of section on flux ($\chi^2(2)=5.8, p=0.05$). This could be explained
@@ -468,28 +464,6 @@ indicates a more constrained performance style in this closing
 section, where performers transition between fewer gestures in the
 final section of performances.
 
-% todo add the plots here.
-
-% \begin{figure}
-%   \centering
-%   \includegraphics[width=\linewidth]{figures/type-section-flux}
-%   \includegraphics[width=\linewidth]{figures/type-section-entropy}
-%   \caption{The flux of compositions and improvisations divided into
-%     beginning, middle, and end. Composition flux remains stable throughout,
-%     but improvisations show a downward trend and composition entropy tends to move up
-%     at the end, while flux moves down.
-%     \label{fig:type-section-flux-entropy}}
-% \end{figure}
-
-% \begin{figure}
-%   \centering
-%   \includegraphics[width=\linewidth]{figures/context-section-flux}
-%   \includegraphics[width=\linewidth]{figures/context-section-entropy}
-%   \caption{The distribution of flux and entropy in performances divided by ``beginnings,
-%     middles, and ends''.
-%     \label{fig:context-section-flux-entropy}}
-% \end{figure}
-
 \subsection{Performance styles over time}
 
 While the interaction session in our corpus have many different
@@ -497,9 +471,9 @@ contexts, they are all part of a program of artistic and HCI research
 that has evolved over time. Figure \ref{fig:flux-entropy-through-time}
 shows the values of flux and entropy for each session in the corpus.
 Over the course of this research program, different ensembles and
-different activities have been emphasised, some of these differences
-can be seen as clusters of performances with similar flux and entropy
-in the two plots. For instance, the earliest series of rehearsals and
+activities have been emphasised and some of these differences can be
+seen as clusters of performances with similar flux and entropy in the
+two plots. For instance, the earliest series of rehearsals and
 performances had flux between 0.05 and 0.15, while the period of
 activity after July 2014 had flux between 0.1 and 0.25. This change
 corresponded with an intensive series of study sessions and rehearsals
@@ -519,10 +493,10 @@ the performers explored was relatively stable.
 
 \section{Conclusions}
 
-In this paper we have extended our previous work on transition
+In this note we have extended previous work on transition
 matrices with two simple matrix measures, flux and entropy, both of
 which have been demonstrated to have significant discriminatory power
-with regards to a corpus of 150 collaborative touch-screen
+with regards to a corpus of 95 collaborative touch-screen
 interactions. Not only do these measures differentiate between
 different types of sessions and the internal structure of these
 sessions, but they have explanatory power that has thrown new light on
