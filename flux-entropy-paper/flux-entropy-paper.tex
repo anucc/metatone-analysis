@@ -176,21 +176,25 @@
 \end{figure*}
 
 
-Modern computing devices and interfaces continue to open up rich,
-open-ended creative opportunities in the new media arts. Understanding
-and evaluating interfaces in these contexts presents many
-challenges~\cite{Resnick:2005yu,Shneiderman:2007qv}. In the context of
-live performance, interface evaluation, using, for example,
-post-performance questionnaires, can omit consideration of the dynamic
-needs of artists in the moment of the performance and in the wild of
-the performance context. In contrast to traditional art forms, logged
-interaction data from a new media arts performance can provide an
+Modern computing devices and interfaces continue to open up open-ended
+creative opportunities for new artistic experiences. Understanding and
+evaluating interfaces in these contexts presents many
+challenges~\cite{Resnick:2005yu,Shneiderman:2007qv}.
+
+In the context of live performance, interface evaluation, using, for
+example, post-performance questionnaires, can omit consideration of
+the dynamic needs of artists in the moment of the performance and in
+the wild of the performance context. 
+
+In contrast to traditional art forms, logged interaction data from
+interaction with a computer-based artistic interface can provide an
 enduring record of that performance for post-hoc quantitative
 investigation as well as for curation and
-preservation~\cite{England:2014ys}. Over time, the accumulation of
-new-media interaction log data might allow data-mining techniques to
-be deployed to potentially describe universal features of such
-interaction.
+preservation~\cite{England:2014ys}. 
+
+Over time, the accumulation of
+interaction log data might allow data-mining techniques to be deployed
+to potentially describe universal features of such interaction.
 
 % Additionally, a wider dissemination of such log data will better
 % support the replication of findings in HCI
@@ -198,41 +202,46 @@ interaction.
 
 It is a feature of creative expression in the arts that highly skilled
 practitioners exploit simple tools to produce works of beauty whether
-it be static paintings or dynamic performance. In previous
-work~\cite{Martin:2014cr} researchers have shown that trained
-percussionists can exploit a very simple iPad interface to discover
-new categories of musical gestures. In that paper, iPad apps were
-studied where tapping was mapped to produce produced short sounds,
-while swiping produced long sounds with the volume proportional to the
-velocity of the moving touch point. It turned out that trained
-percussionists working together in an ensemble were able to discover
-and repeatedly make use of five macro gestures made up of taps and
-swipes: fast taps, slow taps, random taps, short swipes and swirls.
-This process of discovery of interesting musical gestures from a
-simple interface is analogous to what percussionists do with acoustic
-instruments -- drums and bowls and bells are often tapped, stroked and
-hit in novel ways to communicate meaning and emotion through
-music~\cite{Schick:2006fk}.
+it be static paintings or dynamic performance. 
+
+In previous work~\cite{Martin:2014cr} researchers have shown that
+trained percussionists can exploit a very simple iPad interface to
+discover new categories of musical gestures.
+
+In that paper, iPad apps
+were studied where tapping was mapped to produce produced short
+sounds, while swiping produced long sounds with the volume
+proportional to the velocity of the moving touch point. 
+
+It turned out that trained percussionists working together in an
+ensemble were able to discover and repeatedly make use of five macro
+gestures made up of taps and swipes: fast taps, slow taps, random
+taps, short swipes and swirls. This process of discovery of
+interesting musical gestures from a simple interface is analogous to
+what percussionists do with acoustic instruments -- drums and bowls
+and bells are often tapped, stroked and hit in novel ways to
+communicate meaning and emotion through music~\cite{Schick:2006fk}.
+
+
 
 In this note we describe a log data archive that has been accumulated
 to support a long-term practice-led research program into simple iPad
-interfaces for group music-making similar to those described in [ref:
-charles at CHI] . Over a period of more than two years (April
-2013--June 2015), we collected data from $....$ group music-making
+interfaces for group music-making similar to those described in Martin
+et al~\cite{Martin:2014cr}. Over a period of more than two years
+(April 2013--June 2015), we collected data from group music-making
 sessions where the participants used custom-built, touch-screen apps
-on Apple iPad devices. Although several different apps have been
-included in our corpus,
-% TODO: should there be a citation here?
-they all shared the simple mode of interaction where the majority of
-the screen could be used for free-form touch interactions; tapping
-produced short sounds, while swiping or swirling produced long sounds
-with the volume proportional to the velocity of the moving touch
-point. Apart from this commonality, our apps featured different
-palettes of available sounds and modes of synthesis, different
-arrangements of sounds on the iPad screens, different kinds of visual
-display and feedback, different kinds of networked interactions
-(between the iPads in an ensemble and with a central server), as well
-as a variety of special features for each app.
+on Apple iPad devices. 
+Although several different apps have been
+included in our corpus, they all shared the simple mode of interaction
+where the majority of the screen could be used for free-form touch
+interactions; tapping produced short sounds, while swiping or swirling
+produced long sounds with the volume proportional to the velocity of
+the moving touch point. Apart from this commonality, our apps featured
+different palettes of available sounds and modes of synthesis,
+different arrangements of sounds on the iPad screens, different kinds
+of visual display and feedback, different kinds of networked
+interactions (between the iPads in an ensemble and with a central
+server), as well as a variety of special features for each app.
 
 In all of our data-collection sessions, every touch
 interaction---every touch down, dragging movement and touch up---was
@@ -259,26 +268,21 @@ together with the interaction data for each session to record the
 recorded sessions by context and type is shown in Figure
 \ref{fig:count-data}.
 
-% TODO: NOTE: FORGET ABOUT THE DEMONSTRATIONS AND THE DATA COLLECTION
-% PARTS OF THE CORPUS. THEY JUST MAKE THE STORY VAGUE. YOU DON'T
-% INCLUDE THEM IN YOUR ANALYSIS AT ALL.
 
-% TODO: NOTE: NEED TO MODIFY ALL OF THESE GRAPHS, TABLES AND FIGURES.
-
-
-
-
+% TODO fix this table to remove descriptive data about the
+% demonstration sessions.
 \begin{table}
-%\centering
+\centering
 \begin{tabular}{l|llll}
 \hline
             & Total & Min  & Median   & Max     \\ 
 \hline
 N           & 150       &         &        &  \\
-Record size & 306MB     &         &        &   \\
+%Record size & 306MB     &         &        &   \\
 Length      & 20H34M22S & 1M0S    & 7M29S  & 26M0S\\
 Participants& 524       & 1       & 4      & 9    \\
 Flux        &           & 0.02239 & 0.1445 & 0.3246\\
+%Entropy     &           &  &  & \\          
 \hline
 \end{tabular}
 \caption{
@@ -293,36 +297,31 @@ Flux        &           & 0.02239 & 0.1445 & 0.3246\\
 \end{table}
 
 
-
 \section{Macro Gestures, Transition Matrices and Matrix Measures}
-
-
 
 A useful way of modelling user interfaces is to consider their
 configurations as state vectors and to deploy the methods of matrix
 algebra to describe transitions between these states during an
-interaction sequence\cite{Thimbleby:2001kq, Thimbleby:2004fj}. Data
-obtained from usability analysis of quite complex systems (such as 
-resource planning software for security applications~\cite{Kannampallil:2007fp}) 
+interaction sequence~\cite{Thimbleby:2001kq, Thimbleby:2004fj}.
+An opposite approach is to record users' interactions with an
+interface, manually coding interaction states. 
+This method has been applied to usability analysis of resource
+planning software for security applications~\cite{Kannampallil:2007fp}
+where the transition probability matrix of these state sequences
+was used to draw conclusions about the nature of this interactions.
+In the creative arts, editing commands at a computer interface for the
+``live coding'' of computer music has also been coded as states and
+analysed using transition matrices~\cite{Swift:2014tya}, in both the
+textual and musical dimensions, in order to arrive at conclusions
+regarding artistic style.
 
-have been undertaken by coding sequences of fine-detail human actions
-as states and then to model data from usability walkthroughs as
-sequences of state transitions. The transition probably matrix for
-transitions between states can then be derived from such user data and
-conclusions drawn about the nature of interaction. In the creative
-arts, editing commands at a computer interface for the ``live coding
-of computer music'' have also been coded coded as states and analysed
-using transition matrices, in both the textual and musical dimensions,
-in order to arrive at conclusions regarding artistic
-style\cite{Swift:2014tya}.
-
-In our corpus of iPad musical performances, rehearsals and studies,
-the macro gestures identified by Martin et al~\cite{Martin:2014cr}
-provide a basis to identify and code macro gestures. Each performer in
-each muscial piece can then be thought of as following a ``score'' of
-state transitions and an overall transition matrix for the entire
-ensemble can be derived by averaging the individual transition
-matrices.
+In our corpus of iPad musical performances, rehearsals and studies, we
+have used the continuous touch-screen gestures identified by Martin et
+al~\cite{Martin:2014cr} as a basis for a musical state-space.
+Each performer in each musical piece can then be thought of as
+producing a ``score'' of state transitions and an overall transition
+matrix for the entire ensemble can be derived by averaging the
+individual transition matrices.
 
 Suppose that each participant's activity in a collaborative
 interaction can at any given time be classified as belonging to one of
@@ -345,15 +344,16 @@ The transition activity of the whole ensemble can be calculated by
 averaging the TM for each performer. The matrix can be normalised so
 that the sum of all elements is equal to one.
 
-Previous work showed that the raw touch data obtained from interaction
-with simple iPad interfaces similar to ours could be segmented using a
-Random Forest\cite{Breiman:2001kx} classifier\footnote{The classifier
-  used was from Python's Scikit-learn package\cite{scikit-learn}.}.
-The classifier was applied to 5-second windows of the touch-data to
-provide a chain of gesture-states for each participant in each
-session. These chains can be used to create $9 \times 9$ (the
-classifier recognises 9~distinct gestures) transition matrices for
-individual performers and the whole ensemble in each session.
+Previous work~\cite{Martin:2015jk} showed that the raw touch data
+obtained from interaction with simple iPad interfaces similar to ours
+could be segmented using a Random Forest\cite{Breiman:2001kx}
+classifier\footnote{The classifier used was from Python's Scikit-learn
+  package\cite{scikit-learn}.}. The classifier was applied to 5-second
+windows of the touch-data to provide a chain of gesture-states for
+each participant in each session. These chains can be used to create
+$9 \times 9$ (the classifier recognises 9~distinct gestures)
+transition matrices for individual performers and the whole ensemble
+in each session.
 
 \section{Quantitative transition matrix statistics}
 \label{sec:underst-impr-group}
@@ -403,9 +403,12 @@ interaction.
 In the rest of this paper we will use these matrix measures to answer
 two questions. First, do the transition matrix measures allow us to
 distinguish between different performance contexts, types and
-instrumental setups? Secondly, do these performance measure allow us
-further insight into the corpus than the metadata can provide?
-% TODO I think this second question is too broad?
+instrumental setups? Secondly, do these measures allow us further
+insight into the internal structure of performances?
+
+%  Secondly, do these performance measure allow us
+% further insight into the corpus than the metadata can provide?
+% % TODO I think this second question is too broad?
 
 \begin{figure}
   \centering
@@ -425,11 +428,8 @@ further insight into the corpus than the metadata can provide?
   \includegraphics[width=\linewidth]{figures/context-flux-entropy-boxplot}
   \caption{Distributions of flux and entropy values by performance
 context. Study and rehearsal sessions had the highest flux for
-improvisations which fell during performances. Compositions had lower
-flux in rehearsals than performances. Demonstration sessions had much
-lower entropy indicating data unevenly spread in the transition
-matrices. This could be because untrained participants did not explore
-the full gestural potential of the instruments.
+improvisations. Compositions had lower
+flux in rehearsals than performances.
 \label{fig:flux-entropy-boxplot}}
 \end{figure}
 
