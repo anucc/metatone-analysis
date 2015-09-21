@@ -103,16 +103,20 @@
   ensemble musical performance practice on touch screens where
   transition matrix measures are able to distinguish between sessions
   of different contexts, and the internal structure of these sessions.
-  The archive includes 95 touch data logs of ensemble touch-screen
-  interactions in concerts, rehearslas and formal HCI studies of
-  groups of musicians over more than two years.
-  The data analysis has been undertaken by first classifying these
-  data into higher level gesture types and summarising the performers'
-  transitions between these gestures.
-  We find that two transition-matrix measure, flux, and entropy,
-  can be used to distinguish different performance types and contexts,
-  as well as different phases (beginning, middle and end) of all of
-  the performances in our corpus.
+  Traditional methodologies for studying interfaces that support
+  collaborative creativity can be time-consuming and intrusive to
+  implement but our methods may provide a practical alternative for
+  large scale analysis of creative interactions.
+
+  Our archive includes 95 touch data logs of ensemble touch-screen
+  interactions in concerts, rehearsals and formal HCI studies of
+  groups of musicians over more than two years. The data analysis has
+  been undertaken by first classifying these data into higher level
+  gesture types and summarising the performers' transitions between
+  these gestures. We find that two transition-matrix measure, flux,
+  and entropy, can be used to distinguish different performance types
+  and contexts, as well as the internal structure (beginning, middle
+  and end) of the performances in our corpus.
 \end{abstract}
 
 \keywords{  
@@ -162,48 +166,53 @@ collaborative interaction~\cite{Resnick:2005yu}. However, it has been
 acknowledged that understanding and evaluating interfaces in creative
 contexts can be challenging~\cite{Shneiderman:2007qv}. In the context
 of live performance, interface evaluation using questionnaires, or
-ethnographic data gathering can miss the dynamic need of artists in
-the moment of performance and may be impractical in live performative
-contexts. When performers use a combuter-based artistic interface,
-logged interaction data which has been collected for curation and
-preservation~\cite{England:2014ys}, might also allow quantitative
-investigation into these performances.
+ethnographic data gathering can miss the dynamic needs of artists
+during collaborative interactions and may be impractical in live
+performative contexts. When performers use a combuter-based artistic
+interface, logged interaction data which has been collected for
+curation and preservation~\cite{England:2014ys}, might also allow
+quantitative investigation into these performances. In this note we
+will show how an archive of collaborative performance data logs can be
+subjected to a quantitative analysis based on transition probabilities
+between gestural states. We will demonstrate that two measures on
+transition matrices, flux and entropy, show significant differences
+between different kinds of performances, and give insight into the
+internal structure of these performances.
 
-In this note we describe an archive of interaction data logs that has
-been accumulated to support a long-term practice-led research program
-into simple iPad interfaces for group music-making similar to those
-described in Martin et al~\cite{Martin:2014cr}. Over a period of more
-than two years (April 2013--June 2015), we collected data from group
-music-making sessions where the participants used custom-built,
-touch-screen apps on Apple iPad devices. Although several different
-apps have been included in our corpus, they shared a common mode of
-free-form touch interaction where tapping produced short sounds and
-swirling or swiping produced long sounds. Apart from this commonality,
-the apps featured a variety of sound palettes, different kinds of
-visual feedback, and different kinds of networked interactions
-(between the iPads in an ensemble and with a central server).
+Our archive of interaction data logs has been accumulated to support a
+long-term practice-led research program into simple iPad interfaces
+for group music-making similar to those described in Martin et
+al~\cite{Martin:2014cr}. Over a period of more than two years (April
+2013--June 2015), we collected data from group music-making sessions
+where the participants used our custom-built, touch-screen apps on
+Apple iPad devices. Although several different apps have been included
+in our corpus, they shared a common mode of free-form touch
+interaction where tapping produced short sounds and swirling or
+swiping produced long sounds. Apart from this commonality, the apps
+featured a variety of sound palettes, different kinds of visual
+feedback, and different kinds of networked interactions (between the
+iPads in an ensemble and with a central server).
 
 In all of our interaction sessions, every touch interaction---every
 touch down, dragging movement and release---was time-stamped and
-logged to disk for later analysis. These sessions included rehearsals
-without an audience as well as live performances at arts festivals and
-other events. They also included interactions during
-formally-structured HCI experiments where participant compared
-multiple apps and interfaces. Some of the performances were iPad-only
-and others used iPads together with other acoustic percussion
-instruments. Although the majority of the sessions were free-form
-improvisations, a number of rehearsals and performances involved
-composed pieces where the musicians read and performed percussion
-notation using the apps.
+logged to disk for later analysis. These sessions included
+formally-structured HCI experiments, where participants were
+interviewed or surveyed. They also included rehearsals without an
+audience and performances at arts festivals where creative goals were
+paramount; in these situations surveys or interviews would have been
+inappropriate and possibly disruptive. Some of the performances were
+iPad-only and others used iPads together with other acoustic
+percussion instruments. Although the majority of the sessions were
+free-form improvisations, a number of rehearsals and performances
+involved composed pieces where the musicians read and performed
+percussion notation using the apps.
 
-Representative photographs of some of these session contexts
-(rehearsal, performance including other acoustic instruments and iPad
-only performance) are are shown
-Figure~\ref{fig:three-performance-contexts}) and other descriptive
-statistics about the sessions are shown in Table \ref{corpus-table}.
-In our corpus, the median length of sessions is 7m26s and the median
-number of participants per ensemble is four. Metadata was included
-together with the interaction data for each session to record the
+Representative photographs of some of these session contexts are are
+shown Figure~\ref{fig:three-performance-contexts}) and other
+descriptive statistics about the sessions are shown in Table
+\ref{corpus-table}. In our corpus, the median length of sessions is
+7m26s and the median number of participants per ensemble is four. Each
+session record is labelled with metadata about the session
 \emph{context} (performance, rehearsal, study), session \emph{type}
 (improvisation or composition), and \emph{instrumentation}
 (iPads-only, or iPads with acoustic percussion). The distribution of
@@ -229,9 +238,6 @@ recorded sessions by context and type is shown in Figure
 % and bells are often tapped, stroked and hit in novel ways to
 % communicate meaning and emotion through music~\cite{Schick:2006fk}.
 
-
-% TODO fix this table to remove descriptive data about the
-% demonstration sessions.
 \begin{table}
 \centering
 \begin{tabular}{l|llll}
@@ -249,7 +255,7 @@ Entropy &   & 0.7683 & 3.342 & 4.442\\
 \caption{
   Representative data about the corpus of musical touch-screen
   interaction sessions used in this study. These sessions were
-  rehearsals, performances, or studies and 
+  rehearsals, performances, or studies and
   participants improvised or performed compositions. Each record
   consisted of touch-data recorded in CSV format and was later analysed
   with a gestural classification system. Some participants were
@@ -263,18 +269,18 @@ Entropy &   & 0.7683 & 3.342 & 4.442\\
 A useful way of modelling user interfaces is to consider their
 configurations as state vectors and to deploy the methods of matrix
 algebra to describe transitions between these states during an
-interaction sequence~\cite{Thimbleby:2001kq, Thimbleby:2004fj}.
-An opposite approach is to record users' interactions with an
-interface, manually coding interaction states. 
-This method has been applied to usability analysis of resource
-planning software for security applications~\cite{Kannampallil:2007fp}
-where the transition probability matrix of these state sequences
-was used to draw conclusions about the nature of this interactions.
-In the creative arts, editing commands at a computer interface for the
-``live coding'' of computer music has also been coded as states and
-analysed using transition matrices~\cite{Swift:2014tya}, in both the
-textual and musical dimensions, in order to arrive at conclusions
-regarding artistic style.
+interaction sequence~\cite{Thimbleby:2001kq, Thimbleby:2004fj}. An
+inverted approach is to record users' interactions with an interface,
+manually coding interaction states  This method has been applied to
+usability analysis of resource planning software for security
+applications~\cite{Kannampallil:2007fp} where the transition
+probability matrix of these state sequences was used to draw
+conclusions about the nature of this interactions. In the creative
+arts, editing commands at a computer interface for the ``live coding''
+of computer music has also been coded as states and analysed using
+transition matrices~\cite{Swift:2014tya}, in both the textual and
+musical dimensions, in order to arrive at conclusions regarding
+artistic style.
 
 In our corpus of iPad musical performances, rehearsals and studies, we
 have used the continuous touch-screen gestures identified by Martin et
