@@ -263,62 +263,54 @@ Entropy &   & 0.7683 & 3.342 & 4.442\\
   the corpus.\label{corpus-table}}
 \end{table}
 
-
 \section{Macro Gestures, Transition Matrices and Matrix Measures}
 
 A useful way of modelling user interfaces is to consider their
-configurations as state vectors and to deploy the methods of matrix
-algebra to describe transitions between these states during an
-interaction sequence~\cite{Thimbleby:2001kq, Thimbleby:2004fj}. An
-inverted approach is to record users' interactions with an interface,
-manually coding interaction states  This method has been applied to
-usability analysis of resource planning software for security
-applications~\cite{Kannampallil:2007fp} where the transition
+theoretical configurations as state vectors and to deploy the methods
+of matrix algebra to describe transitions between these states during
+an interaction sequence~\cite{Thimbleby:2001kq, Thimbleby:2004fj}. An
+inverted approach is to record users' interactions and manually code
+interaction states to produce a transition model. This method has been
+applied to usability analysis of resource planning software for
+security applications~\cite{Kannampallil:2007fp} where the transition
 probability matrix of these state sequences was used to draw
 conclusions about the nature of this interactions. In the creative
-arts, editing commands at a computer interface for the ``live coding''
-of computer music has also been coded as states and analysed using
+arts, editing commands at a computer interface to ``live code''
+computer music has also been coded as states and analysed using
 transition matrices~\cite{Swift:2014tya}, in both the textual and
 musical dimensions, in order to arrive at conclusions regarding
 artistic style.
 
 In our corpus of iPad musical performances, rehearsals and studies, we
-have used the continuous touch-screen gestures identified by Martin et
-al~\cite{Martin:2014cr} as a basis for a musical state-space.
-Each performer in each musical piece can then be thought of as
-producing a ``score'' of state transitions and an overall transition
-matrix for the entire ensemble can be derived by averaging the
-individual transition matrices.
+have used an automated method to classify logs of touch interaction,
+at a regular interval, into nine continuous touch-screen gestures, as
+described by Martin et al~\cite{Martin:2015jk}. Each performer in each
+musical piece can then be thought of as producing a ``score'' of state
+transitions and an overall transition matrix for the entire ensemble
+can be derived by averaging the individual transition matrices.
 
 Suppose that each participant's activity in a collaborative
 interaction can at any given time be classified as belonging to one of
 $m$ distinct \emph{states}. Over the course of the activity, each
 participant $X$ generates a length $N$ sequence of these interaction
-states
-\begin{equation}
- X_n \hskip 2em n = 1, \ldots, N
-\end{equation}
-which can be thought of as Markov process. If there is an (automated)
-classification process for extracting each participant's state
-sequence from (or during) their interaction data, then we can estimate
-the $m \times m$ transition matrix $P$ which characterises this
-process by simply counting the number of times state $j$ follows state
-$i$. The entries of $P$ are then given by:
-$p_{ij} = \frac{N_{ij}}{\sum_i \sum_j N_{ij}}$.
-% \begin{equation}
-%   p_{ij} = \frac{N_{ij}}{\sum_i \sum_j N_{ij}}
-% \end{equation}
-The transition activity of the whole ensemble can be calculated by
-averaging the TM for each performer. The matrix can be normalised so
-that the sum of all elements is equal to one.
+states $X_n$ ($n = 1, \ldots, N$) which can be thought of as Markov
+process.
 
-Previous work~\cite{Martin:2015jk} showed that the raw touch data
-obtained from interaction with simple iPad interfaces similar to ours
-could be segmented using a Random Forest\cite{Breiman:2001kx}
-classifier\footnote{The classifier used was from Python's Scikit-learn
-  package\cite{scikit-learn}.}. The classifier was applied to 5-second
-windows of the touch-data to provide a chain of gesture-states for
-each participant in each session. These chains can be used to create
+If there is an (automated) classification process for identifying each
+participant's state sequence from their interaction data, then we can
+estimate the $m \times m$ transition matrix $P$ which characterises
+this process by setting each entry $p_{ij}$ to be the number of times
+state $j$ follows state $i$ in the sequence. The transition activity
+of the whole ensemble can be calculated by averaging the TM for each
+performer. The matrix can be normalised so that the sum of all
+elements is equal to one.
+
+We applied a Random Forest~\cite{Breiman:2001kx}
+classifier\footnote{The Random Forest classifier used was from
+  Python's Scikit-learn package\cite{scikit-learn}.} to 5-second
+windows of touch-data in our corpus to provide chains of
+gesture-states for each participant in each session following previous
+work~\cite{Martin:2015jk}. These chains can be used to create
 $9 \times 9$ (the classifier recognises 9~distinct gestures)
 transition matrices for individual performers and the whole ensemble
 in each session.
