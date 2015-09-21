@@ -17,17 +17,20 @@ flux.entropy.ratings <- read.csv("../flux_entropy_ratings.csv")
 #summary(raw.performance.data)
 summary(valid.sessions)
 ## rehearsals/performances/studies only
-perf.contexts <- subset(raw.performance.data, performance_context %in% c("rehearsal", "performance", "study"))
-perf.contexts <- subset(perf.contexts, performance_type %in% c("composition","improvisation"))
-summary(perf.contexts$performance_type) # Composition: 23 - Improvisation: 72
-summary(perf.contexts)
-                                        # Calculate total recorded time.
-total.seconds <- max(valid.sessions$length_seconds)
-message(paste(total.seconds %/% 3600, "H", (total.seconds %% 3600) %/% 60, "M", signif(total.seconds %% 60, 4), "S", sep = "" ))
-                                        # performer data
-message(paste(sum(valid.sessions$number_performers),min(valid.sessions$number_performers),median(valid.sessions$number_performers),max(valid.sessions$number_performers),sep = " & "))
-                                        #
-message(paste(signif(sum(valid.sessions$flux),4),signif(min(valid.sessions$flux),4),signif(median(valid.sessions$flux),4),signif(max(valid.sessions$flux),4),sep = " & "))
+perf.sessions <- subset(raw.performance.data, performance_context %in% c("rehearsal", "performance", "study"))
+perf.sessions <- subset(perf.sessions, performance_type %in% c("composition","improvisation"))
+summary(perf.sessions$performance_type) # Composition: 23 - Improvisation: 72
+summary(perf.sessions)
+
+format.seconds <- function(seconds){
+return(paste(seconds %/% 3600, "H", (seconds %% 3600) %/% 60, "M", signif(seconds %% 60, 4), "S", sep = ""))
+}
+                                        # length data - total min median max
+lengths <- perf.sessions$length_seconds
+message(paste("Length",format.seconds(sum(lengths)),format.seconds(min(lengths)),format.seconds(median(lengths)),format.seconds(max(lengths)),sep = " & "))
+message(paste("Participants",sum(perf.sessions$number_performers),min(perf.sessions$number_performers),median(perf.sessions$number_performers),max(perf.sessions$number_performers),sep = " & "))
+message(paste("Flux", " " ,signif(min(valid.sessions$flux),4),signif(median(valid.sessions$flux),4),signif(max(valid.sessions$flux),4),sep = " & "))
+message(paste("Entropy", " " ,signif(min(valid.sessions$entropy),4),signif(median(valid.sessions$entropy),4),signif(max(valid.sessions$entropy),4),sep = " & "))
 
 # New long data frame for initial plots.
 valid.sessions.long <- read.csv("../metatone-performance-data-normalmatrices.csv")
@@ -49,9 +52,9 @@ summary(perf.sessions.long)
 #valid.sessions <- (subset(valid.sessions, performance_context != "data_collection"))
 ## plots
 # Count of Session Data
-ggplot(perf.contexts, aes(performance_context)) + geom_bar(aes(fill = performance_type)) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "right", legend.box = "vertical") + scale_fill_manual(values=chifig.2colours) + scale_x_discrete("performance context") + scale_y_continuous("no. of sessions")
+ggplot(perf.sessions, aes(performance_context)) + geom_bar(aes(fill = performance_type)) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "right", legend.box = "vertical") + scale_fill_manual(values=chifig.2colours) + scale_x_discrete("performance context") + scale_y_continuous("no. of sessions")
 ggsave("../flux-entropy-paper/figures/sessions-count.pdf", width=5.4, height = 2)
-#ggplot(perf.contexts, aes(performance_context)) + geom_bar(aes(fill = performance_type))
+#ggplot(perf.sessions, aes(performance_context)) + geom_bar(aes(fill = performance_type))
 # Flux boxplot
 #ggplot(valid.sessions, aes(performance_context, flux)) + geom_boxplot(aes(fill = performance_type)) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "top", legend.box = "horizontal") + scale_fill_manual(values=chifig.2colours) + scale_x_discrete("performance context")
 #quartz.save("../flux-entropy-paper/figures/flux-boxplot.pdf", type = "pdf")
@@ -64,7 +67,7 @@ ggsave("../flux-entropy-paper/figures/context-flux-entropy-boxplot.pdf",width=5.
 
 ggplot(valid.sessions, aes(performance_context, trace)) + geom_boxplot(aes(fill = performance_type))
 ggplot(valid.sessions, aes(performance_context, norm)) + geom_boxplot(aes(fill = performance_type))
-ggplot(perf.contexts, aes(performance_context, determinant)) + geom_boxplot(aes(fill = performance_type))
+ggplot(perf.sessions, aes(performance_context, determinant)) + geom_boxplot(aes(fill = performance_type))
 ggplot(valid.sessions, aes(performance_context, number_performers)) + geom_boxplot(aes(fill = performance_type))
 ggplot(valid.sessions, aes(performance_context, length_seconds)) + geom_boxplot(aes(fill = performance_type))
 # distribution of flux and entropy
@@ -88,14 +91,14 @@ ggsave("../flux-entropy-paper/figures/flux-entropy-through-time.pdf", width=6,he
 
 ## stats
 ## Question: Do Performance Type and Context have a significant effect on Flux and Entropy?
-summary(aov(flux~performance_context*performance_type*instruments, perf.contexts))
-summary(aov(entropy~performance_context*performance_type*instruments, perf.contexts))
-summary(aov(norm~performance_context*performance_type*instruments, perf.contexts))
-summary(aov(determinant~performance_context*performance_type*instruments, perf.contexts))
-summary(aov(trace~performance_context*performance_type*instruments, perf.contexts))
+summary(aov(flux~performance_context*performance_type*instruments, perf.sessions))
+summary(aov(entropy~performance_context*performance_type*instruments, perf.sessions))
+summary(aov(norm~performance_context*performance_type*instruments, perf.sessions))
+summary(aov(determinant~performance_context*performance_type*instruments, perf.sessions))
+summary(aov(trace~performance_context*performance_type*instruments, perf.sessions))
 
-summary(aov(length_seconds~performance_context*performance_type*instruments, perf.contexts))
-summary(aov(number_performers~performance_context*performance_type*instruments, perf.contexts))
+summary(aov(length_seconds~performance_context*performance_type*instruments, perf.sessions))
+summary(aov(number_performers~performance_context*performance_type*instruments, perf.sessions))
 
                                         # yes! this is a result.
 # performance_type and performance_type:instruments both have significant effects
@@ -105,7 +108,7 @@ summary(aov(entropy~performance_context*performance_type*instruments, valid.sess
 summary(aov(entropy~performance_context, valid.sessions))
 
 # worst plot ever.
-#ggplot(perf.contexts, aes(performance_context, flux, colour = performance_type, shape = instruments, fill = instruments)) + geom_violin()+ geom_boxplot() + geom_point(alpha = 0.5, position = position_jitter(w = 0.1, h = 0))  + scale_fill_manual(values = chifig.3colours) +scale_color_manual(values = chifig.2colours) + stat_summary(fun.data = "mean_cl_boot", position=position_jitter(w = 0.2, h=0))
+#ggplot(perf.sessions, aes(performance_context, flux, colour = performance_type, shape = instruments, fill = instruments)) + geom_violin()+ geom_boxplot() + geom_point(alpha = 0.5, position = position_jitter(w = 0.1, h = 0))  + scale_fill_manual(values = chifig.3colours) +scale_color_manual(values = chifig.2colours) + stat_summary(fun.data = "mean_cl_boot", position=position_jitter(w = 0.2, h=0))
 
 # Potential POLR stuff.
 flux.entropy.ratings <- read.csv("../flux_entropy_ratings.csv")
