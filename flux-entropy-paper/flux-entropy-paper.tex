@@ -281,17 +281,16 @@ transition matrices~\cite{Swift:2014tya}, in both the textual and
 musical dimensions, in order to arrive at conclusions regarding
 artistic style.
 
-In our corpus of iPad musical performances, rehearsals and studies, we
-have used an automated method to classify logs of touch interaction,
-at a regular interval, into nine continuous touch-screen gestures, as
-described by Martin et al~\cite{Martin:2015jk}. Each performer in each
-musical piece can then be thought of as producing a ``score'' of state
-transitions and an overall transition matrix for the entire ensemble
-can be derived by averaging the individual transition matrices.
+In our corpus of iPad musical performances, logs of low-level touch
+data record each performers micro-gestures. However, it has been
+established that musical performances on touch-screens can be seen in
+terms of vocabularies of continuous macro gestures that unfold over
+several seconds of touch interaction~\cite{Martin:2014cr}. Improvised
+performances can be then thought of as a sequence of such
+states~\cite{Pressing:1988uo} for each performer.
 
-Suppose that each participant's activity in a collaborative
-interaction can at any given time be classified as belonging to one of
-$m$ distinct \emph{states}. Over the course of the activity, each
+If the performers' touch interactions can be classified as belonging
+to one of $m$ distinct states, then over the course of a session each
 participant $X$ generates a length $N$ sequence of these interaction
 states $X_n$ ($n = 1, \ldots, N$) which can be thought of as Markov
 process.
@@ -305,15 +304,16 @@ of the whole ensemble can be calculated by averaging the TM for each
 performer. The matrix can be normalised so that the sum of all
 elements is equal to one.
 
-We applied a Random Forest~\cite{Breiman:2001kx}
+To generate state sequences for our corpus we have used an automated
+method to classify logs of touch interaction, at a regular interval,
+into nine continuous touch-screen gestures, as described by Martin et
+al~\cite{Martin:2015jk}. A Random Forest~\cite{Breiman:2001kx}
 classifier\footnote{The Random Forest classifier used was from
-  Python's Scikit-learn package\cite{scikit-learn}.} to 5-second
-windows of touch-data in our corpus to provide chains of
-gesture-states for each participant in each session following previous
-work~\cite{Martin:2015jk}. These chains can be used to create
-$9 \times 9$ (the classifier recognises 9~distinct gestures)
-transition matrices for individual performers and the whole ensemble
-in each session.
+  Python's Scikit-learn package\cite{scikit-learn}.} was applied to
+5-second windows of touch-data in our corpus to provide chains of
+gesture-states for each participant in each session. These chains can
+be used to create $9 \times 9$ transition matrices for individual
+performers and the whole ensemble in each session.
 
 \section{Quantitative transition matrix statistics}
 \label{sec:underst-impr-group}
@@ -322,11 +322,11 @@ While the interaction sessions recorded in our corpus were performed
 by many different participants with varying experience levels, in
 different contexts and on different instrumental setups, the common
 interface and method of recording the data allows all the sessions to
-be transformed into gesture sequences. These transition matrices have
-been used as a visualisation technique to reveal qualitative
-differences in structure in improvisational
+be transformed into gesture sequences, and transition matrices.
+Transition matrices have been used as a visualisation technique to
+reveal qualitative differences in structure in improvisational
 music-making\cite{Swift:2014tya}. In this paper, however, we wish to
-extract quantitative statistics from these TMs for comparing and
+extract quantitative measures from these TMs for comparing and
 tracking different sessions over time.
 
 To do this we calculate two high-level quantities from each session:
