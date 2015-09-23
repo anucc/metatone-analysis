@@ -75,7 +75,7 @@
  % Transition Matrix Measures}
 %\title{Mining interaction log data in long-term practice-led research}
  
-\title{Mining Interaction Log Data in a Creative Arts Practice using Macro Gestures and Transition Matrices}
+\title{Mining Interaction Log Data in a Creative Arts Practice using Transition Matrices}
 
 
 %in a Creative Arts Practice}
@@ -94,13 +94,17 @@
     \affaddr{Affiliation}\\
     \affaddr{City, Country}\\
     \email{e-mail address}}\\
+     \alignauthor{4th Author Name\\
+    \affaddr{Affiliation}\\
+    \affaddr{City, Country}\\
+    \email{e-mail address}}\\
 }
 
 \maketitle
 
 \begin{abstract}
 
-  In this note we describe the analysis of an interaction data archive
+  In this note we present an analysis of an interaction data archive
   associated with a long-term practice-led research program
   investigating ensemble musical performance practice on touch
   screens. We use transition matrix measures to distinguish between
@@ -108,7 +112,7 @@
   sessions. The data analysis proceeds by first classifying these data
   into higher level gesture types and summarising the performers'
   transitions between these gestures. We find that two
-  transition-matrix measure, flux, and entropy, can be used to
+  transition-matrix measures, flux, and entropy, can be used to
   distinguish different performance types and contexts, as well as the
   internal structure of the performances in our corpus.
 \end{abstract}
@@ -127,10 +131,10 @@
   \centering
   \includegraphics[width=\linewidth]{figures/three-performance-contexts}
   \caption{Collaborative musical interaction with our touch-screen
-    interfaces in three different contexts: (left to right) rehearsal
-    in a studio,
-    performance with percussion instruments, and performance with just
-    iPads.\label{fig:three-performance-contexts}}
+    interfaces in two different {\em contexts} and two different {\em instrumentations}: (left to right) rehearsal
+    in a studio with iPads only,
+    concert performance with iPads and percussion instruments, and concert performance with 
+    iPads only.\label{fig:three-performance-contexts}}
 \end{figure*}
 
 
@@ -138,25 +142,25 @@ Modern computing devices and interfaces continue to present
 opportunities to support new kinds of creative expression and
 collaborative interaction~\cite{Resnick:2005yu}. However, it has been
 acknowledged that understanding and evaluating interfaces in creative
-contexts can be challenging~\cite{Shneiderman:2007qv}. This problem is
+contexts can be very challenging~\cite{Shneiderman:2007qv}. This problem is
 even more pronounced in artistic \emph{performance}, where subjective
 interface evaluation through questionnaires or interviews may be both
-practically difficult and culturally inappropriate. When the interface
-is digital, however, it is still usually trivial to log interaction in
-these situations, which is useful for curation and
-preservation~\cite{England:2014ys}. The question is: can this log data
-be used not just as a record for posterity, but in support of a
-broader creative-practice led research program?
+practically difficult and culturally inappropriate. However, when an artistic interface
+is digital, it becomes possible to log artistic performances and these
+logs can be used for curation and
+preservation~\cite{England:2014ys}. A question we address is: can this log data
+be used to understand and support a
+broader creative-practice-led research program?
 
 In this note we will show how an archive of collaborative performance
-data logs can be subjected to a quantitative analysis based on
+logs can be subjected to a quantitative analysis based on
 transition probabilities between gestural states. We will demonstrate
 that two measures on transition matrices, flux and entropy, show
 significant differences between different kinds of performances, and
 give insight into the internal structure of these performances.
 
-Our archive of interaction data logs has been accumulated to support a
-long-term practice-led research program into simple iPad interfaces
+Our archive of interaction data-logs has been accumulated to support a
+long-term, practice-led, research program into simple iPad interfaces
 for group music-making similar to those described in Martin et
 al~\cite{Martin:2014cr}. Over a period of more than two years (April
 2013--June 2015), we collected data from group music-making sessions
@@ -171,12 +175,14 @@ iPads in an ensemble and with a central server).
 
 In all of our 95 interaction sessions, every touch interaction---every
 touch down, dragging movement and release---was time-stamped and
-logged to disk for later analysis. These sessions included
-formally-structured HCI experiments, where participants were
-interviewed or surveyed. They also included rehearsals without an
-audience and performances at arts festivals where creative goals were
-paramount; in these situations surveys or interviews would have been
-inappropriate and possibly disruptive. Some of the performances were
+logged to disk for later analysis. These sessions included {\em rehearsals} for upcoming concerts, without an
+audience, as well as curated {\em concerts}, in front of a live audience, where 
+performative goals were paramount. They also included a number of {\em recording sessions}
+for the purposes of formally-structured HCI experiments. In the recording
+sessions, the performers were also interviewed and surveyed-- something which would have 
+been disruptive and inappropriate for the concerts. Survey and interview data were not part of the
+corpus. 
+Some of the sessions were
 iPad-only and others used iPads together with other acoustic
 percussion instruments. Although the majority of the sessions were
 free-form improvisations, a number of rehearsals and performances
@@ -184,13 +190,14 @@ involved composed pieces where the musicians read and performed
 percussion notation using the apps.
 
 Some of these session contexts are are shown
-Figure~\ref{fig:three-performance-contexts}) and other descriptive
-statistics about the sessions are shown in Table \ref{corpus-table}.
-In our corpus, the median length of sessions is 7m26s and the median
+Figure~\ref{fig:three-performance-contexts} and other descriptive
+statistics about the corpus are shown in Table \ref{corpus-table}.
+In our corpus, the median length of sessions is 7m26s (IS THIS STILL THE MEDIAN IGNORING THE
+DEMONSTRATION AND DATA GATHERING SESSIONS?) and the median
 number of participants per ensemble is four. Each session record is
-labelled with metadata about the session \emph{context} (performance,
-rehearsal, study), session \emph{type} (improvisation or composition),
-and \emph{instrumentation} (iPads-only, or iPads with acoustic
+labelled with metadata about its \emph{context} (concert,
+rehearsal, recording), its \emph{type} (improvisation or composition),
+and its \emph{instrumentation} (iPads-only, or iPads with acoustic
 percussion). The distribution of recorded sessions by context and type
 is shown in Figure \ref{fig:count-data}.
 
@@ -229,14 +236,12 @@ Entropy &   & 0.7683 & 3.342 & 4.442\\
 \hline
 \end{tabular}
 \caption{
-  Representative data about the corpus of musical touch-screen
-  interaction sessions used in this study. These sessions were
-  rehearsals, performances, or studies and
-  participants improvised or performed compositions. Each record
-  consisted of touch-data recorded in CSV format and was later analysed
-  with a gestural classification system. Some participants were
-  present in multiple sessions, however this data was not tracked in
-  the corpus.\label{corpus-table}}
+  Representative statistics from the corpus of musical touch-screen
+  interaction sessions described in this note.  Each record in the corpus
+  consists of low level touch-data (such as touches begin, touches move, touches end) recorded in CSV format. 
+  Many of the participants were
+  present in multiple sessions, but this data was not tracked in
+  our (deidentified) corpus.\label{corpus-table}}
 \end{table}
 
 \section{Macro Gestures, Transition Matrices and Matrix Measures}
@@ -247,42 +252,41 @@ of matrix algebra to describe transitions between these states during
 an interaction sequence~\cite{Thimbleby:2001kq, Thimbleby:2004fj}. An
 inverted approach is to record users' interactions and manually code
 interaction states to produce a transition model. This method has been
-applied to usability analysis of resource planning software for
-security applications~\cite{Kannampallil:2007fp} where the transition
-probability matrix of these state sequences was used to draw
-conclusions about the nature of this interactions. In the creative
-arts, editing commands at a computer interface to ``live code''
-computer music has also been coded as states and analysed using
-transition matrices~\cite{Swift:2014tya}, in both the textual and
+applied to usability analysis of many applications outside of the creative arts, for example~\cite{Kannampallil:2007fp}
+studied resource-planning software for
+security applications and used the transition
+probability matrix of these state-sequences to draw
+conclusions about the nature of interactions with that software. As an example from the creative
+arts, protocols obtained from a computer interface for ``live coding''
+computer music have been  coded as states and analysed using
+transition matrices~\cite{Swift:2014tya} in both the textual (editing) and
 musical dimensions, in order to arrive at conclusions regarding
 artistic style.
 
-In our corpus of iPad musical performances, logs of low-level touch
-data record each performer's micro-gestures. However, it has been
-established that musical performances on touch-screens can be seen in
-terms of vocabularies of continuous macro gestures that unfold over
-several seconds of touch interaction~\cite{Martin:2014cr}. Improvised
-performances can be then thought of as a sequence of such
+In our corpus of iPad musical performances, logs of low-level touch-data record each performer's micro-gestures. 
+Because it has been
+established that musical performances on touch-screens can be chuncked into
+vocabularies of continuous macro gestures that unfold over
+several seconds of touch interaction~\cite{Martin:2014cr}, these logs
+ can be thought of as a sequence of such
 states~\cite{Pressing:1988uo} for each performer.
-
-If the performers' touch interactions can be classified as belonging
-to one of $m$ distinct states, then over the course of a session each
+If a performers' touch interactions can be classified as belonging
+to one of $m$ distinct states, then, over the course of a session, each
 participant $X$ generates a length $N$ sequence of these interaction
 states $X_n$ ($n = 1, \ldots, N$) which can be thought of as Markov
 process.
-
 If there is an (automated) classification process for identifying each
 participant's state sequence from their interaction data, then we can
-estimate the $m \times m$ transition matrix $P$ which characterises
-this process by setting each entry $p_{ij}$ to be the number of times
+estimate the $m \times m$ transition matrix (TM), $P$, which characterises
+this process by setting each entry, $p_{ij}$, to be the number of times
 state $j$ follows state $i$ in the sequence. The transition activity
 of the whole ensemble can be calculated by averaging the TM for each
 performer. The matrix can be normalised so that the sum of all
 elements is equal to one.
 
 To generate state sequences for our corpus we have used an automated
-method to classify logs of touch interaction, at a regular interval,
-into nine continuous touch-screen gestures, as described by Martin et
+method to sample the data at regular intervals and to classify the logs of touch events
+into the nine continuous touch-screen gestures identified by Martin et
 al~\cite{Martin:2015jk}. A Random Forest~\cite{Breiman:2001kx}
 classifier\footnote{The Random Forest classifier used was from
   Python's Scikit-learn package\cite{scikit-learn}.} was applied to
@@ -300,10 +304,9 @@ different contexts and on different instrumental setups, the common
 interface and method of recording the data allows all the sessions to
 be transformed into gesture sequences, and transition matrices. While
 these matrices can be used to visualise the structure of individual
-performances~\cite{Swift:2014tya}, we wish to extract quantitative
+performances, as has been done in ~\cite{Swift:2014tya}, we also wish to extract quantitative
 measures from these TMs to compare the large number of sessions in our
 corpus.
-
 To do this we calculate two high-level quantities from each session:
 ``flux'' and ``entropy''. The flux of a sequence is defined as the
 ratio of state transitions (e.g. $A \rightarrow B$ where $A \neq B$),
@@ -315,15 +318,15 @@ changes state. Flux returns a value in the interval $[0,1]$ and will
 return 0 when participants never change state, and 1 when participants
 never stay in the same state for two measurements in a row.
 
-Another useful measure that can be used on a transition matrix is its
+Another, evocative measure that can be defined on a TM is its
 entropy, defined in the information-theoretic\cite{Shannon:1948rt}
 sense: $H(P) = -\sum_{i,j}p_{ij}\log_2(p_{ij})$. This measure
 is small when the matrix is sparse, and largest when each matrix
 element is equal. It offers a different perspective on collaborative
 interactions than the flux measure by capturing the breadth of the
 gestural space explored by the participants throughout the course of
-an interaction. Consider the degenerate case of a participant who
-alternates between two states for a whole performance: the flux in
+an interaction. Consider a degenerate case of a participant who
+alternates between just two states for a whole performance: the flux in
 this case will be maximal ($\mathrm{flux}(P) = 1$) since there are no
 self-transitions, (only $A \rightarrow B$ or $ B \rightarrow A$) even
 though the participant has only used a small subset of the state
@@ -341,8 +344,8 @@ insight into the internal structure of performances?
   \centering
   \includegraphics[width=\linewidth]{figures/sessions-count}
   \caption{Distribution of the sessions in our interaction corpus by
-    performance context. Improvisations or compositions were repeated
-    several times in rehearsals and study sessions but only performed
+    session {\em context}. Improvisations or compositions were repeated
+    several times in rehearsals and recording sessions but only performed
     once in concerts.
     \label{fig:count-data}}
 \end{figure}
@@ -356,33 +359,36 @@ insight into the internal structure of performances?
   \caption{Distributions of flux and entropy values by performance
 context. Study and rehearsal sessions had the highest flux for
 improvisations. Compositions had lower
-flux in rehearsals than performances.
+flux in rehearsals than concerts.
 \label{fig:flux-entropy-boxplot}}
 \end{figure}
 
-The distribution of flux and entropy with respect to session contexts,
-types and instrumentation are shown in Figure
+The distribution of flux and entropy with respect to session {\em contexts} (concert,
+rehearsal, recording),
+{\em types} (improvisation or composition) and {\em instrumentation} (iPads-only, or iPads with acoustic
+percussion) are shown in Figure
 \ref{fig:flux-entropy-boxplot}. A three-way ANOVA procedure was
 performed on the data set to find whether the metadata could
 significantly predict the entropy and flux values.
 
-All main effects on flux were found to be significant: performance
-context ($F(2,86) = 6.28, p < 0.01$), performance type
+All main effects on flux were found to be significant: session
+context ($F(2,86) = 6.28, p < 0.01$), session type
 ($F(1,86) = 7.21, p < 0.01$), and instrumentation
 ($F(1,86) = 20.06, p < 0.001$). Significant interaction effects were
-also found for performance context and type
-($F(1,86) = 6.18, p < 0.05$), and performance context and
+also found for session context and type
+($F(1,86) = 6.18, p < 0.05$), and session context and
 instrumentation ($F(1,86) = 10.48, p < 0.01$).
 
-For entropy, significant main effects were found due to performance
+For entropy, significant main effects were found due to session
 context ($F(2,86) = 12.10, p < 0.001$), and instrumentation
-($F(1,86) = 25.86$). The interaction of performance type and
-instrumentation was also found to be significant
+($F(1,86) = 25.86$) (WHAT IS THE P VALUE HERE?). There was no main effect for session type although
+ the interaction of session type and
+instrumentation was found to be significant
 ($F(1,86) = 9.93, p<0.01$).
 
 These tests show that the different interaction styles that might be
-present in performance contexts, types and instrumentations are
-reflected in the values of flux and entropy of their transition
+present in the various session contexts, types and instrumentations in our corpus
+appear to be descriminated  by values of the flux and entropy of their transition
 matrices.
 
 \begin{figure*}[t!]
@@ -390,35 +396,35 @@ matrices.
     \begin{subfigure}[t]{0.5\linewidth}
         \centering
           \includegraphics[width=\linewidth]{figures/type-section-flux-entropy}
-          \caption{Performances divided by performance type. \label{fig:type-section-flux-entropy}}
+          \caption{Sessions divided by session type. \label{fig:type-section-flux-entropy}}
     \end{subfigure}%
     ~ 
     \begin{subfigure}[t]{0.5\linewidth}
         \centering
           \includegraphics[width=\linewidth]{figures/context-section-flux-entropy}
-          \caption{Sessions divided by performance context. \label{fig:context-section-flux-entropy}}
+          \caption{Sessions divided by session context. \label{fig:context-section-flux-entropy}}
     \end{subfigure}
     \caption{The flux and entropy of different interaction sessions
       divided into beginning, middle, and end.}
 \end{figure*}
 
 
-\subsection{Breaking performances into sections}
+\subsection{Breaking Sessions into sections}
 
-It is clear from these results that flux and entropy can be used to
-differentiate between performance styles and types, but can they be
-used to understand some of the internal structure of performances? A
-classical model for understanding temporal art-forms is the
+It appears from our data-mining results that both flux and entropy can be used to
+differentiate between session styles and types, but can they be
+used to understand some of the internal structure of sessions? Since Aristotle, a
+classical model for understanding temporal art-forms is the three-phase
 ``beginning, middle, end'' structure~\cite{Aristotle:350rt}. To
-investigate how this structure fits our corpus, we can divide the
-gestural-sequences of each session into thirds and calculate the
+investigate how this structure fits our corpus, we have divided the
+gestural-sequences of each session into three equal sections and have calculated the
 transition matrices given by each section.
 
 Figure~\ref{fig:type-section-flux-entropy} shows that the flux and
-entropy of compositions are much more stable with respect to section
-than for improvisations. The stability of compositions is to be
+entropy of compositions are much more stable across the three sections than  are
+improvisations. This stability of compositions is to be
 expected since performers use the same gestures in each rehearsal and
-performance of these written scores, however it may be that different
+concert of written scores, however it may be that different
 kinds of compositions could result in different structural
 differences. Both measures have a downward trend through sections in
 improvisations with Kruskal-Wallis tests showing a significant effect
@@ -426,80 +432,90 @@ of section on flux ($\chi^2(2)=5.8, p=0.05$). This could be explained
 by performers entering an exploration stage at the start of an
 improvisation, where they change gesture frequently to experiment with
 different ideas. At the end of an improvisation, performers may change
-gesture less frequently while ``winding up'' the performance.
+gesture less frequently while ``winding up'' the concert performance.
 
 The gestural change in improvisation can be further explored by
-dividing the sessions by performance context. Figure
+dividing the sessions by session context. Figure
 \ref{fig:context-section-flux-entropy} shows this division for
 improvisations only. In rehearsals and studies the distribution of
 flux and entropy over sections has a similar shape, both measures drop
 in the ending section of studies and after the beginning section in
-rehearsals. In performances however, flux drops after the beginning
+rehearsals. In concerts however, flux drops after the beginning
 while entropy drops substantially in the ending section. This
 indicates a more constrained performance style in this closing
 section, where performers transition between fewer gestures in the
-final section of performances.
+final section of concert performances.
 
 \subsection{Performance styles over time}
 
-While the interaction session in our corpus have many different
+While the interaction sessions in our corpus have many different
 contexts, they are all part of a program of artistic and HCI research
 that has evolved over time. Figure \ref{fig:flux-entropy-through-time}
 shows the values of flux and entropy for each session in the corpus.
-Over the course of this research program, different ensembles and
+Over the course of this data collection, different ensembles and
 activities have been emphasised and some of these differences can be
-seen as clusters of performances with similar flux and entropy in the
+seen as clusters of performances having similar fluxes and entropies in the
 two plots. For instance, the earliest series of rehearsals and
-performances had flux between 0.05 and 0.15, while the period of
-activity after July 2014 had flux between 0.1 and 0.25. This change
-corresponded with an intensive series of study sessions and rehearsals
-where the participants developed a more ``fluctuating'' style of
-performance. The entropy between these two periods, however, remains
-at a similar level, showing the the space of available gestures that
-the performers explored was relatively stable.
+concerts, from early 2013 until July 2014, 
+had fluxes that were bounded between approximately 0.05 and 0.17.
+Just before and after July 2014, fluxes were bounded between 0.1 and 0.26. Finally,
+between early and mid 2015, fluxes were bounded between 0.08 and 0.32. Within these 
+blocks of performances, distinct clusters can be identified. Clusters in the entropy plots
+sometimes show similar trends to the fluxes and sometimes different. The higher
+upper bounds of fluxes close to July 2015 relative to those a year earlier may indicate
+the development of a more ``fluctuating'' style of performance. In the same period, the bound
+of entropies remained more similar indicating that the total space of available gestures continued
+to be explored in a relatively stable way. 
 
 \begin{figure}
   \centering
   \includegraphics[width=\linewidth]{figures/flux-entropy-through-time}
   \caption{Distribution of flux and entropy values of sessions through time.
     Different performance styles are visible as clusters of similar
-    flux regardless of performance context.
+    flux regardless of session context.
     \label{fig:flux-entropy-through-time}}
 \end{figure}
 
 \section{Conclusions}
 
-In this note we have extended previous work using transition matrices
-to understand HCI processes with the application of two simple matrix
-measures, flux and entropy, both of which have been demonstrated to
-have significant discriminatory power with regards to a corpus of 95
-collaborative touch-screen interactions. Not only do these measures
-differentiate between different types of sessions and the internal
-structure of these sessions, they provide qualitative insight into the
-performances as well. For improvised performances, live performances
-had the lowest measure in both flux and entropy, while lab-studies had
-the highest. This may be due to the increased pressure on performers
-when improvising in front of an audience. The internal investigation
-of performances session revealed more structural variety in
-improvisations than compositions. In response, new works could be
-composed that specifically explore different gestural structures in
-touch-screen performance.
+In this note we have applied transition matrices
+to a data corpus of 95 collaborative musical performances using touch screens.
+We have applied two simple matrix
+measures, flux and entropy, to the data and have shown that
+ both of these measures appear to 
+have discriminatory power. Not only do these measures
+differentiate between different types of sessions, and the internal
+structure of these sessions, but they provide qualitative insight into the
+performances. For improvised performances, it turns out that our results showed that concerts
+had the lowest values of both flux and entropy, while recording sessions had
+the highest. This may be due to the increased pressure on performers to take fewer risks
+when improvising in front of an audience at a concert and indicates that perhaps rehearsals should 
+emphasise the development of such risk-taking. 
+Our results for the three phases of performance (beginning, middle, end)
+revealed more variation in
+improvisations than compositions. As a creative
+ response to this finding, 
+new works might be
+composed that specifically explore and emphasise different gestural sequences across the three phases.
 
-Data-mining logs of interactions with creative interfaces suggest
-further approaches for future work. The macro-gestures that these
-processes reveal could be used as the basis for new works of new media
-art~\cite{Manovich:2002ly}. Additionally, a wider dissemination of
-such log data could better support the replication of findings in HCI
-research~\cite{Wilson:2011ve}. Finally, flux and entropy proved useful
-in the analysis of our data corpus, but other transition matrix
-metrics may be more suitable for different interaction data.
+Our data-mining of interaction-logs from creative interfaces suggests
+further approaches for future work.
+Our flux and entropy measures have proven useful
+in the analysis of our data corpus, but many other transition matrix
+metrics might be found to be useful for these and different interaction data.
+Our assumption of equal intervals for the beginning, middle and end of performances could be 
+optimised with a goal to identifying a common, or even optimal, apportionment of time to each phase.  
+A wide dissemination of corpuses such as ours could better support the replication of findings in HCI
+research~\cite{Wilson:2011ve}. The macro-gestures that these
+processes reveal could be used as the basis for ``transcoding'' new works of new media
+art~\cite{Manovich:2002ly} from these data corpuses. 
 
-HCI researchers are increasingly concerned with interactions that
-happen in-the-wild, where the creative collaborations of many users
-may be recorded, but where conducting surveys or interviews is
-innapropriate. We suggest that analysing interaction-state transitions
-using matrices and simple measures can lead to new insights into HCI
-interactions outside the lab.
+%HCI researchers are increasingly concerned with interactions that
+%happen in-the-wild, where the creative collaborations of many users
+%may be recorded, but where conducting surveys or interviews is
+%innapropriate. We suggest that analysing interaction-state transitions
+%using matrices and simple measures can lead to new insights into HCI
+%interactions outside the lab.
 
 
 \pagebreak
