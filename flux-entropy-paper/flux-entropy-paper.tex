@@ -152,8 +152,7 @@ give insight into the internal structure of these performances.
 
 Our archive of interaction data-logs has been accumulated to support a
 long-term, practice-led, research program into simple iPad interfaces
-for group music-making similar to those described in Martin et
-al~\cite{Martin:2014cr}. Over a period of more than two years (April
+for group music-making. Over a period of more than two years (April
 2013--June 2015), we collected data from group music-making sessions
 where the participants used our custom-built, touch-screen apps on
 Apple iPad devices. Although several different apps have been included
@@ -164,11 +163,12 @@ featured a variety of sound palettes, different kinds of visual
 feedback, and different kinds of networked interactions (between the
 iPads in an ensemble and with a central server).
 
-In all of our 95 interaction sessions, every touch interaction---every
-touch down, dragging movement and release---was time-stamped and
-logged to disk for later analysis. These sessions included {\em rehearsals} for upcoming concerts, without an
-audience, as well as curated {\em concerts}, in front of a live audience, where 
-performative goals were paramount. They also included a number of {\em recording sessions}
+In all of our 95 interaction sessions, every touch interaction---
+touches begin, touches move, touches end ---was time-stamped and
+logged to disk for later analysis. These sessions included {\em rehearsals} without an
+audience, as well as {\em concerts}, in front of a live audience, where 
+performative goals were paramount. They also included a number of {\em
+  recording} sessions
 for the purposes of formally-structured HCI experiments. In the recording
 sessions, the performers were also interviewed and surveyed-- something which would have 
 been disruptive and inappropriate for the concerts. Survey and interview data were not part of the
@@ -179,7 +179,6 @@ percussion instruments. Although the majority of the sessions were
 free-form improvisations, a number of rehearsals and performances
 involved composed pieces where the musicians read and performed
 percussion notation using the apps.
-
 Some of these session contexts are are shown
 Figure~\ref{fig:three-performance-contexts} and other descriptive
 statistics about the corpus are shown in Table \ref{corpus-table}.
@@ -228,12 +227,12 @@ Entropy &   & 0.7683 & 3.342 & 4.442\\
 \caption{
   Representative statistics from the corpus of musical touch-screen
   interaction sessions described in this note.  Each record in the corpus
-  consists of low level touch-data (such as touches begin, touches move, touches end) recorded in CSV format. 
+  consists of low level touch-data recorded in CSV format. 
   Many of the participants were
   present in multiple sessions, but this data was not tracked.\label{corpus-table}}
 \end{table}
 
-\section{Macro Gestures, Transition Matrices and Matrix Measures}
+\section{Macro Gestures and Transition Matrices}
 
 A useful way of modelling user interfaces is to consider their
 theoretical configurations as state vectors and to deploy the methods
@@ -284,7 +283,7 @@ gesture-states for each participant in each session. These chains can
 be used to create $9 \times 9$ transition matrices for individual
 performers and the whole ensemble in each session.
 
-\section{Quantitative transition matrix statistics}
+\section{Quantitative Transition Matrix Measures}
 \label{sec:underst-impr-group}
 
 While the interaction sessions recorded in our corpus were performed
