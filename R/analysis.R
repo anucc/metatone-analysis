@@ -4,6 +4,17 @@ library(grid)
 library(gridExtra)
 library(reshape2)
 
+
+
+
+
+
+
+perf.type.colours <- c("#1b9e77","#d95f02")
+perf.context.colours <- c("#7570b3","#e7298a","#66a61e")
+perf.structure.colours <- c("#e6ab02","#a6761d","#666666")
+perf.structure.colours <-  c("#edf8b1","#7fcdbb","#2c7fb8") # sequential
+
 chifig.3colours <- c("#e41a1c", "#377eb8", "#4daf4a")
 chifig.2colours <- c("#984ea3", "#ff7f00")
 chifig.5colours <- c("#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00")
@@ -47,12 +58,19 @@ perf.sessions.long <-  subset(perf.sessions.long, performance_type %in% c("compo
 summary(perf.sessions.long)
 
 
+# Re label performance contexts for paper
+perf.sessions$performance_context <- factor(perf.sessions$performance_context, levels=c("data_collection", "demonstration", "performance", "rehearsal", "study"), labels=c("data", "demo", "concert", "rehearsal", "recording"))
+perf.sessions.long$performance_context <- factor(perf.sessions.long$performance_context, levels=c("data_collection", "demonstration", "performance", "rehearsal", "study"), labels=c("data", "demo", "concert", "rehearsal", "recording"))
+summary(perf.sessions)
+
+
 ## Initial Plots
 # cut out data_collection
 #valid.sessions <- (subset(valid.sessions, performance_context != "data_collection"))
 ## plots
 # Count of Session Data
-ggplot(perf.sessions, aes(performance_context)) + geom_bar(aes(fill = performance_type)) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "right", legend.box = "vertical") + scale_fill_manual(values=chifig.2colours) + scale_x_discrete("performance context") + scale_y_continuous("no. of sessions")
+ggplot(perf.sessions, aes(performance_context)) + geom_bar(aes(fill = performance_type)) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "right", legend.box = "vertical") + scale_fill_manual("performance type",values=perf.type.colours) + scale_x_discrete("performance context") + scale_y_continuous("no. of sessions")
+
 ggsave("../flux-entropy-paper/figures/sessions-count.pdf", width=5.4, height = 2)
 #ggplot(perf.sessions, aes(performance_context)) + geom_bar(aes(fill = performance_type))
 # Flux boxplot
@@ -62,7 +80,7 @@ ggsave("../flux-entropy-paper/figures/sessions-count.pdf", width=5.4, height = 2
 #ggplot(valid.sessions, aes(performance_context, entropy)) +  geom_boxplot(aes(fill = performance_type))  + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "top", legend.box = "horizontal") + scale_fill_manual(values=chifig.2colours) + scale_x_discrete("performance context")
 #quartz.save("../flux-entropy-paper/figures/entropy-boxplot.pdf", type = "pdf")
 # Both Flux and Entropy Boxplot
-ggplot(perf.sessions.long, aes(performance_context, value)) + geom_boxplot(aes(fill = performance_type)) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "right", legend.box = "vertical") + scale_fill_manual(values=chifig.2colours) + scale_x_discrete("performance context") + scale_y_continuous("measure value") + facet_grid(measure~.,scales="free_y")
+ggplot(perf.sessions.long, aes(performance_context, value)) + geom_boxplot(aes(fill = performance_type)) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "right", legend.box = "vertical") + scale_fill_manual("performance type",values=perf.type.colours) + scale_x_discrete("performance context") + scale_y_continuous("measure value") + facet_grid(measure~.,scales="free_y")
 ggsave("../flux-entropy-paper/figures/context-flux-entropy-boxplot.pdf",width=5.9,height=3)
 
 ggplot(valid.sessions, aes(performance_context, trace)) + geom_boxplot(aes(fill = performance_type))
@@ -85,7 +103,7 @@ quartz.save("../flux-entropy-paper/figures/flux-entropy-distribution.pdf", type 
 #ggplot(valid.sessions, aes(time, entropy)) + geom_point(aes(colour = performance_context,shape = performance_type), alpha = 0.8) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "right", legend.box = "vertical") + scale_colour_manual(values=chifig.5colours)
 #quartz.save("../flux-entropy-paper/figures/entropy-through-time.pdf", type = "pdf")
                                         # Flux and Entropy through time.
-ggplot(perf.sessions.long, aes(time, value)) + geom_point(aes(colour = performance_context,shape = performance_type), alpha = 0.8) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "right", legend.box = "vertical") + scale_colour_manual(values=chifig.5colours) + labs(x="", y="measure value") +  facet_grid(measure~.,scales="free_y")
+ggplot(perf.sessions.long, aes(time, value)) + geom_point(aes(colour = performance_context,shape = performance_type), size=3.5, alpha = 0.7) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "right", legend.box = "vertical") + scale_colour_manual("performance context",values=perf.context.colours) + labs(x="", y="measure value") +  facet_grid(measure~.,scales="free_y") + labs(shape = "performance type")
 ggsave("../flux-entropy-paper/figures/flux-entropy-through-time.pdf", width=6,height=3.2)
 
 
@@ -218,23 +236,25 @@ ggsave("../flux-entropy-paper/figures/context-section-entropy-lm.pdf")
 
 
 # Boxplot of Flux by section and context
-ggplot(improvisation.sections, aes(section, flux)) + geom_boxplot(aes(fill=section)) + facet_wrap(~performance_context) + scale_fill_manual(values=chifig.3colours) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "none", legend.box = "horizontal")
+ggplot(improvisation.sections, aes(section, flux)) + geom_boxplot(aes(fill=section)) + facet_wrap(~performance_context) + scale_fill_manual(values=perf.structure.colours) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "none", legend.box = "horizontal")
 ggsave("../flux-entropy-paper/figures/context-section-flux.pdf")
 # Box plot of Entropy by section and context
-ggplot(improvisation.sections, aes(section, entropy)) + geom_boxplot(aes(fill=section)) + facet_wrap(~performance_context) + scale_fill_manual(values=chifig.3colours) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "none", legend.box = "horizontal")
+ggplot(improvisation.sections, aes(section, entropy)) + geom_boxplot(aes(fill=section)) + facet_wrap(~performance_context) + scale_fill_manual(values=perf.structure.colours) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "none", legend.box = "horizontal")
 ggsave("../flux-entropy-paper/figures/context-section-entropy.pdf")
 # Boxplot of Flux by section and type
-ggplot(tm, aes(section, flux)) + geom_boxplot(aes(fill=section)) + facet_wrap(~performance_type) + scale_fill_manual(values=chifig.3colours) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "none", legend.box = "horizontal")
+ggplot(tm, aes(section, flux)) + geom_boxplot(aes(fill=section)) + facet_wrap(~performance_type) + scale_fill_manual(values=perf.structure.colours) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "none", legend.box = "horizontal")
 ggsave("../flux-entropy-paper/figures/type-section-flux.pdf")
 # Box plot of Entropy by section and type
-ggplot(tm, aes(section, entropy)) + geom_boxplot(aes(fill=section)) + facet_wrap(~performance_type) + scale_fill_manual(values=chifig.3colours) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "none", legend.box = "horizontal")
+ggplot(tm, aes(section, entropy)) + geom_boxplot(aes(fill=section)) + facet_wrap(~performance_type) + scale_fill_manual(values=perf.structure.colours) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "none", legend.box = "horizontal")
 ggsave("../flux-entropy-paper/figures/type-section-entropy.pdf")
 
 ## Boxplots for flux and entropy by section.
 ## faceted by section and measure (flux and entropy)
 improvisation.sections.long <- melt(improvisation.sections,id.vars=c("section","performance_context","performance_type","instruments"),variable.name = "measure",measure.vars = c("flux","entropy"))
-ggplot(improvisation.sections.long, aes(section, value)) + geom_boxplot(aes(fill=section)) + facet_grid(measure~performance_context, scales="free_y") + scale_fill_manual(values=chifig.3colours) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "none", legend.box = "horizontal") + scale_x_discrete("") + scale_y_continuous("measure value")
+summary(improvisation.sections.long$performance_context)
+improvisation.sections.long$performance_context <- factor(improvisation.sections.long$performance_context, levels=c("data_collection", "demonstration", "performance", "rehearsal", "study"), labels=c("data", "demo", "concert", "rehearsal", "recording"))
+ggplot(improvisation.sections.long, aes(section, value)) + geom_boxplot(aes(fill=section)) + facet_grid(measure~performance_context, scales="free_y") + scale_fill_manual(values=perf.structure.colours) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "none", legend.box = "horizontal") + scale_x_discrete("") + scale_y_continuous("measure value")
 ggsave("../flux-entropy-paper/figures/context-section-flux-entropy.pdf", width=6, height = 3.6)
 tm.long <- melt(tm,id.vars=c("section","performance_context","performance_type","instruments"),variable.name = "measure",measure.vars = c("flux","entropy"))
-ggplot(tm.long, aes(section, value)) + geom_boxplot(aes(fill=section)) + facet_grid(measure~performance_type, scales="free_y") + scale_fill_manual(values=chifig.3colours) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "none", legend.box = "horizontal") + scale_x_discrete("") + scale_y_continuous("measure value")
+ggplot(tm.long, aes(section, value)) + geom_boxplot(aes(fill=section)) + facet_grid(measure~performance_type, scales="free_y") + scale_fill_manual(values=perf.structure.colours) + theme(plot.margin=unit(rep(0,4), "cm"), legend.position = "none", legend.box = "horizontal") + scale_x_discrete("") + scale_y_continuous("measure value")
 ggsave("../flux-entropy-paper/figures/type-section-flux-entropy.pdf", width=6, height = 3.6)
