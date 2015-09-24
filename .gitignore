@@ -1,3 +1,9 @@
 data
 performance-names.csv
 classifier.p
+*.out
+*.bbl
+*.blg
+*.aux
+*.synctex.gz
+flux-entropy-paper.log
