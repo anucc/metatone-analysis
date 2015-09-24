@@ -3,18 +3,12 @@ library(MASS)
 library(grid)
 library(gridExtra)
 library(reshape2)
-
-
-
-
-
-
-
-perf.type.colours <- c("#1b9e77","#d95f02")
-perf.context.colours <- c("#7570b3","#e7298a","#66a61e")
+#perf.type.colours <- c("#1b9e77","#d95f02")
+perf.type.colours <- c("#984ea3", "#ff7f00")
+#perf.context.colours <- c("#7570b3","#e7298a","#66a61e")
+perf.context.colours <- c("#e41a1c", "#377eb8", "#4daf4a")
 perf.structure.colours <- c("#e6ab02","#a6761d","#666666")
 perf.structure.colours <-  c("#edf8b1","#7fcdbb","#2c7fb8") # sequential
-
 chifig.3colours <- c("#e41a1c", "#377eb8", "#4daf4a")
 chifig.2colours <- c("#984ea3", "#ff7f00")
 chifig.5colours <- c("#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00")
