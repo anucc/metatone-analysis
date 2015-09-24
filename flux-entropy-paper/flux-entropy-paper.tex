@@ -71,22 +71,13 @@
 % End of preamble. Here it comes the document.
   \begin{document}
 
-%\title{Quantitative Evaluation of Touch-Screen Group Musical Performance with
- % Transition Matrix Measures}
 %\title{Mining interaction log data in long-term practice-led research}
  
 \title{Mining Interaction Log Data in a Creative Arts Practice using Transition Matrices}
 
-
-%in a Creative Arts Practice}
-
 \numberofauthors{3}
 \author{%
   \alignauthor{1st Author Name\\
-    \affaddr{Affiliation}\\
-    \affaddr{City, Country}\\
-    \email{e-mail address}}\\
-  \alignauthor{2nd Author Name\\
     \affaddr{Affiliation}\\
     \affaddr{City, Country}\\
     \email{e-mail address}}\\
@@ -264,13 +255,11 @@ artistic style.
 
 In our corpus of iPad musical performances, logs of low-level touch-data record each performer's micro-gestures. 
 Because it has been
-established that musical performances on touch-screens can be chuncked into
+established that musical performances on touch-screens can contain 
 vocabularies of continuous macro gestures that unfold over
-several seconds of touch interaction~\cite{Martin:2014cr}, these logs
- can be thought of as a sequence of such
-states~\cite{Pressing:1988uo} for each performer.
-% TODO need to refine the meaning of this sentence - now Pressing
-% doesn't make sense as a citation.
+several seconds of touch interaction~\cite{Martin:2014cr}, and that
+gestural performances can be divided into sequences of such states~\cite{Pressing:1988uo}, these logs
+ can be used identify a sequence of such states for each performer.
 If a performers' touch interactions can be classified as belonging
 to one of $m$ distinct states, then, over the course of a session, each
 participant $X$ generates a length $N$ sequence of these interaction
@@ -382,8 +371,7 @@ instrumentation ($F(1,86) = 10.48, p < 0.01$).
 
 For entropy, significant main effects were found due to session
 context ($F(2,86) = 12.10, p < 0.001$), and instrumentation
-($F(1,86) = 25.86$).
-% TODO (WHAT IS THE P VALUE HERE?). 
+($F(1,86) = 25.86, p < 0.001$).
 There was no main effect for session type although
  the interaction of session type and
 instrumentation was found to be significant
@@ -393,6 +381,46 @@ These tests show that the different interaction styles that might be
 present in the various session contexts, types and instrumentations in our corpus
 appear to be descriminated  by values of the flux and entropy of their transition
 matrices.
+
+% R> summary(aov(flux~performance_context*performance_type*instruments, perf.sessions))
+%                                                  Df Sum Sq Mean Sq F value
+% performance_context                               2 0.0267  0.0133    6.28
+% performance_type                                  1 0.0153  0.0153    7.21
+% instruments                                       1 0.0426  0.0426   20.06
+% performance_context:performance_type              1 0.0131  0.0131    6.18
+% performance_context:instruments                   1 0.0000  0.0000    0.02
+% performance_type:instruments                      1 0.0223  0.0223   10.48
+% performance_context:performance_type:instruments  1 0.0034  0.0034    1.62
+% Residuals                                        86 0.1828  0.0021        
+%                                                   Pr(>F)
+% performance_context                               0.0028
+% performance_type                                  0.0087
+% instruments                                      2.3e-05
+% performance_context:performance_type              0.0149
+% performance_context:instruments                   0.8954
+% performance_type:instruments                      0.0017
+% performance_context:performance_type:instruments  0.2065
+% Residuals                                               
+% R> summary(aov(entropy~performance_context*performance_type*instruments, perf.sessions))
+%                                                  Df Sum Sq Mean Sq F value
+% performance_context                               2   5.10    2.55   12.10
+% performance_type                                  1   0.31    0.31    1.48
+% instruments                                       1   5.46    5.46   25.87
+% performance_context:performance_type              1   0.21    0.21    0.99
+% performance_context:instruments                   1   0.10    0.10    0.49
+% performance_type:instruments                      1   2.09    2.09    9.93
+% performance_context:performance_type:instruments  1   0.01    0.01    0.04
+% Residuals                                        86  18.14    0.21        
+%                                                   Pr(>F)
+% performance_context                              2.3e-05
+% performance_type                                  0.2267
+% instruments                                      2.1e-06
+% performance_context:performance_type              0.3224
+% performance_context:instruments                   0.4878
+% performance_type:instruments                      0.0022
+% performance_context:performance_type:instruments  0.8396
+% Residuals                                               
+% R> 
 
 \begin{figure*}[t!]
     \centering
@@ -412,7 +440,7 @@ matrices.
 \end{figure*}
 
 
-\subsection{Breaking Sessions into sections}
+\subsection{Breaking sessions into sections}
 
 It appears from our data-mining results that both flux and entropy can be used to
 differentiate between session styles and types, but can they be
@@ -521,7 +549,7 @@ art~\cite{Manovich:2002ly} from these data corpuses.
 %interactions outside the lab.
 
 
-\pagebreak
+%\pagebreak
 \bibliographystyle{SIGCHI-Reference-Format}
 \bibliography{references}
 
