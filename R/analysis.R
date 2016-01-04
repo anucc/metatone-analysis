@@ -1,3 +1,13 @@
+install.packages("ggplot2")
+
+install.packages("MASS")
+
+install.packages("grid")
+
+install.packages("gridExtra")
+
+install.packages("reshape2")
+
 library(ggplot2)
 library(MASS)
 library(grid)
@@ -57,7 +67,15 @@ perf.sessions$performance_context <- factor(perf.sessions$performance_context, l
 perf.sessions.long$performance_context <- factor(perf.sessions.long$performance_context, levels=c("data_collection", "demonstration", "performance", "rehearsal", "study"), labels=c("data", "demo", "concert", "rehearsal", "recording"))
 summary(perf.sessions)
 
+ggplot((subset(perf.sessions, performance_type == "composition")), aes(length_seconds,flux)) + geom_point(aes(colour = performance_context, shape = instruments, size = number_performers)) + geom_smooth(method = "lm")
 
+ggplot((subset(perf.sessions, performance_type == "composition")), aes(length_seconds,entropy)) + geom_point(aes(colour = performance_context, shape = instruments, size = number_performers)) + geom_smooth(method = "lm")
+
+ggplot((subset(perf.sessions, performance_type == "composition")), aes(number_performers,flux)) + geom_point(aes(colour = performance_context, shape = instruments, size = length_seconds)) + geom_smooth(method = "lm")
+
+ggplot((subset(perf.sessions, performance_type == "composition")), aes(performance_context,entropy)) + geom_point(aes(colour = performance_context, shape = instruments, size = length_seconds)) + geom_smooth(method = "lm")
+
+ggplot((subset(perf.sessions, performance_type == "composition")), aes(performance_context,length_seconds)) + geom_boxplot() + geom_point(aes(colour = performance_context, shape = instruments, size = number_performers)) + geom_smooth(method = "lm") 
 ## Initial Plots
 # cut out data_collection
 #valid.sessions <- (subset(valid.sessions, performance_context != "data_collection"))
