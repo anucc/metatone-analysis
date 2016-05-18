@@ -1,5 +1,6 @@
-data
-performance-names.csv
+#data
+data-surveys
+#performance-names.csv
 classifier.p
 *.out
 *.bbl
