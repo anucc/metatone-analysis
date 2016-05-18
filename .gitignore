@@ -1,5 +1,6 @@
 #data
 data-surveys
+flux-entropy-paper
 #performance-names.csv
 classifier.p
 *.out
