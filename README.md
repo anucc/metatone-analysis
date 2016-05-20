@@ -1,4 +1,4 @@
-# Metatone Analysis Project
+# Metatone Touch-Screen Performance Analysis Project
 
 ![Three performances that are recorded in this repository.](https://raw.githubusercontent.com/anucc/metatone-analysis/master/images/three-performance-contexts.jpg)
 
