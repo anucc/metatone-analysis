@@ -8,6 +8,10 @@ The `metatone_post_hoc_analysis.py` file will perform gestural classification on
 
 ## Important files:
 
+- `data` contains the touch-screen data and post-hoc gestural classifications for each performance in the archive.
+
 - `metatone-performance-information.csv` contains meta-data about each performance included in the repository.
+
+- `metatone_post_hoc_analysis.py` is the main analysis script.
 
 - `metatone-performance-data.csv` is the output file from the analysis script and contains flux and entropy measures on the transition matrices of each performance.
