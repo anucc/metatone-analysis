@@ -1,11 +1,11 @@
 # Metatone Analysis Project
 
-We're going to use transition matrices to analyse ALL of the metatone performances! It will be rad.
+This repository contains data from collaborative touch-screen performances on iPads that were recorded from 2013-2015 as well as scripts in R and Python for performing statistical analysis on these performances.
 
-None of the original data is in the repo, you'll need to grab the -touch.csv files and drop them in `data` for the system to work properly.
-
-Run `metatone_post_hoc_analysis.py` to generate all of the other data.
+The `metatone_post_hoc_analysis.py` file will perform gestural classification on these performance logs, and measure the transition probabilities between these gestures.
 
 ## Important files:
 
-The output data file is the important one: `metatone-performance-data.csv`. Import this into R and ANOVA for great good.
+- `metatone-performance-information.csv` contains meta-data about each performance included in the repository.
+
+- `metatone-performance-data.csv` is the output file from the analysis script and contains flux and entropy measures on the transition matrices of each performance.
