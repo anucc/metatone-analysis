@@ -9,3 +9,4 @@ classifier.p
 *.aux
 *.synctex.gz
 flux-entropy-paper.log
+python/tm-venv
