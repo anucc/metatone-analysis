@@ -7,7 +7,7 @@ import pandas as pd
 import numpy as np
 import time
 import datetime
-touches = pd.read_csv("data/2013-04-20T14-55-00-MetatoneOSCLog-touches-posthoc-gestures.csv", index_col='time', parse_dates=True)
+touches = pd.read_csv("../data/2013-04-20T14-55-00-MetatoneOSCLog-touches-posthoc-gestures.csv", index_col='time', parse_dates=True)
 touches["timediff"] = touches.index
 touches["timediff"] = touches["timediff"] - touches["timediff"].shift()
 long_break = touches.ix[touches["timediff"] > pd.to_timedelta("00:02:00")]

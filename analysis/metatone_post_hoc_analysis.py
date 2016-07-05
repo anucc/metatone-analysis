@@ -27,7 +27,7 @@ class MetatoneTouchLog:
     def __init__(self, touches_file):
         #print("Loading logs for " + touches_file)
         performance_path = touches_file.replace(".csv", "")
-        self.performance_title = touches_file.replace("-touches.csv", "").replace("data/", "")
+        self.performance_title = touches_file.replace("-touches.csv", "").replace("../data/", "")
         self.touches = pd.read_csv(touches_file, index_col='time', parse_dates=True)
         # load up the gestures or generate if necessary.
         gestures_path = performance_path + "-posthoc-gestures.csv"
@@ -152,7 +152,7 @@ def main():
     performances = []
     for local_file in os.listdir("data"):
         if local_file.endswith("-touches.csv"):
-            log_files.append("data/" + local_file)
+            log_files.append("../data/" + local_file)
     print("Loading the performances.")
     for log in log_files:
         performances.append(MetatoneTouchLog(log))
