@@ -12,12 +12,10 @@ import datetime
 import sys
 sys.path.append("MetatoneClassifier/classifier/")
 sys.path.append("MetatoneClassifier/performance-plotter/")
-sys.path.append("minirank")
 import metatone_classifier
 import transitions
 import PlotMetatonePerformanceAndTransitions
 import generate_posthoc_gesture_score
-from minirank import *
 from sklearn import datasets, metrics, cross_validation
 import matplotlib.pyplot as plt
 
