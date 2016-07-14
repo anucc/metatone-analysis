@@ -38,4 +38,4 @@ def mle_transition_counts(series):
 def melted_mle_transition_counts(session_df):
   return session_df.apply(mle_transition_counts).fillna(0.)
 
-x = read_session_data("2013-04-20T14-55-00-MetatoneOSCLog")
+df = melted_mle_transition_counts(read_session_data("2013-04-20T14-55-00-MetatoneOSCLog"))
