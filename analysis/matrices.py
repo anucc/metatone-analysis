@@ -25,28 +25,17 @@ def read_session_data(session_name):
   df = pd.read_csv(csv_path, index_col='time', parse_dates=True)
   return df.apply(add_gesture_labels)
 
-def mle_transition_probs(series):
+# Gosh, I wish this wasn't still so filthy - there's gotta be a nicer
+# numpy/scipy/pandas way to do this. Still, bird in the hand and all
+# that...
+
+def mle_transition_counts(series):
   df = pd.DataFrame({"from": series, "to": series.shift(-1)})
   # aggregate counts for each transition
-  df = df.groupby(['from','to']).size().reset_index(name='count')
+  df = df.groupby(['from','to']).size()
   return df
 
-
-
-
-# futzing about
+def melted_mle_transition_counts(session_df):
+  return session_df.apply(mle_transition_counts).fillna(0.)
 
 x = read_session_data("2013-04-20T14-55-00-MetatoneOSCLog")
-
-x.christina.astype("category", categories=gestures, ordered=False)
-
-y = [read_session_data(f) for f in metadata['filename']]
-
-x.merge(metadata, on='filename') # it's aliiiiive!
-
-grouped = metadata.groupby('filename')
-
-grouped.agg(read_session_data)
-
-
-[k for {k: v} in {"B": 1, "C": 5}]
