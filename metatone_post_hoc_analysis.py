@@ -40,7 +40,7 @@ class MetatoneTouchLog:
             self.gestures = generate_posthoc_gesture_score.generate_gesture_frame(self.touches)
             self.gestures.to_csv(gestures_path)
         self.ensemble_transition_matrix = transitions.calculate_full_group_transition_matrix(self.gestures)
-        #self.ensemble_transition_matrix = transitions.transition_matrix_to_stochastic_matrix(self.ensemble_transition_matrix)
+        #self.ensemble_transition_matrix = transitions.transition_matrix_to_stochastic_matrix(self.ensemble_transition_matrix) # not doing this!!
         self.ensemble_transition_matrix = transitions.transition_matrix_to_normal_transition_matrix(self.ensemble_transition_matrix)
         self.longest_break = self.find_long_breaks()
 
@@ -203,7 +203,6 @@ def main():
     performance_surveys_2015_runthrough = pd.read_csv("data-surveys/201504-Study-RunthroughData.csv",index_col='time', parse_dates=True)
     # 2015 study - Q23
     performance_surveys_2015_study = pd.read_csv("data-surveys/201504-Study-PerformanceSurveys.csv",index_col='time', parse_dates=True)
-
     # a.apply(lambda x: LIKERT_MAPPING[x])
     LIKERT_MAPPING = {1:1,2:1,3:2,4:2,5:3,6:4,7:4,8:5,9:5}
     #ratings = performance_surveys_2014["Q6"]
@@ -270,8 +269,6 @@ def test_regression(df):
     print('MEAN ABSOLUTE ERROR (ORDINAL LOGISTIC):    %s' % np.mean(score_ordinal_logistic))
     print('MEAN ABSOLUTE ERROR (LOGISTIC REGRESSION): %s' % np.mean(score_logistic))
     print('MEAN ABSOLUTE ERROR (RIDGE REGRESSION):    %s' % np.mean(score_ridge))
-
-
 
 def plot_confusion_matrix(cm, title='Confusion matrix', cmap=plt.cm.Blues):
     plt.imshow(cm, interpolation='nearest', cmap=cmap)
