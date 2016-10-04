@@ -41,47 +41,47 @@ GESTURE_CODES = {
 #
 #####################
 
-def full_one_step_transition(e1, e2):
+def one_step_transition(e1, e2):
     """
     Calculates a full transition matrix between two states.
     """
-    matrix = full_empty_transition_matrix()
+    matrix = empty_transition_matrix()
     matrix[e2][e1] += 1 
     return matrix
 
-def full_empty_transition_matrix():
+def empty_transition_matrix():
     """
-    Returns a full empty transition matrix.
+    Returns an empty transition matrix.
     """
-    return np.zeros([NUMBER_GESTURES,NUMBER_GESTURES]) # Full gesture matrix
+    return np.zeros([NUMBER_GESTURES,NUMBER_GESTURES]) # gesture matrix
 
-def full_create_transition_dataframe(states):
+def create_transition_dataframe(states):
     """
     Given a the gesture states of a single player, 
-    calculates a dataframe of full one-step transition matrices.
+    calculates a dataframe of one-step transition matrices.
     """
     dictionary_output = {}
     for col in states:
-        matrices = [full_empty_transition_matrix()]
+        matrices = [empty_transition_matrix()]
         prev = -1
         for index_loc in states[col].index:
             curr = index_loc
             if prev != -1:
                 from_state = states.at[prev, col]
                 to_state = states.at[curr, col]
-                matrix = full_one_step_transition(from_state, to_state)
+                matrix = one_step_transition(from_state, to_state)
                 matrices.append(matrix)
             prev = index_loc
             dictionary_output[col] = matrices
     return pd.DataFrame(index=states.index, data=dictionary_output)
 
-def calculate_full_group_transition_matrix(states_frame):
+def group_transition_matrix(states_frame):
     """
     Returns the group's transition matrix for a whole performance.
     """
     if not isinstance(states_frame, pd.DataFrame) or states_frame.empty:
         return None
-    transitions = full_create_transition_dataframe(states_frame.dropna()).dropna()
+    transitions = create_transition_dataframe(states_frame.dropna()).dropna()
     if transitions.empty:
         return None
     cols = [transitions[n] for n in transitions.columns]
@@ -111,8 +111,9 @@ def transition_matrix_to_stochastic_matrix(trans_matrix):
     try:
         result = map((lambda x: map((lambda n: 0 if n == 0 else n/sum(x)),x)), trans_matrix)
     except ZeroDivisionError:
-        print("Fail! Zero division error when making stochastic matrix.")
-        result = trans_matrix
+        print("Transition Matrices Error! Zero division error when making stochastic matrix.")
+        print(trans_matrix)
+        raise
     return result
 
 def transition_matrix_to_normal_transition_matrix(trans_matrix):
@@ -127,6 +128,19 @@ def transition_matrix_to_normal_transition_matrix(trans_matrix):
     else:
         result = trans_matrix
     return result
+
+def one_fold_division(series,n,aggregation_function = transition_sum):
+    """
+    Divides a dataframe at one point and returns two aggregated objects.
+    n ranges from 0 to 1.
+    """
+    first_index = series.index[0]
+    last_index = series.index[-1]
+    middle_point = int(np.floor(len(series.index) * n))
+    middle_index = series.index[middle_point]
+    left_df = series.ix[series.index.indexer_between_time(first_index.time(),middle_index.time())]
+    right_df = series.ix[series.index.indexer_between_time(middle_index.time(),last_index.time())]
+    return aggregation_function(left_df), aggregation_function(right_df)
 
 #####################
 #
@@ -159,3 +173,5 @@ def entropy_measure(mat):
     scipy.stats.entropy
     """
     return entropy(np.reshape(mat,len(mat)**2), base=2)
+
+
