@@ -39,7 +39,7 @@ class MetatoneTouchLog:
             print("Gesture Frame not found, now generating: " + gestures_path)
             self.gestures = generate_posthoc_gesture_score.generate_gesture_frame(self.touches)
             self.gestures.to_csv(gestures_path)
-        self.ensemble_transition_matrix = transition_matrices.calculate_full_group_transition_matrix(self.gestures)
+        self.ensemble_transition_matrix = transition_matrices.group_transition_matrix(self.gestures)
         #self.ensemble_transition_matrix = transitions.transition_matrix_to_stochastic_matrix(self.ensemble_transition_matrix) # not doing this!!
         self.ensemble_transition_matrix = transition_matrices.transition_matrix_to_normal_transition_matrix(self.ensemble_transition_matrix)
         #self.longest_break = self.find_long_breaks() # don't worry about splitting long breaks for now!
@@ -294,5 +294,5 @@ if __name__ == '__main__':
 
 def time_testing():
     t = time.time()
-    transition_matrices.calculate_full_group_transition_matrix(a.gestures)
+    transition_matrices.group_transition_matrix(a.gestures)
     print("That took: ", time.time() - t)
