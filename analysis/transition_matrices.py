@@ -94,6 +94,19 @@ def group_transition_matrix(states_frame):
     group_matrix = transition_sum(group_transitions)
     return group_matrix
 
+def aggregate_transition_matrices(transitions):
+    if transitions.empty:
+        return None
+    cols = [transitions[n] for n in transitions.columns]
+    for c in range(len(cols)):
+        if c == 0:
+            group_transitions = cols[c]
+        else:
+            group_transitions = group_transitions + cols[c]
+    group_transitions = group_transitions.dropna()
+    group_matrix = transition_sum(group_transitions)
+    return group_matrix
+
 def transition_sum(tran_arr):
     """
     Sums an array of transition matrices. Used for resampling during
