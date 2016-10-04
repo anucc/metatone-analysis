@@ -10,8 +10,9 @@ import numpy as np
 import time
 import datetime
 import sys
-sys.path.append("MetatoneClassifier/classifier/")
-sys.path.append("MetatoneClassifier/performance-plotter/")
+sys.path.append("../MetatoneClassifier/classifier/")
+sys.path.append("../MetatoneClassifier/performance-plotter/")
+sys.path.append("../")
 import metatone_classifier
 import transitions
 import PlotMetatonePerformanceAndTransitions
@@ -21,7 +22,7 @@ import matplotlib.pyplot as plt
 
 class MetatoneTouchLog:
     """
-    Class to contain dataframes of a single metatone performance logs.
+    Class to contain dataframes of a single metatone performance log.
     Must be initialised with a log_path.
     """
     def __init__(self, touches_file):
@@ -40,7 +41,7 @@ class MetatoneTouchLog:
         self.ensemble_transition_matrix = transitions.calculate_full_group_transition_matrix(self.gestures)
         #self.ensemble_transition_matrix = transitions.transition_matrix_to_stochastic_matrix(self.ensemble_transition_matrix) # not doing this!!
         self.ensemble_transition_matrix = transitions.transition_matrix_to_normal_transition_matrix(self.ensemble_transition_matrix)
-        self.longest_break = self.find_long_breaks()
+        #self.longest_break = self.find_long_breaks() # don't worry about splitting long breaks for now!
 
     def first_touch_timestamp(self):
         """
@@ -88,8 +89,8 @@ class MetatoneTouchLog:
         """
         Returns the total length of the performance (first touch to last touch)
         """
-        first_touch = self.touches[:1].index[0].to_datetime()
-        last_touch = self.touches[-1:].index[0].to_datetime()
+        first_touch = self.touches[:1].index[0].to_pydatetime()
+        last_touch = self.touches[-1:].index[0].to_pydatetime()
         return (last_touch - first_touch).total_seconds()
 
     def performer_lengths(self):
@@ -97,15 +98,15 @@ class MetatoneTouchLog:
         Returns the individual performers' performance lengths
         """
         performers = self.performers()
-        first_touch = self.touches[:1].index[0].to_datetime()
+        first_touch = self.touches[:1].index[0].to_pydatetime()
         performer_first_touches = {}
         performer_last_touches = {}
         performance_lengths = {}
         for performer_id in performers:
             performer_touches = self.touches.ix[self.touches['device_id'] == performer_id]
-            performer_first_touches[performer_id] = performer_touches[:1].index[0].to_datetime()
-            performer_last_touches[performer_id] = performer_touches[-1:].index[0].to_datetime()
-            performer_length = (performer_touches[-1:].index[0].to_datetime() - first_touch).total_seconds()
+            performer_first_touches[performer_id] = performer_touches[:1].index[0].to_pydatetime()
+            performer_last_touches[performer_id] = performer_touches[-1:].index[0].to_pydatetime()
+            performer_length = (performer_touches[-1:].index[0].to_pydatetime() - first_touch).total_seconds()
             performance_lengths[performer_id] = performer_length
             # print("Performer: " + performer_id + " Length was: " + str(performer_length))
         return {self.first_touch_timestamp():performance_lengths}
@@ -150,16 +151,20 @@ def main():
     """Load up all the performances and do some stats"""
     log_files = []
     performances = []
-    for local_file in os.listdir("data"):
+    for local_file in os.listdir("../data"):
         if local_file.endswith("-touches.csv"):
             log_files.append("../data/" + local_file)
     print("Loading the performances.")
     for log in log_files:
-        performances.append(MetatoneTouchLog(log))
+        try:
+            performances.append(MetatoneTouchLog(log))
+        except:
+            print("Performance Analysis Failed for: " + log)
+            raise
 
     ## Also load up the experiment design dataframe to merge with the data!
     print("Loading performance information frame.")
-    performance_information = pd.read_csv("metatone-performance-information.csv", index_col='time', parse_dates=True)
+    performance_information = pd.read_csv("../metadata/metatone-performance-information.csv", index_col='time', parse_dates=True)
     performance_information = performance_information[['performance_context', 'performance_type', 'instruments', 'notes']]
 
     print("Generating the performance data frame.")
@@ -177,7 +182,7 @@ def main():
             }})
     perf_frame = pd.DataFrame.from_dict(perf_names, orient="index")
     perf_frame = pd.concat([performance_information,perf_frame], axis = 1)
-    perf_frame.to_csv("metatone-performance-data.csv")
+    perf_frame.to_csv("../metadata/metatone-performance-data.csv")
 
     #print("Creating Gesture Scores.")
     #for perf in performances:
@@ -196,25 +201,25 @@ def main():
 
     # loading the survey data
     # 2014 - Q1 was performance quality
-    performance_surveys_2014 = pd.read_csv("data-surveys/201407-Study.csv",index_col='time', parse_dates=True)
+    ##performance_surveys_2014 = pd.read_csv("data-surveys/201407-Study.csv",index_col='time', parse_dates=True)
     # 2015 runthrough - Q26
-    performance_surveys_2015_runthrough = pd.read_csv("data-surveys/201504-Study-RunthroughData.csv",index_col='time', parse_dates=True)
+    ##performance_surveys_2015_runthrough = pd.read_csv("data-surveys/201504-Study-RunthroughData.csv",index_col='time', parse_dates=True)
     # 2015 study - Q23
-    performance_surveys_2015_study = pd.read_csv("data-surveys/201504-Study-PerformanceSurveys.csv",index_col='time', parse_dates=True)
+    ##performance_surveys_2015_study = pd.read_csv("data-surveys/201504-Study-PerformanceSurveys.csv",index_col='time', parse_dates=True)
     # a.apply(lambda x: LIKERT_MAPPING[x])
-    LIKERT_MAPPING = {1:1,2:1,3:2,4:2,5:3,6:4,7:4,8:5,9:5}
+    ##LIKERT_MAPPING = {1:1,2:1,3:2,4:2,5:3,6:4,7:4,8:5,9:5}
     #ratings = performance_surveys_2014["Q6"]
     #ratings = ratings.append(performance_surveys_2015_runthrough["Q26"].apply(lambda x: LIKERT_MAPPING[x]))
     #ratings = ratings.append(performance_surveys_2015_study["Q23"].apply(lambda x: LIKERT_MAPPING[x]))
     #flux_ratings_frame = perf_frame['flux']
     #flux_ratings_frame = pd.concat([flux_ratings_frame,ratings],axis =1)
 
-    ratings = performance_surveys_2014["Q6"]
+    # ratings = performance_surveys_2014["Q6"]
 
-    flux_entropy_ratings = pd.DataFrame({"rating":ratings})
-    flux_entropy_ratings = flux_entropy_ratings.dropna()
-    flux_entropy_ratings["flux"] = perf_frame["flux"]
-    flux_entropy_ratings["entropy"] = perf_frame["entropy"]
+    # flux_entropy_ratings = pd.DataFrame({"rating":ratings})
+    # flux_entropy_ratings = flux_entropy_ratings.dropna()
+    # flux_entropy_ratings["flux"] = perf_frame["flux"]
+    # flux_entropy_ratings["entropy"] = perf_frame["entropy"]
     #flux_entropy_ratings.to_csv("flux_entropy_ratings.csv")
 
 def test_regression(df):
@@ -281,3 +286,5 @@ def plot_confusion_matrix(cm, title='Confusion matrix', cmap=plt.cm.Blues):
 
 if __name__ == '__main__':
     main()
+
+
