@@ -10,3 +10,8 @@ classifier.p
 *.synctex.gz
 flux-entropy-paper.log
 analysis/tm-venv
+metadata/metatone-performance-data.csv
+
+analysis/heatmap.html
+
+*.pyc
