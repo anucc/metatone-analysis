@@ -5,16 +5,17 @@ Loads up ALL metatone performance touch logs and calculates some performance sta
 """
 from __future__ import print_function
 import os
+import time
 import pandas as pd
 import numpy as np
 import time
 import datetime
 import sys
+import transition_matrices
 sys.path.append("../MetatoneClassifier/classifier/")
 sys.path.append("../MetatoneClassifier/performance-plotter/")
 sys.path.append("../")
 import metatone_classifier
-import transitions
 import PlotMetatonePerformanceAndTransitions
 import generate_posthoc_gesture_score
 from sklearn import datasets, metrics, cross_validation
@@ -38,9 +39,9 @@ class MetatoneTouchLog:
             print("Gesture Frame not found, now generating: " + gestures_path)
             self.gestures = generate_posthoc_gesture_score.generate_gesture_frame(self.touches)
             self.gestures.to_csv(gestures_path)
-        self.ensemble_transition_matrix = transitions.calculate_full_group_transition_matrix(self.gestures)
+        self.ensemble_transition_matrix = transition_matrices.calculate_full_group_transition_matrix(self.gestures)
         #self.ensemble_transition_matrix = transitions.transition_matrix_to_stochastic_matrix(self.ensemble_transition_matrix) # not doing this!!
-        self.ensemble_transition_matrix = transitions.transition_matrix_to_normal_transition_matrix(self.ensemble_transition_matrix)
+        self.ensemble_transition_matrix = transition_matrices.transition_matrix_to_normal_transition_matrix(self.ensemble_transition_matrix)
         #self.longest_break = self.find_long_breaks() # don't worry about splitting long breaks for now!
 
     def first_touch_timestamp(self):
@@ -65,13 +66,13 @@ class MetatoneTouchLog:
         """
         Returns the flux of the whole ensemble transition matrix.
         """
-        return transitions.flux_measure(self.ensemble_transition_matrix)
+        return transition_matrices.flux_measure(self.ensemble_transition_matrix)
 
     def ensemble_entropy(self):
         """
         Returns the entropy of the whole ensemble transition matrix.
         """
-        return transitions.entropy_measure(self.ensemble_transition_matrix)
+        return transition_matrices.entropy_measure(self.ensemble_transition_matrix)
 
     def ensemble_determinant(self):
         """ Returns the Determinant of the Ensemble Transition Matrix """
@@ -291,4 +292,7 @@ def plot_confusion_matrix(cm, title='Confusion matrix', cmap=plt.cm.Blues):
 if __name__ == '__main__':
     main()
 
-
+def time_testing():
+    t = time.time()
+    transition_matrices.calculate_full_group_transition_matrix(a.gestures)
+    print("That took: ", time.time() - t)
