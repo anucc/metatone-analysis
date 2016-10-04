@@ -74,15 +74,19 @@ class MetatoneTouchLog:
         return transitions.entropy_measure(self.ensemble_transition_matrix)
 
     def ensemble_determinant(self):
+        """ Returns the Determinant of the Ensemble Transition Matrix """
         return np.linalg.det(self.ensemble_transition_matrix)
 
     def ensemble_norm(self):
+        """ Returns the Frobenius norm of the Ensemble Transition Matrix """
         return np.linalg.norm(self.ensemble_transition_matrix, ord="fro")
 
     def ensemble_trace(self):
+        """ Returns the Trace of the Ensemble Transition Matrix """
         return np.trace(self.ensemble_transition_matrix)
 
     def ensemble_one_norm(self):
+        """ Returns 1-norm of the Ensemble Transition Matrix """
         return sum(sum(self.ensemble_transition_matrix))
 
     def performance_length(self):
