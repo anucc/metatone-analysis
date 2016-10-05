@@ -29,6 +29,7 @@ for log in log_files:
         print("Performance Analysis Failed for: " + log)
         raise
 
+NUMBER_OF_DIVISIONS = 1000
 ## Do the one fold division and test the difference in flux.
 ## This is running on group flux.
 print("Doing the one fold tests.")
@@ -36,8 +37,8 @@ big_data = {}
 for perf in performances:
     trans = perf.transitions
     data = {}
-    for n in range(1,100):
-        n_hund = n/100.0
+    for n in range(1,NUMBER_OF_DIVISIONS):
+        n_hund = n/float(NUMBER_OF_DIVISIONS)
         a, b = one_fold_division(trans,n_hund,transition_sum)
         a = transition_matrix_to_normal_transition_matrix(transition_sum(a))
         b = transition_matrix_to_normal_transition_matrix(transition_sum(b))
@@ -48,3 +49,28 @@ for perf in performances:
     print("Processed: " + perf.performance_title)
 df = pd.DataFrame.from_dict(big_data)
 df.plot(kind='line',subplots=False,legend = False)
+df.plot(kind='point',subplots=False,legend = False)
+
+
+
+## Same test, just keep the max value from each performance
+## Plot is a bit boring here as well.
+## Max values bunched up at each edge...
+print("Doing the one fold tests.")
+big_data = {}
+for perf in performances:
+    trans = perf.transitions
+    data = {}
+    for n in range(1,NUMBER_OF_DIVISIONS):
+        n_hund = n/float(NUMBER_OF_DIVISIONS)
+        a, b = one_fold_division(trans,n_hund,transition_sum)
+        a = transition_matrix_to_normal_transition_matrix(transition_sum(a))
+        b = transition_matrix_to_normal_transition_matrix(transition_sum(b))
+        a = flux_measure(a)
+        b = flux_measure(b)
+        data[n] = abs(a-b)
+    d = pd.DataFrame.from_dict(data,orient='index')[0]
+    big_data[perf.performance_title] = {'proportion':d.idxmax(),'max':d.max()}
+    print("Processed: " + perf.performance_title)
+df = pd.DataFrame.from_dict(big_data,orient='index')
+df.plot(kind='scatter',x='proportion',y='max')
