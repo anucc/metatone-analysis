@@ -201,7 +201,6 @@ def main():
     perf_gestures = {}
     for perf in performances:
         perf_gestures.update({perf.first_touch_timestamp():{
-            "filename":perf.performance_title,
             "gestures":np.array(perf.gestures)
             }})
     gestures_frame = pd.DataFrame.from_dict(perf_gestures, orient="index")
