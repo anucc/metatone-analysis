@@ -12,6 +12,7 @@ import time
 import datetime
 import sys
 import transition_matrices
+import pickle
 sys.path.append("../MetatoneClassifier/classifier/")
 sys.path.append("../MetatoneClassifier/performance-plotter/")
 sys.path.append("../")
@@ -173,6 +174,8 @@ def main():
     performance_information = pd.read_csv("../metadata/metatone-performance-information.csv", index_col='time', parse_dates=True)
     performance_information = performance_information[['performance_context', 'performance_type', 'instruments', 'notes']]
 
+    ## Arrange the metadata from each performance object in a dataframe
+    WRITE_FILES = False # Write out the performance frame file.
     print("Generating the performance data frame.")
     perf_names = {}
     for perf in performances:
@@ -188,8 +191,26 @@ def main():
             }})
     perf_frame = pd.DataFrame.from_dict(perf_names, orient="index")
     perf_frame = pd.concat([performance_information,perf_frame], axis = 1)
-    perf_frame.to_csv("../metadata/metatone-performance-data.csv")
+    if (WRITE_FILES):
+        print("Saving the performance metadata as a csv")
+        perf_frame.to_csv("../metadata/metatone-performance-data.csv")
 
+    ## Add the gestures to the data frame as numpy arrays for processing elsewhere
+    print("Adding the gesture data to the dataframe.")
+    perf_frame.loc[(perf_frame["performance_type"]=="improvisation") & (perf_frame["performance_context"]!="demonstration")]
+    perf_gestures = {}
+    for perf in performances:
+        perf_gestures.update({perf.first_touch_timestamp():{
+            "filename":perf.performance_title,
+            "gestures":np.array(perf.gestures)
+            }})
+    gestures_frame = pd.DataFrame.from_dict(perf_gestures, orient="index")
+    perf_frame = pd.concat([perf_frame,gestures_frame], axis = 1)
+    print("Pickling the dataframe.")
+    filename = "../metadata/metatone_performances_dataframe.pickle"
+    with open(filename, 'wb') as f:
+          pickle.dump(perf_frame, f, pickle.HIGHEST_PROTOCOL)
+    
     #print("Creating Gesture Scores.")
     #for perf in performances:
     #    perf.print_gesture_score() ## Prints out a gesture-score pdf for reference.
