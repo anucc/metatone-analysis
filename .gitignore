@@ -13,5 +13,5 @@ analysis/tm-venv
 metadata/metatone-performance-data.csv
 
 analysis/heatmap.html
-
+.ipynb_checkpoints/*
 *.pyc
