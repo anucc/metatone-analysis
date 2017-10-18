@@ -24,3 +24,7 @@ performances.
     analysis script and contains flux and entropy measures on the
     transition matrices of each performance.
 - legacy analysis scripts are in `R`
+
+## Jupyter Notebooks
+
+Some jupyter notebooks in the top level of the repository (e.g., `generate_metatone_tinyperf_corpus_differential.ipynb`) are used to transform the corpus data and use for other projects.
