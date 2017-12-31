@@ -21,6 +21,7 @@ from datetime import timedelta
 from datetime import datetime
 import random
 
+
 ## Int values for Gesture codes.
 NUMBER_GESTURES = 9
 GESTURE_CODES = {
@@ -46,18 +47,20 @@ def one_step_transition(e1, e2):
     Calculates a full transition matrix between two states.
     """
     matrix = empty_transition_matrix()
-    matrix[e2][e1] += 1 
+    matrix[e2][e1] += 1
     return matrix
+
 
 def empty_transition_matrix():
     """
     Returns an empty transition matrix.
     """
-    return np.zeros([NUMBER_GESTURES,NUMBER_GESTURES]) # gesture matrix
+    return np.zeros([NUMBER_GESTURES, NUMBER_GESTURES])  # gesture matrix
+
 
 def create_transition_dataframe(states):
     """
-    Given a the gesture states of a single player, 
+    Given a the gesture states of a single player,
     calculates a dataframe of one-step transition matrices.
     """
     dictionary_output = {}
@@ -74,6 +77,7 @@ def create_transition_dataframe(states):
             prev = index_loc
             dictionary_output[col] = matrices
     return pd.DataFrame(index=states.index, data=dictionary_output)
+
 
 def group_transition_matrix(states_frame):
     """
@@ -94,6 +98,7 @@ def group_transition_matrix(states_frame):
     group_matrix = transition_sum(group_transitions)
     return group_matrix
 
+
 def aggregate_transition_matrices(transitions):
     if transitions.empty:
         return None
@@ -107,14 +112,16 @@ def aggregate_transition_matrices(transitions):
     group_matrix = transition_sum(group_transitions)
     return group_matrix
 
+
 def transition_sum(tran_arr):
     """
     Sums an array of transition matrices. Used for resampling during
     performances as well as creating a whole-performance transition
     matrix.
     """
-    out = np.sum(tran_arr,axis=0).tolist()
+    out = np.sum(tran_arr, axis=0).tolist()
     return out
+
 
 def transition_matrix_to_stochastic_matrix(trans_matrix):
     """
@@ -122,12 +129,13 @@ def transition_matrix_to_stochastic_matrix(trans_matrix):
     where rows sum to 1. Rows with zero in all entries stay as zero!
     """
     try:
-        result = map((lambda x: map((lambda n: 0 if n == 0 else n/sum(x)),x)), trans_matrix)
+        result = map((lambda x: map((lambda n: 0 if n == 0 else n / sum(x)), x)), trans_matrix)
     except ZeroDivisionError:
         print("Transition Matrices Error! Zero division error when making stochastic matrix.")
         print(trans_matrix)
         raise
     return result
+
 
 def transition_matrix_to_normal_transition_matrix(trans_matrix):
     """
@@ -142,7 +150,8 @@ def transition_matrix_to_normal_transition_matrix(trans_matrix):
         result = trans_matrix
     return result
 
-def one_fold_division(series,n,aggregation_function = transition_sum):
+
+def one_fold_division(series, n, aggregation_function=transition_sum):
     """
     Divides a dataframe at one point and returns two aggregated objects.
     n ranges from 0 to 1.
@@ -151,8 +160,8 @@ def one_fold_division(series,n,aggregation_function = transition_sum):
     last_index = series.index[-1]
     middle_point = int(np.floor(len(series.index) * n))
     middle_index = series.index[middle_point]
-    left_df = series.ix[series.index.indexer_between_time(first_index.time(),middle_index.time())]
-    right_df = series.ix[series.index.indexer_between_time(middle_index.time(),last_index.time())]
+    left_df = series.ix[series.index.indexer_between_time(first_index.time(), middle_index.time())]
+    right_df = series.ix[series.index.indexer_between_time(middle_index.time(), last_index.time())]
     return aggregation_function(left_df), aggregation_function(right_df)
 
 #####################
@@ -160,7 +169,8 @@ def one_fold_division(series,n,aggregation_function = transition_sum):
 # Matrix Measures
 #
 #####################
-	
+
+
 def flux_measure(mat):
     """
     Measure of a transition matrix's flux. Given a numpy matrix M with
@@ -169,15 +179,16 @@ def flux_measure(mat):
     diagonal.
     """
     mat = np.array(mat)
-    d = np.linalg.norm(mat.diagonal(),1) # |d|_1 
-    m = sum(sum(abs(mat))) # |M|_1
+    d = np.linalg.norm(mat.diagonal(), 1)  # |d|_1
+    m = sum(sum(abs(mat)))  # |M|_1
     if m == 0:
         # Take care of case of empty matrix
         # returning 0 is wrong but more benign than NaN
         measure = 0
     else:
-        measure = (m - d) / m # Flux.
+        measure = (m - d) / m  # Flux.
     return measure
+
 
 def entropy_measure(mat):
     """
@@ -185,6 +196,4 @@ def entropy_measure(mat):
     theoretic sense. H(P) = -\sum_{i,j}p_{ij}\log_2(p_{ij}) Uses
     scipy.stats.entropy
     """
-    return entropy(np.reshape(mat,len(mat)**2), base=2)
-
-
+    return entropy(np.reshape(mat, len(mat)**2), base=2)
