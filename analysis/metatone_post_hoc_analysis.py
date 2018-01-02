@@ -8,19 +8,17 @@ import os
 import time
 import pandas as pd
 import numpy as np
-import time
-import datetime
 import sys
 import transition_matrices
 import pickle
+from sklearn import metrics, model_selection
+import matplotlib.pyplot as plt
 sys.path.append("../MetatoneClassifier/classifier/")
 sys.path.append("../MetatoneClassifier/performance-plotter/")
 sys.path.append("../")
-import metatone_classifier
 import PlotMetatonePerformanceAndTransitions
 import generate_posthoc_gesture_score
-from sklearn import datasets, metrics, cross_validation
-import matplotlib.pyplot as plt
+
 
 class MetatoneTouchLog:
     """
@@ -28,7 +26,7 @@ class MetatoneTouchLog:
     Must be initialised with a log_path.
     """
     def __init__(self, touches_file):
-        #print("Loading logs for " + touches_file)
+        # print("Loading logs for " + touches_file)
         performance_path = touches_file.replace(".csv", "")
         self.performance_title = touches_file.replace("-touches.csv", "").replace("../data/", "")
         self.touches = pd.read_csv(touches_file, index_col='time', parse_dates=True)
@@ -42,9 +40,9 @@ class MetatoneTouchLog:
             self.gestures.to_csv(gestures_path)
         self.transitions = transition_matrices.create_transition_dataframe(self.gestures)
         self.ensemble_transition_matrix = transition_matrices.aggregate_transition_matrices(self.transitions)
-        #self.ensemble_transition_matrix = transitions.transition_matrix_to_stochastic_matrix(self.ensemble_transition_matrix) # not doing this!!
+        # self.ensemble_transition_matrix = transitions.transition_matrix_to_stochastic_matrix(self.ensemble_transition_matrix) # not doing this!!
         self.ensemble_transition_matrix = transition_matrices.transition_matrix_to_normal_transition_matrix(self.ensemble_transition_matrix)
-        #self.longest_break = self.find_long_breaks() # don't worry about splitting long breaks for now!
+        # self.longest_break = self.find_long_breaks() # don't worry about splitting long breaks for now!
 
     def first_touch_timestamp(self):
         """
@@ -116,7 +114,7 @@ class MetatoneTouchLog:
             performer_length = (performer_touches[-1:].index[0].to_pydatetime() - first_touch).total_seconds()
             performance_lengths[performer_id] = performer_length
             # print("Performer: " + performer_id + " Length was: " + str(performer_length))
-        return {self.first_touch_timestamp():performance_lengths}
+        return {self.first_touch_timestamp(): performance_lengths}
 
     def print_gesture_score(self):
         """
@@ -126,7 +124,7 @@ class MetatoneTouchLog:
         plot_title = time.strftime('%Y-%m-%dT%H-%M-%S', performance_time) + "-gesture-plot"
         PlotMetatonePerformanceAndTransitions.plot_gesture_only_score(plot_title, self.gestures)
         print("Saved gesture plot: " + plot_title)
-        
+
     def find_long_breaks(self):
         """
         Finds breaks longer than 2 minutes in a touch log. Prints a warning!
@@ -141,18 +139,19 @@ class MetatoneTouchLog:
             first_touch = self.touches[:1].index[0]
             frame_list = []
             for last_touch in long_break.index:
-                part_frame = self.touches.ix[self.touches.index.indexer_between_time(first_touch,last_touch)]
+                part_frame = self.touches.ix[self.touches.index.indexer_between_time(first_touch, last_touch)]
                 first_touch = last_touch
-                frame_list.append(part_frame[:-1]) ## this makes it left closed, right open
+                frame_list.append(part_frame[:-1])  # this makes it left closed, right open
             # then add the rest:
             last_touch = self.touches.index[-1]
-            part_frame = self.touches.ix[self.touches.index.indexer_between_time(first_touch,last_touch)] #inclusive
-            frame_list.append(part_frame) ## the last one is closed on both sides!
+            part_frame = self.touches.ix[self.touches.index.indexer_between_time(first_touch, last_touch)]  # inclusive
+            frame_list.append(part_frame)  # the last one is closed on both sides!
             # now write each one to csv. (forget about the time_diff column)
             for frame in frame_list:
                 frame_name = frame.index[0].strftime('%Y-%m-%dT%H-%M-%S') + "-MetatoneOSCLog-autosplit-touches.csv"
-                frame[['device_id','x_pos','y_pos','velocity']].to_csv(frame_name)
+                frame[['device_id', 'x_pos', 'y_pos', 'velocity']].to_csv(frame_name)
         return 0
+
 
 def main():
     """Load up all the performances and do some stats"""
@@ -169,49 +168,47 @@ def main():
             print("Performance Analysis Failed for: " + log)
             raise
 
-    ## Also load up the experiment design dataframe to merge with the data!
+    # Also load up the experiment design dataframe to merge with the data!
     print("Loading performance information frame.")
     performance_information = pd.read_csv("../metadata/metatone-performance-information.csv", index_col='time', parse_dates=True)
     performance_information = performance_information[['performance_context', 'performance_type', 'instruments', 'notes']]
 
-    ## Arrange the metadata from each performance object in a dataframe
-    WRITE_FILES = False # Write out the performance frame file.
+    # Arrange the metadata from each performance object in a dataframe
+    WRITE_FILES = False  # Write out the performance frame file.
     print("Generating the performance data frame.")
     perf_names = {}
     for perf in performances:
-        perf_names.update({perf.first_touch_timestamp():{
-            "filename":perf.performance_title,
+        perf_names.update({perf.first_touch_timestamp(): {
+            "filename": perf.performance_title,
             "number_performers": perf.number_performers(),
             "length_seconds": perf.performance_length(),
             "flux": perf.ensemble_flux(),
             "entropy": perf.ensemble_entropy(),
             "determinant": perf.ensemble_determinant(),
             "norm": perf.ensemble_norm(),
-            "trace": perf.ensemble_trace()
-            }})
+            "trace": perf.ensemble_trace()}})
     perf_frame = pd.DataFrame.from_dict(perf_names, orient="index")
-    perf_frame = pd.concat([performance_information,perf_frame], axis = 1)
+    perf_frame = pd.concat([performance_information, perf_frame], axis=1)
     if (WRITE_FILES):
         print("Saving the performance metadata as a csv")
         perf_frame.to_csv("../metadata/metatone-performance-data.csv")
 
-    ## Add the gestures to the data frame as numpy arrays for processing elsewhere
+    # Add the gestures to the data frame as numpy arrays for processing elsewhere
     print("Adding the gesture data to the dataframe.")
-    perf_frame.loc[(perf_frame["performance_type"]=="improvisation") & (perf_frame["performance_context"]!="demonstration")]
+    perf_frame.loc[(perf_frame["performance_type"] == "improvisation") & (perf_frame["performance_context"] != "demonstration")]
     perf_gestures = {}
     for perf in performances:
-        perf_gestures.update({perf.first_touch_timestamp():{
-            "gestures":np.array(perf.gestures)
-            }})
+        perf_gestures.update({perf.first_touch_timestamp(): {
+            "gestures": np.array(perf.gestures)}})
     gestures_frame = pd.DataFrame.from_dict(perf_gestures, orient="index")
-    perf_frame = pd.concat([perf_frame,gestures_frame], axis = 1)
+    perf_frame = pd.concat([perf_frame,gestures_frame], axis=1)
     print("Pickling the dataframe.")
     filename = "../metadata/metatone_performances_dataframe.pickle"
     with open(filename, 'wb') as f:
-          pickle.dump(perf_frame, f, pickle.HIGHEST_PROTOCOL)
-    
-    #print("Creating Gesture Scores.")
-    #for perf in performances:
+        pickle.dump(perf_frame, f, pickle.HIGHEST_PROTOCOL)
+
+    # print("Creating Gesture Scores.")
+    # for perf in performances:
     #    perf.print_gesture_score() ## Prints out a gesture-score pdf for reference.
 
     # print("Finding the lengths.")
@@ -227,18 +224,18 @@ def main():
 
     # loading the survey data
     # 2014 - Q1 was performance quality
-    ##performance_surveys_2014 = pd.read_csv("data-surveys/201407-Study.csv",index_col='time', parse_dates=True)
+    # #performance_surveys_2014 = pd.read_csv("data-surveys/201407-Study.csv",index_col='time', parse_dates=True)
     # 2015 runthrough - Q26
-    ##performance_surveys_2015_runthrough = pd.read_csv("data-surveys/201504-Study-RunthroughData.csv",index_col='time', parse_dates=True)
+    # #performance_surveys_2015_runthrough = pd.read_csv("data-surveys/201504-Study-RunthroughData.csv",index_col='time', parse_dates=True)
     # 2015 study - Q23
-    ##performance_surveys_2015_study = pd.read_csv("data-surveys/201504-Study-PerformanceSurveys.csv",index_col='time', parse_dates=True)
+    # #performance_surveys_2015_study = pd.read_csv("data-surveys/201504-Study-PerformanceSurveys.csv",index_col='time', parse_dates=True)
     # a.apply(lambda x: LIKERT_MAPPING[x])
-    ##LIKERT_MAPPING = {1:1,2:1,3:2,4:2,5:3,6:4,7:4,8:5,9:5}
-    #ratings = performance_surveys_2014["Q6"]
-    #ratings = ratings.append(performance_surveys_2015_runthrough["Q26"].apply(lambda x: LIKERT_MAPPING[x]))
-    #ratings = ratings.append(performance_surveys_2015_study["Q23"].apply(lambda x: LIKERT_MAPPING[x]))
-    #flux_ratings_frame = perf_frame['flux']
-    #flux_ratings_frame = pd.concat([flux_ratings_frame,ratings],axis =1)
+    # #LIKERT_MAPPING = {1:1,2:1,3:2,4:2,5:3,6:4,7:4,8:5,9:5}
+    # ratings = performance_surveys_2014["Q6"]
+    # ratings = ratings.append(performance_surveys_2015_runthrough["Q26"].apply(lambda x: LIKERT_MAPPING[x]))
+    # ratings = ratings.append(performance_surveys_2015_study["Q23"].apply(lambda x: LIKERT_MAPPING[x]))
+    # flux_ratings_frame = perf_frame['flux']
+    # flux_ratings_frame = pd.concat([flux_ratings_frame,ratings],axis =1)
 
     # ratings = performance_surveys_2014["Q6"]
 
@@ -246,26 +243,28 @@ def main():
     # flux_entropy_ratings = flux_entropy_ratings.dropna()
     # flux_entropy_ratings["flux"] = perf_frame["flux"]
     # flux_entropy_ratings["entropy"] = perf_frame["entropy"]
-    #flux_entropy_ratings.to_csv("flux_entropy_ratings.csv")
+    # flux_entropy_ratings.to_csv("flux_entropy_ratings.csv")
+
 
 def test_regression(df):
     """
     using the logistic ordinal regression package from:
     http://fa.bianp.net/blog/2013/logistic-ordinal-regression/
     """
-    X, y = np.array(df[["flux","entropy"]]), np.array(df["rating"])
-    #X, y = np.array(df["flux"]), np.array(df["rating"])
+    X, y = np.array(df[["flux", "entropy"]]), np.array(df["rating"])
+    # X, y = np.array(df["flux"]), np.array(df["rating"])
 
-    #X -= X.mean()
-    #y -= y.min()
+    # X -= X.mean()
+    # y -= y.min()
 
     idx = np.argsort(y)
     X = X[idx]
     y = y[idx]
-    cv = cross_validation.ShuffleSplit(y.size, n_iter=50, test_size=.1, random_state=0)
+    cv = model_selection.ShuffleSplit(y.size, n_iter=50, test_size=.1, random_state=0)
     score_logistic = []
     score_ordinal_logistic = []
     score_ridge = []
+    from sklearn import linear_model
     for i, (train, test) in enumerate(cv):
         if not np.all(np.unique(y[train]) == np.unique(y)):
             # we need the train set to have all different classes
@@ -276,10 +275,9 @@ def test_regression(df):
         w, theta = ordinal_logistic_fit(X[train], y[train])
         pred = ordinal_logistic_predict(w, theta, X[test])
         s = metrics.mean_absolute_error(y[test], pred)
-        print('ERROR (ORDINAL)  fold %s: %s' % (i+1, s))
+        print('ERROR (ORDINAL)  fold %s: %s' % (i + 1, s))
         score_ordinal_logistic.append(s)
 
-        from sklearn import linear_model
         clf = linear_model.LogisticRegression(C=1.)
         clf.fit(X[train], y[train])
         pred = clf.predict(X[test])
@@ -287,7 +285,6 @@ def test_regression(df):
         print('ERROR (LOGISTIC) fold %s: %s' % (i+1, s))
         score_logistic.append(s)
 
-        from sklearn import linear_model
         clf = linear_model.Ridge(alpha=1.)
         clf.fit(X[train], y[train])
         pred = np.round(clf.predict(X[test]))
@@ -298,6 +295,7 @@ def test_regression(df):
     print('MEAN ABSOLUTE ERROR (ORDINAL LOGISTIC):    %s' % np.mean(score_ordinal_logistic))
     print('MEAN ABSOLUTE ERROR (LOGISTIC REGRESSION): %s' % np.mean(score_logistic))
     print('MEAN ABSOLUTE ERROR (RIDGE REGRESSION):    %s' % np.mean(score_ridge))
+
 
 def plot_confusion_matrix(cm, title='Confusion matrix', cmap=plt.cm.Blues):
     plt.imshow(cm, interpolation='nearest', cmap=cmap)
@@ -313,7 +311,8 @@ def plot_confusion_matrix(cm, title='Confusion matrix', cmap=plt.cm.Blues):
 if __name__ == '__main__':
     main()
 
-def time_testing():
+
+def time_testing(a):
     t = time.time()
     transition_matrices.group_transition_matrix(a.gestures)
     print("That took: ", time.time() - t)

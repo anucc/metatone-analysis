@@ -30,8 +30,8 @@ for log in log_files:
         raise
 
 NUMBER_OF_DIVISIONS = 20
-## Do the one fold division and test the difference in flux.
-## This is running on group flux.
+# Do the one fold division and test the difference in flux.
+# This is running on group flux.
 print("Doing the one fold tests.")
 big_data = {}
 for perf in performances:
@@ -39,42 +39,42 @@ for perf in performances:
     data = {}
     for n in range(1,NUMBER_OF_DIVISIONS):
         n_hund = n/float(NUMBER_OF_DIVISIONS)
-        a, b = one_fold_division(trans,n_hund,transition_sum)
+        a, b = one_fold_division(trans, n_hund, transition_sum)
         a = transition_matrix_to_normal_transition_matrix(transition_sum(a))
         b = transition_matrix_to_normal_transition_matrix(transition_sum(b))
         a = flux_measure(a)
         b = flux_measure(b)
-        data[n] = abs(a-b)
+        data[n] = abs(a - b)
     big_data[perf.performance_title] = data
     print("Processed: " + perf.performance_title)
 df = pd.DataFrame.from_dict(big_data)
-df.plot(kind='line',subplots=False,legend = False)
-df.plot(kind='point',subplots=False,legend = False)
+df.plot(kind='line', subplots=False, legend=False)
+df.plot(kind='point', subplots=False, legend=False)
 
 
 NUMBER_OF_DIVISIONS = 1000
 RANGE_TRIM = 0.15
-## Same test, just keep the max value from each performance
-## Plot is a bit boring here as well.
-## Max values bunched up at each edge...
+# Same test, just keep the max value from each performance
+# Plot is a bit boring here as well.
+# Max values bunched up at each edge...
 print("Doing the one fold tests.")
 big_data = {}
 for perf in performances:
     trans = perf.transitions
     data = {}
-    ## Cut off the first and last 10%
+    # Cut off the first and last 10%
     range_start = 0 + RANGE_TRIM
     range_length = 1 - (2 * RANGE_TRIM)
     for n in range(0,NUMBER_OF_DIVISIONS):
-        n_hund = range_start + (range_length * n/float(NUMBER_OF_DIVISIONS))
-        a, b = one_fold_division(trans,n_hund,transition_sum)
+        n_hund = range_start + (range_length * n / float(NUMBER_OF_DIVISIONS))
+        a, b = one_fold_division(trans, n_hund, transition_sum)
         a = transition_matrix_to_normal_transition_matrix(transition_sum(a))
         b = transition_matrix_to_normal_transition_matrix(transition_sum(b))
         a = flux_measure(a)
         b = flux_measure(b)
-        data[n_hund] = abs(a-b)
-    d = pd.DataFrame.from_dict(data,orient='index')[0]
-    big_data[perf.performance_title] = {'proportion':d.idxmax(),'max':d.max()}
+        data[n_hund] = abs(a - b)
+    d = pd.DataFrame.from_dict(data, orient='index')[0]
+    big_data[perf.performance_title] = {'proportion': d.idxmax(), 'max': d.max()}
     print("Processed: " + perf.performance_title)
-df = pd.DataFrame.from_dict(big_data,orient='index')
-df.plot(kind='scatter',x='proportion',y='max')
+df = pd.DataFrame.from_dict(big_data, orient='index')
+df.plot(kind='scatter', x='proportion', y='max')
