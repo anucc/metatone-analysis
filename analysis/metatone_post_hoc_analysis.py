@@ -199,7 +199,7 @@ def main():
     perf_frame = pd.concat([perf_frame, gestures_frame], axis=1)
     print("Saving the dataframe in HDF5 format.")
     filename = "../metadata/metatone_performances_dataframe.h5"
-    perf_frame.to_hdf(filename)
+    perf_frame.to_hdf(filename, 'MetatonePerfMetadata')
 
     # print("Creating Gesture Scores.")
     # for perf in performances:
@@ -239,6 +239,8 @@ def main():
     # flux_entropy_ratings["entropy"] = perf_frame["entropy"]
     # flux_entropy_ratings.to_csv("flux_entropy_ratings.csv")
 
+if __name__ == '__main__':
+    main()
 
 # def test_regression(df):
 #     """
@@ -302,8 +304,6 @@ def main():
 #     plt.ylabel('True label')
 #     plt.xlabel('Predicted label')
 
-# if __name__ == '__main__':
-#     main()
 
 
 # def time_testing(a):
