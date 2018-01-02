@@ -10,13 +10,8 @@ import pandas as pd
 import numpy as np
 import sys
 import transition_matrices
-import pickle
-from sklearn import metrics, model_selection
-import matplotlib.pyplot as plt
 sys.path.append("../MetatoneClassifier/classifier/")
-sys.path.append("../MetatoneClassifier/performance-plotter/")
 sys.path.append("../")
-import PlotMetatonePerformanceAndTransitions
 import generate_posthoc_gesture_score
 
 
@@ -122,7 +117,7 @@ class MetatoneTouchLog:
         """
         performance_time = time.strptime(self.performance_title[:19], '%Y-%m-%dT%H-%M-%S')
         plot_title = time.strftime('%Y-%m-%dT%H-%M-%S', performance_time) + "-gesture-plot"
-        PlotMetatonePerformanceAndTransitions.plot_gesture_only_score(plot_title, self.gestures)
+        generate_posthoc_gesture_score.plot_gesture_only_score(plot_title, self.gestures)
         print("Saved gesture plot: " + plot_title)
 
     def find_long_breaks(self):
@@ -201,11 +196,10 @@ def main():
         perf_gestures.update({perf.first_touch_timestamp(): {
             "gestures": np.array(perf.gestures)}})
     gestures_frame = pd.DataFrame.from_dict(perf_gestures, orient="index")
-    perf_frame = pd.concat([perf_frame,gestures_frame], axis=1)
-    print("Pickling the dataframe.")
-    filename = "../metadata/metatone_performances_dataframe.pickle"
-    with open(filename, 'wb') as f:
-        pickle.dump(perf_frame, f, pickle.HIGHEST_PROTOCOL)
+    perf_frame = pd.concat([perf_frame, gestures_frame], axis=1)
+    print("Saving the dataframe in HDF5 format.")
+    filename = "../metadata/metatone_performances_dataframe.h5"
+    perf_frame.to_hdf(filename)
 
     # print("Creating Gesture Scores.")
     # for perf in performances:
@@ -246,73 +240,73 @@ def main():
     # flux_entropy_ratings.to_csv("flux_entropy_ratings.csv")
 
 
-def test_regression(df):
-    """
-    using the logistic ordinal regression package from:
-    http://fa.bianp.net/blog/2013/logistic-ordinal-regression/
-    """
-    X, y = np.array(df[["flux", "entropy"]]), np.array(df["rating"])
-    # X, y = np.array(df["flux"]), np.array(df["rating"])
+# def test_regression(df):
+#     """
+#     using the logistic ordinal regression package from:
+#     http://fa.bianp.net/blog/2013/logistic-ordinal-regression/
+#     """
+#     X, y = np.array(df[["flux", "entropy"]]), np.array(df["rating"])
+#     # X, y = np.array(df["flux"]), np.array(df["rating"])
 
-    # X -= X.mean()
-    # y -= y.min()
+#     # X -= X.mean()
+#     # y -= y.min()
 
-    idx = np.argsort(y)
-    X = X[idx]
-    y = y[idx]
-    cv = model_selection.ShuffleSplit(y.size, n_iter=50, test_size=.1, random_state=0)
-    score_logistic = []
-    score_ordinal_logistic = []
-    score_ridge = []
-    from sklearn import linear_model
-    for i, (train, test) in enumerate(cv):
-        if not np.all(np.unique(y[train]) == np.unique(y)):
-            # we need the train set to have all different classes
-            continue
-        assert np.all(np.unique(y[train]) == np.unique(y))
-        train = np.sort(train)
-        test = np.sort(test)
-        w, theta = ordinal_logistic_fit(X[train], y[train])
-        pred = ordinal_logistic_predict(w, theta, X[test])
-        s = metrics.mean_absolute_error(y[test], pred)
-        print('ERROR (ORDINAL)  fold %s: %s' % (i + 1, s))
-        score_ordinal_logistic.append(s)
+#     idx = np.argsort(y)
+#     X = X[idx]
+#     y = y[idx]
+#     cv = model_selection.ShuffleSplit(y.size, n_iter=50, test_size=.1, random_state=0)
+#     score_logistic = []
+#     score_ordinal_logistic = []
+#     score_ridge = []
+#     from sklearn import linear_model
+#     for i, (train, test) in enumerate(cv):
+#         if not np.all(np.unique(y[train]) == np.unique(y)):
+#             # we need the train set to have all different classes
+#             continue
+#         assert np.all(np.unique(y[train]) == np.unique(y))
+#         train = np.sort(train)
+#         test = np.sort(test)
+#         w, theta = ordinal_logistic_fit(X[train], y[train])
+#         pred = ordinal_logistic_predict(w, theta, X[test])
+#         s = metrics.mean_absolute_error(y[test], pred)
+#         print('ERROR (ORDINAL)  fold %s: %s' % (i + 1, s))
+#         score_ordinal_logistic.append(s)
 
-        clf = linear_model.LogisticRegression(C=1.)
-        clf.fit(X[train], y[train])
-        pred = clf.predict(X[test])
-        s = metrics.mean_absolute_error(y[test], pred)
-        print('ERROR (LOGISTIC) fold %s: %s' % (i+1, s))
-        score_logistic.append(s)
+#         clf = linear_model.LogisticRegression(C=1.)
+#         clf.fit(X[train], y[train])
+#         pred = clf.predict(X[test])
+#         s = metrics.mean_absolute_error(y[test], pred)
+#         print('ERROR (LOGISTIC) fold %s: %s' % (i+1, s))
+#         score_logistic.append(s)
 
-        clf = linear_model.Ridge(alpha=1.)
-        clf.fit(X[train], y[train])
-        pred = np.round(clf.predict(X[test]))
-        s = metrics.mean_absolute_error(y[test], pred)
-        print('ERROR (RIDGE) fold %s: %s' % (i+1, s))
-        score_ridge.append(s)
-    print()
-    print('MEAN ABSOLUTE ERROR (ORDINAL LOGISTIC):    %s' % np.mean(score_ordinal_logistic))
-    print('MEAN ABSOLUTE ERROR (LOGISTIC REGRESSION): %s' % np.mean(score_logistic))
-    print('MEAN ABSOLUTE ERROR (RIDGE REGRESSION):    %s' % np.mean(score_ridge))
-
-
-def plot_confusion_matrix(cm, title='Confusion matrix', cmap=plt.cm.Blues):
-    plt.imshow(cm, interpolation='nearest', cmap=cmap)
-    plt.title(title)
-    plt.colorbar()
-    tick_marks = np.arange(len(iris.target_names))
-    plt.xticks(tick_marks, iris.target_names, rotation=45)
-    plt.yticks(tick_marks, iris.target_names)
-    plt.tight_layout()
-    plt.ylabel('True label')
-    plt.xlabel('Predicted label')
-
-if __name__ == '__main__':
-    main()
+#         clf = linear_model.Ridge(alpha=1.)
+#         clf.fit(X[train], y[train])
+#         pred = np.round(clf.predict(X[test]))
+#         s = metrics.mean_absolute_error(y[test], pred)
+#         print('ERROR (RIDGE) fold %s: %s' % (i+1, s))
+#         score_ridge.append(s)
+#     print()
+#     print('MEAN ABSOLUTE ERROR (ORDINAL LOGISTIC):    %s' % np.mean(score_ordinal_logistic))
+#     print('MEAN ABSOLUTE ERROR (LOGISTIC REGRESSION): %s' % np.mean(score_logistic))
+#     print('MEAN ABSOLUTE ERROR (RIDGE REGRESSION):    %s' % np.mean(score_ridge))
 
 
-def time_testing(a):
-    t = time.time()
-    transition_matrices.group_transition_matrix(a.gestures)
-    print("That took: ", time.time() - t)
+# def plot_confusion_matrix(cm, title='Confusion matrix', cmap=plt.cm.Blues):
+#     plt.imshow(cm, interpolation='nearest', cmap=cmap)
+#     plt.title(title)
+#     plt.colorbar()
+#     tick_marks = np.arange(len(iris.target_names))
+#     plt.xticks(tick_marks, iris.target_names, rotation=45)
+#     plt.yticks(tick_marks, iris.target_names)
+#     plt.tight_layout()
+#     plt.ylabel('True label')
+#     plt.xlabel('Predicted label')
+
+# if __name__ == '__main__':
+#     main()
+
+
+# def time_testing(a):
+#     t = time.time()
+#     transition_matrices.group_transition_matrix(a.gestures)
+#     print("That took: ", time.time() - t)
