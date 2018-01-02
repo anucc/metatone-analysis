@@ -16,13 +16,11 @@ from __future__ import print_function
 import pandas as pd
 import numpy as np
 from scipy.stats import entropy
-import matplotlib.pyplot as plt
 from datetime import timedelta
 from datetime import datetime
-import random
 
 
-## Int values for Gesture codes.
+# Int values for Gesture codes.
 NUMBER_GESTURES = 9
 GESTURE_CODES = {
     'N': 0,
